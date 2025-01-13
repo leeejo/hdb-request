@@ -32,76 +32,63 @@
 </head>
 <body>
 
-<div
-  class="flex flex-col px-20 py-6 max-w-full bg-white w-[1440px] max-md:px-5"
-  role="region"
-  aria-label="Application Details"
->
-  <nav aria-label="Breadcrumb" class="flex gap-8 items-center w-full max-md:max-w-full">
-    <div
-      class="flex flex-wrap flex-1 shrink items-center self-stretch my-auto w-full basis-0 min-w-[240px] max-md:max-w-full"
-    >
-      <a 
-        href="/"
-        class="flex items-center self-stretch my-auto text-base text-sky-700 whitespace-nowrap hover:underline focus:outline-none focus:ring-2 focus:ring-sky-700"
-      >
-        <span class="overflow-hidden self-stretch my-auto">Home</span>
-      </a>
-      <div
-        class="flex overflow-hidden gap-1 items-center self-stretch px-2 w-10 h-full"
-        aria-hidden="true"
-      >
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/e85e1324ec87d7f94b9d832c78d217c39a80fa788b0930a7dfe9687f9198db37?apiKey=2e8681b5ef83499db5732e3a245b8341&"
-          class="object-contain self-stretch my-auto w-6 aspect-square"
-          alt=""
-        />
+<div class="flex items-center p-3 w-full bg-sky-900 min-h-[72px]" role="banner">
+  <div class="flex flex-wrap flex-1 shrink justify-between items-center self-stretch my-auto w-full basis-0 max-w-[1920px] min-w-[240px] max-md:max-w-full">
+    <div class="flex flex-wrap flex-1 shrink gap-6 items-center self-stretch my-auto basis-0 min-w-[240px] max-md:max-w-full">
+      <div class="flex gap-2.5 justify-center items-center self-stretch my-auto w-12 min-h-[48px]">
+        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/9289cd6eea78ce4a0dc47978121ee6e55bffd5a83f2f9ef9fe3e069e0512d9a9?apiKey=2e8681b5ef83499db5732e3a245b8341&" class="object-contain self-stretch my-auto w-8 aspect-square" alt="Company Logo" />
       </div>
-      <a
-        href="/in-tray"
-        class="flex items-center self-stretch my-auto text-base text-sky-900 whitespace-nowrap hover:underline focus:outline-none focus:ring-2 focus:ring-sky-900"
-      >
-        <span class="overflow-hidden self-stretch my-auto underline decoration-auto decoration-solid underline-offset-auto">
-          In-tray
-        </span>
-      </a>
-      <div
-        class="flex overflow-hidden gap-1 items-center self-stretch px-2 w-10 h-full"
-        aria-hidden="true"
-      >
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/e85e1324ec87d7f94b9d832c78d217c39a80fa788b0930a7dfe9687f9198db37?apiKey=2e8681b5ef83499db5732e3a245b8341&"
-          class="object-contain self-stretch my-auto w-6 aspect-square"
-          alt=""
-        />
-      </div>
-      <div
-        class="flex items-center self-stretch my-auto text-base whitespace-nowrap text-zinc-600"
-        aria-current="page"
-      >
-        <span class="overflow-hidden self-stretch my-auto">8013197D</span>
+      <div class="flex flex-wrap flex-1 shrink gap-4 items-center self-stretch my-auto basis-0 min-w-[240px] max-md:max-w-full">
+        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/45c27dcb120438d562a8500b88f6de8e7e901475e4ced84cab25126867cc0b4e?apiKey=2e8681b5ef83499db5732e3a245b8341&" class="object-contain shrink-0 self-stretch my-auto aspect-[1.05] w-[42px]" alt="Sales Icon" />
+        <div class="overflow-hidden self-stretch my-auto text-2xl font-medium leading-tight text-white min-w-[240px] text-ellipsis">
+          Sales Processing System
+        </div>
+        <form class="flex overflow-hidden flex-1 shrink items-center self-stretch my-auto h-11 rounded border border-blue-400 border-solid basis-0 max-w-[284px] min-w-[240px]" role="search">
+          <div class="flex overflow-hidden flex-1 shrink justify-between items-center self-stretch pl-3 my-auto w-full rounded basis-0 min-w-[240px]">
+            <div class="flex overflow-hidden flex-1 shrink gap-1 self-stretch my-auto basis-0">
+              <div class="flex overflow-hidden flex-col justify-center items-center my-auto w-6">
+                <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/b03b02b9d5ccd87c459c9432d4cc8faa1a3eb73320cb01e9ab4513db80e5c369?apiKey=2e8681b5ef83499db5732e3a245b8341&" class="object-contain w-full aspect-square" alt="Search Icon" />
+              </div>
+              <label for="searchInput" class="sr-only">Search by Registration Number or NRIC</label>
+              <input type="search" id="searchInput" class="flex-1 shrink text-base text-blue-400 basis-0 bg-transparent border-none outline-none" placeholder="Search by Reg No. or NRIC" aria-label="Search by Registration Number or NRIC" />
+            </div>
+            <button type="submit" class="flex justify-center items-center self-stretch my-auto w-11 min-h-[44px]" aria-label="Submit search">
+              <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ebb2a33d5f525fb473863f0f686ef64ba92e51e55e383f50179e0cfd5197db8?apiKey=2e8681b5ef83499db5732e3a245b8341&" class="object-contain self-stretch my-auto w-6 aspect-square" alt="" />
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  </nav>
-  <div class="flex flex-col mt-8 w-full max-md:max-w-full">
-    <div
-      class="flex overflow-hidden flex-col w-full bg-stone-50 bg-opacity-0 max-md:max-w-full"
-    >
-      <h1
-        class="text-4xl font-medium leading-tight text-neutral-800 max-md:max-w-full"
-      >
-        Application Reg No. 8013197D
-      </h1>
-      <div
-        class="overflow-hidden mt-1 w-full text-sm text-gray-500 bg-stone-50 bg-opacity-0 max-md:max-w-full"
-      >
-        <span class="text-gray-500">Updated on</span>
-        <span class="font-bold text-gray-500">Thurs, 02 Nov 2023</span>
-        <span class="text-gray-500">at</span>
-        <span class="font-bold text-gray-500">09:58 AM (SGT)</span>
-      </div>
+    <div class="flex gap-3 items-center self-stretch my-auto min-w-[240px] w-[244px]">
+      <button class="flex gap-2.5 justify-center items-center self-stretch my-auto w-12 min-h-[48px]" aria-label="Notifications">
+        <div class="flex items-start self-stretch p-2 my-auto w-10">
+          <div class="flex overflow-hidden flex-col justify-center items-center w-6 min-h-[24px]">
+            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/c9344d4b99dc154dc70c86a6a13726c3545bf98d8a6ee7549876fd49c8d9da2c?apiKey=2e8681b5ef83499db5732e3a245b8341&" class="object-contain w-full aspect-square" alt="" />
+          </div>
+        </div>
+      </button>
+      <button class="flex gap-2.5 justify-center items-center self-stretch my-auto w-12 min-h-[48px]" aria-label="Messages">
+        <div class="flex items-start self-stretch p-2 my-auto w-10">
+          <div class="flex overflow-hidden flex-col justify-center items-center w-6 min-h-[24px]">
+            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/c9344d4b99dc154dc70c86a6a13726c3545bf98d8a6ee7549876fd49c8d9da2c?apiKey=2e8681b5ef83499db5732e3a245b8341&" class="object-contain w-full aspect-square" alt="" />
+          </div>
+        </div>
+      </button>
+      <button class="flex items-start self-stretch my-auto w-12 min-h-[48px]" aria-label="Settings">
+        <div class="flex flex-col justify-center items-center px-2 py-3 w-12 min-h-[48px]">
+          <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/ec92a487f4a7f0b29ba746e656224a4fea0dedf217b8edb1d89c90b39d1eef58?apiKey=2e8681b5ef83499db5732e3a245b8341&" class="object-contain w-full aspect-[1.08]" alt="" />
+        </div>
+      </button>
+      <button class="flex items-center self-stretch px-1 my-auto rounded min-h-[48px]" aria-label="User profile">
+        <div class="flex gap-2 items-center self-stretch my-auto">
+          <div class="flex flex-col items-center self-stretch my-auto w-8 h-8 bg-blue-300 min-h-[32px] rounded-[999px]">
+            <div class="flex overflow-hidden flex-1 justify-center items-center size-full">
+              <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/aed2f68ee20434c3a5b013b29c4156bb28f14202d8e8cc698bef87b0cc461d90?apiKey=2e8681b5ef83499db5732e3a245b8341&" class="object-contain self-stretch my-auto w-4 aspect-square" alt="User avatar" />
+            </div>
+          </div>
+          <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/7a7bb950614e5a5597a76ae5c959918ffa24c3ac377bf90063a671107b82738f?apiKey=2e8681b5ef83499db5732e3a245b8341&" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" />
+        </div>
+      </button>
     </div>
   </div>
 </div>
