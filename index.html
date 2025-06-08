@@ -36,6 +36,7 @@
     border-radius: 0.5rem; /* Rounded corners */
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
     max-width: 800px; /* Max width of 800px */
+    min-height:60%;
     max-height: 80%; /* Keep max-height for very large screens (optional) */
     width: 100%; /* Occupy full width within max-width */
     overflow-y: auto; /* Add scroll if content overflows */
@@ -65,62 +66,28 @@
     display: none;
   }
 
-  /* Styles for the multi-select dropdown */
-  .multiselect-dropdown {
-    position: relative;
-    display: inline-block;
-    width: 100%; /* Make it full width */
-  }
-
-  .multiselect-dropdown button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    width: 100%;
-    background-color: white;
-    cursor: pointer;
-  }
-
-  .multiselect-dropdown .options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1001; /* Ensure it's above the modal */
-    display: none; /* Hidden by default */
-    max-height: 200px; /* Set a maximum height for scrolling */
-    overflow-y: auto;
-  }
-
-  .multiselect-dropdown .options label {
-    display: block;
-    padding: 0.5rem;
-    cursor: pointer;
-  }
-
-  .multiselect-dropdown .options input[type="checkbox"] {
-    margin-right: 0.5rem;
-  }
-
-  .multiselect-dropdown .options label:hover {
-    background-color: #f0f0f0;
-  }
-
-  .multiselect-dropdown.open .options {
-    display: block;
-  }
-
-  .selected-options {
-    display: inline-block;
-    margin-left: 0.5rem;
-  }
+/* multi select - Smooth arrow rotation */
+        .selected-options-button .arrow-icon {
+            transition: transform 0.2s ease-in-out;
+        }
+        .selected-options-button.open .arrow-icon {
+            transform: rotate(180deg);
+        }
+        /* Ensure options panel is hidden/shown correctly */
+        .multiselect-dropdown .options {
+            display: none; /* Hidden by default */
+        }
+        .multiselect-dropdown.open .options {
+            display: block; /* Shown when 'open' class is toggled */
+        }
+        /* Minimal styling for the selected text inside the button */
+        #selectedDisplay {
+            flex-grow: 1; /* Allows text to take available space */
+            text-align: left; /* Align text to the left within the button */
+            white-space: nowrap; /* Prevent text wrapping */
+            overflow: hidden; /* Hide overflow */
+            text-overflow: ellipsis; /* Add ellipsis for overflow */
+        }
 </style>
 
 
@@ -280,31 +247,21 @@
 
         <div class="mb-4">
           <label for="requestDetails" class="block text-gray-700 font-bold mb-2">Request Details:</label>
-<!-- --->
-          <div id="multiSelectWrapper" class="relative w-full max-w-sm bg-white border border-gray-300 rounded-lg shadow-md">
-        <div class="flex flex-wrap items-center gap-2 p-3 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
 
-            <div id="selectedTagsContainer" class="flex flex-wrap gap-2">
-                </div>
+          <!-- multi select dropdown -->
+        <div class="multiselect-dropdown relative w-full">
+            <button type="button" id="multiselectButton" class="selected-options-button flex items-center justify-between p-2 border border-gray-300 rounded-md w-full bg-white cursor-pointer text-gray-800 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" aria-haspopup="listbox" aria-expanded="false">
+                <span id="selectedDisplay">Select Options</span>
+                <span class="arrow-icon">&#9660;</span> </button>
 
-            <input type="text" id="searchInput" placeholder="Add or search items..." class="flex-1 min-w-[100px] p-1 outline-none text-gray-800">
-
-        </div>
-
-        <div id="dropdownList" class="absolute z-10 w-full bg-white border border-gray-300 rounded-b-lg shadow-lg mt-px hidden">
-            <ul id="optionsList" class="max-h-48 overflow-y-auto custom-scrollbar">
-                </ul>
-            <div class="p-3 border-t border-gray-200">
-                <button type="button" id="unselectAllBtn" class="text-blue-600 hover:underline text-sm font-medium">Unselect all</button>
+            <div class="options absolute top-full left-0 w-full border border-gray-300 rounded-md bg-white shadow-lg z-50 max-h-52 overflow-y-auto">
+                <ul id="dropdownOptionsList" class="list-none p-0 m-0">
+                    </ul>
             </div>
         </div>
+    </div>
+<!-- -->
 
-    </div>    
-     <!--     -->
-
-      
-   
-                </div>
         </form>
     </div>
     <div class="modal-footer">
@@ -345,144 +302,113 @@
     }
   });
 
-    // multi-select dropdown
-  // --- 1. Get References to HTML Elements ---
-const multiSelectWrapper = document.getElementById('multiSelectWrapper');
-const searchInput = document.getElementById('searchInput');
-const dropdownList = document.getElementById('dropdownList');
-const selectedTagsContainer = document.getElementById('selectedTagsContainer');
-const optionsList = document.getElementById('optionsList');
-const unselectAllBtn = document.getElementById('unselectAllBtn');
+     // multi-select dropdown
+  document.addEventListener('DOMContentLoaded', () => {
+            // Constant for dropdown options
+            const DROPDOWN_OPTIONS = [
+                { id: "opt1", name: "Recover grant" },
+                { id: "opt2", name: "Process refund" },
+                { id: "opt3", name: "Initiate payment" },
+                { id: "opt4", name: "Review application" },
+                { id: "opt5", name: "Generate report" },
+                { id: "opt6", name: "Update status" },
+                { id: "opt7", name: "Send notification" }
+            ];
 
-// --- 2. Data to Manage (Your Options & Current Selections) ---
-const allOptions = [
-    { id: 'opt1', name: 'Option A' },
-    { id: 'opt2', name: 'Option B' },
-    { id: 'opt3', name: 'Option C' },
-    { id: 'opt4', name: 'Longer Option D Name' },
-    { id: 'opt5', name: 'Another Option E' },
-    { id: 'opt6', name: 'Final Option F' },
-];
+            // DOM element references
+            const multiselectDropdown = document.querySelector('.multiselect-dropdown');
+            const multiselectButton = document.getElementById('multiselectButton');
+            const optionsPanel = multiselectDropdown.querySelector('.options');
+            const dropdownOptionsList = document.getElementById('dropdownOptionsList');
+            const selectedDisplay = document.getElementById('selectedDisplay');
 
-let selectedItems = []; // This array will hold the 'id' of currently selected options
+            // State management
+            const selectedValues = new Set(); // Stores IDs of selected options
 
-// --- 3. Functions to Render & Update the UI ---
+            /**
+             * Renders the dropdown options dynamically from DROPDOWN_OPTIONS.
+             */
+            function renderDropdownOptions() {
+                dropdownOptionsList.innerHTML = ''; // Clear existing options
+                DROPDOWN_OPTIONS.forEach(option => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'px-3 py-2 cursor-pointer hover:bg-gray-100'; // Tailwind for list item
 
-// Function to update the displayed selected tags (pills)
-function renderSelectedTags() {
-    selectedTagsContainer.innerHTML = ''; // Clear existing tags
+                    const label = document.createElement('label');
+                    label.className = 'flex items-center w-full cursor-pointer'; // Tailwind for label
 
-    selectedItems.forEach(itemId => {
-        const item = allOptions.find(o => o.id === itemId);
-        if (!item) return; // Should not happen if data is consistent
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.value = option.id;
+                    input.checked = selectedValues.has(option.id); // Set checked state based on 'selectedValues'
+                    input.className = 'mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500'; // Tailwind for checkbox
 
-        const tagSpan = document.createElement('span');
-        tagSpan.className = 'inline-flex items-center px-2 py-1 text-sm font-medium text-purple-800 bg-purple-100 rounded-md';
-        tagSpan.innerHTML = `
-            ${item.name}
-            <button type="button" class="ml-1 h-4 w-4 inline-flex items-center justify-center rounded-full bg-purple-200 text-purple-600 hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2" data-item-id="${item.id}">
-                <svg class="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                <span class="sr-only">Remove ${item.name}</span>
-            </button>
-        `;
-        selectedTagsContainer.appendChild(tagSpan);
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(option.name)); // Display option name
 
-        // Add event listener to the dynamically created remove button
-        tagSpan.querySelector('button').addEventListener('click', (event) => {
-            const idToRemove = event.currentTarget.dataset.itemId;
-            selectedItems = selectedItems.filter(id => id !== idToRemove);
-            renderAll(); // Re-render everything
-        });
-    });
-}
+                    listItem.appendChild(label);
+                    dropdownOptionsList.appendChild(listItem);
+                });
+            }
 
-// Function to update the displayed options in the dropdown list
-function renderOptions() {
-    optionsList.innerHTML = ''; // Clear existing options
-    const searchTerm = searchInput.value.toLowerCase();
+            /**
+             * Updates the text content of the button to reflect selected options.
+             */
+            function updateSelectedDisplay() {
+                const selectedNames = DROPDOWN_OPTIONS
+                    .filter(option => selectedValues.has(option.id))
+                    .map(option => option.name);
 
-    allOptions.forEach(option => {
-        // Filter based on search term
-        if (searchTerm && !option.name.toLowerCase().includes(searchTerm)) {
-            return; // Skip if it doesn't match search
-        }
-
-        const li = document.createElement('li');
-        li.className = 'px-3 py-2 hover:bg-gray-100 cursor-pointer'; // Only apply cursor-pointer to LI
-        li.innerHTML = `
-            <label class="flex items-center text-gray-800 cursor-pointer w-full">
-                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 rounded" data-item-id="${option.id}" ${selectedItems.includes(option.id) ? 'checked' : ''}>
-                <span class="ml-2">${option.name}</span>
-            </label>
-        `;
-        optionsList.appendChild(li);
-
-        // Add event listener to the checkbox
-        li.querySelector('input[type="checkbox"]').addEventListener('change', (event) => {
-            const id = event.currentTarget.dataset.itemId;
-            if (event.currentTarget.checked) {
-                if (!selectedItems.includes(id)) {
-                    selectedItems.push(id);
+                if (selectedNames.length > 0) {
+                    selectedDisplay.textContent = selectedNames.join(', ');
+                } else {
+                    selectedDisplay.textContent = 'Select Options';
                 }
-            } else {
-                selectedItems = selectedItems.filter(item => item !== id);
+
+                // Update ARIA attribute on the button
+                multiselectButton.setAttribute('aria-expanded', multiselectDropdown.classList.contains('open'));
             }
-            renderAll(); // Re-render both tags and options to reflect changes
+
+            // --- Event Listeners ---
+
+            // Toggle dropdown visibility on button click
+            multiselectButton.addEventListener('click', () => {
+                multiselectDropdown.classList.toggle('open');
+                multiselectButton.classList.toggle('open'); // Toggle 'open' class on button for arrow rotation
+                updateSelectedDisplay(); // Re-evaluate ARIA expanded state
+            });
+
+            // Prevent clicks inside options panel from closing the dropdown
+            optionsPanel.addEventListener('click', (event) => {
+                event.stopPropagation(); 
+            });
+
+            // Handle checkbox changes using event delegation on the options list
+            dropdownOptionsList.addEventListener('change', (event) => {
+                const checkbox = event.target;
+                if (checkbox.type === 'checkbox') {
+                    if (checkbox.checked) {
+                        selectedValues.add(checkbox.value);
+                    } else {
+                        selectedValues.delete(checkbox.value);
+                    }
+                    updateSelectedDisplay(); // Update button text
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!multiselectDropdown.contains(event.target)) {
+                    multiselectDropdown.classList.remove('open');
+                    multiselectButton.classList.remove('open'); // Ensure arrow resets
+                    updateSelectedDisplay(); // Re-evaluate ARIA expanded state
+                }
+            });
+
+            // --- Initial Setup ---
+            renderDropdownOptions();
+            updateSelectedDisplay();
         });
-    });
-}
-
-// Helper to render both parts
-function renderAll() {
-    renderSelectedTags();
-    renderOptions();
-}
-
-// Function to show/hide the dropdown
-function toggleDropdown(show) {
-    if (show) {
-        dropdownList.classList.remove('hidden');
-        renderOptions(); // Ensure options are fresh when showing
-    } else {
-        // A small delay for blur to allow click events on dropdown items
-        setTimeout(() => {
-            if (!dropdownList.contains(document.activeElement) && !multiSelectWrapper.contains(document.activeElement)) {
-                 dropdownList.classList.add('hidden');
-            }
-        }, 100);
-    }
-}
-
-
-// --- 4. Event Listeners (Making it Interactive) ---
-
-// Show dropdown when search input is focused
-searchInput.addEventListener('focus', () => toggleDropdown(true));
-
-// Hide dropdown when focus leaves the entire multi-select component
-// This requires a bit more logic to ensure clicking inside doesn't close it
-document.addEventListener('click', (event) => {
-    if (!multiSelectWrapper.contains(event.target)) {
-        // Clicked outside the multi-select, hide dropdown
-        dropdownList.classList.add('hidden');
-    }
-});
-
-// Filter options as user types
-searchInput.addEventListener('input', renderOptions);
-
-// Handle "Unselect all" button click
-unselectAllBtn.addEventListener('click', () => {
-    selectedItems = []; // Clear all selections
-    searchInput.value = ''; // Clear search input
-    renderAll(); // Update the UI
-});
-
-// --- 5. Initial Render on Page Load ---
-document.addEventListener('DOMContentLoaded', renderAll); // Render everything when the page loads
-  
 </script>
 
 
