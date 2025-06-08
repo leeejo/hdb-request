@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Multi-Select Demo (Interactive)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Optional: Custom scrollbar for better aesthetics */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div id="multiSelectWrapper" class="relative w-full max-w-sm bg-white border border-gray-300 rounded-lg shadow-md">
+
+        <div class="flex flex-wrap items-center gap-2 p-3 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+
+            <div id="selectedTagsContainer" class="flex flex-wrap gap-2">
+                </div>
+
+            <input type="text" id="searchInput" placeholder="Add or search items..." class="flex-1 min-w-[100px] p-1 outline-none text-gray-800">
+
+        </div>
+
+        <div id="dropdownList" class="absolute z-10 w-full bg-white border border-gray-300 rounded-b-lg shadow-lg mt-px hidden">
+            <ul id="optionsList" class="max-h-48 overflow-y-auto custom-scrollbar">
+                </ul>
+            <div class="p-3 border-t border-gray-200">
+                <button type="button" id="unselectAllBtn" class="text-blue-600 hover:underline text-sm font-medium">Unselect all</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // JS code will be here
+      // --- 1. Get References to HTML Elements ---
+const multiSelectWrapper = document.getElementById('multiSelectWrapper');
+const searchInput = document.getElementById('searchInput');
+const dropdownList = document.getElementById('dropdownList');
+const selectedTagsContainer = document.getElementById('selectedTagsContainer');
+const optionsList = document.getElementById('optionsList');
+const unselectAllBtn = document.getElementById('unselectAllBtn');
+
+// --- 2. Data to Manage (Your Options & Current Selections) ---
+const allOptions = [
+    { id: 'opt1', name: 'Option A' },
+    { id: 'opt2', name: 'Option B' },
+    { id: 'opt3', name: 'Option C' },
+    { id: 'opt4', name: 'Longer Option D Name' },
+    { id: 'opt5', name: 'Another Option E' },
+    { id: 'opt6', name: 'Final Option F' },
+];
+
+let selectedItems = []; // This array will hold the 'id' of currently selected options
+
+// --- 3. Functions to Render & Update the UI ---
+
+// Function to update the displayed selected tags (pills)
+function renderSelectedTags() {
+    selectedTagsContainer.innerHTML = ''; // Clear existing tags
+
+    selectedItems.forEach(itemId => {
+        const item = allOptions.find(o => o.id === itemId);
+        if (!item) return; // Should not happen if data is consistent
+
+        const tagSpan = document.createElement('span');
+        tagSpan.className = 'inline-flex items-center px-2 py-1 text-sm font-medium text-purple-800 bg-purple-100 rounded-md';
+        tagSpan.innerHTML = `
+            ${item.name}
+            <button type="button" class="ml-1 h-4 w-4 inline-flex items-center justify-center rounded-full bg-purple-200 text-purple-600 hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2" data-item-id="${item.id}">
+                <svg class="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span class="sr-only">Remove ${item.name}</span>
+            </button>
+        `;
+        selectedTagsContainer.appendChild(tagSpan);
+
+        // Add event listener to the dynamically created remove button
+        tagSpan.querySelector('button').addEventListener('click', (event) => {
+            const idToRemove = event.currentTarget.dataset.itemId;
+            selectedItems = selectedItems.filter(id => id !== idToRemove);
+            renderAll(); // Re-render everything
+        });
+    });
+}
+
+// Function to update the displayed options in the dropdown list
+function renderOptions() {
+    optionsList.innerHTML = ''; // Clear existing options
+    const searchTerm = searchInput.value.toLowerCase();
+
+    allOptions.forEach(option => {
+        // Filter based on search term
+        if (searchTerm && !option.name.toLowerCase().includes(searchTerm)) {
+            return; // Skip if it doesn't match search
+        }
+
+        const li = document.createElement('li');
+        li.className = 'px-3 py-2 hover:bg-gray-100 cursor-pointer'; // Only apply cursor-pointer to LI
+        li.innerHTML = `
+            <label class="flex items-center text-gray-800 cursor-pointer w-full">
+                <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 rounded" data-item-id="${option.id}" ${selectedItems.includes(option.id) ? 'checked' : ''}>
+                <span class="ml-2">${option.name}</span>
+            </label>
+        `;
+        optionsList.appendChild(li);
+
+        // Add event listener to the checkbox
+        li.querySelector('input[type="checkbox"]').addEventListener('change', (event) => {
+            const id = event.currentTarget.dataset.itemId;
+            if (event.currentTarget.checked) {
+                if (!selectedItems.includes(id)) {
+                    selectedItems.push(id);
+                }
+            } else {
+                selectedItems = selectedItems.filter(item => item !== id);
+            }
+            renderAll(); // Re-render both tags and options to reflect changes
+        });
+    });
+}
+
+// Helper to render both parts
+function renderAll() {
+    renderSelectedTags();
+    renderOptions();
+}
+
+// Function to show/hide the dropdown
+function toggleDropdown(show) {
+    if (show) {
+        dropdownList.classList.remove('hidden');
+        renderOptions(); // Ensure options are fresh when showing
+    } else {
+        // A small delay for blur to allow click events on dropdown items
+        setTimeout(() => {
+            if (!dropdownList.contains(document.activeElement) && !multiSelectWrapper.contains(document.activeElement)) {
+                 dropdownList.classList.add('hidden');
+            }
+        }, 100);
+    }
+}
+
+
+// --- 4. Event Listeners (Making it Interactive) ---
+
+// Show dropdown when search input is focused
+searchInput.addEventListener('focus', () => toggleDropdown(true));
+
+// Hide dropdown when focus leaves the entire multi-select component
+// This requires a bit more logic to ensure clicking inside doesn't close it
+document.addEventListener('click', (event) => {
+    if (!multiSelectWrapper.contains(event.target)) {
+        // Clicked outside the multi-select, hide dropdown
+        dropdownList.classList.add('hidden');
+    }
+});
+
+// Filter options as user types
+searchInput.addEventListener('input', renderOptions);
+
+// Handle "Unselect all" button click
+unselectAllBtn.addEventListener('click', () => {
+    selectedItems = []; // Clear all selections
+    searchInput.value = ''; // Clear search input
+    renderAll(); // Update the UI
+});
+
+// --- 5. Initial Render on Page Load ---
+document.addEventListener('DOMContentLoaded', renderAll); // Render everything when the page loads
+    </script>
+
+</body>
+</html>
