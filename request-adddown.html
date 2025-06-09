@@ -129,50 +129,50 @@
     </div>
 
     <div class="stick-card sticky top-0 z-20 bg-white">
-    <div class="card-base mb-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4 mb-6">
-        <div class="info-item">
-          <div class="label">Case Status</div>
-          <div class="value text-blue-600">Active</div>
+      <div class="card-base mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4 mb-6">
+          <div class="info-item">
+            <div class="label">Case Status</div>
+            <div class="value text-blue-600">Active</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Type</div>
+            <div class="value">Change of family composition</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Reason</div>
+            <div class="value">Material change</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Created date</div>
+            <div class="value">2023-05-30</div>
+          </div>
         </div>
-        <div class="info-item">
-          <div class="label">Type</div>
-          <div class="value">Change of family composition</div>
-        </div>
-        <div class="info-item">
-          <div class="label">Reason</div>
-          <div class="value">Material change</div>
-        </div>
-        <div class="info-item">
-          <div class="label">Created date</div>
-          <div class="value">2023-05-30</div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
+          <div class="info-item">
+            <div class="label">CMS No.</div>
+            <div class="value">123456789</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Assigned Staff</div>
+            <div class="value">Susan Ho Hui Ting (12345A)</div>
+          </div>
+          <div class="info-item">
+            <div class="label">Assigned Date</div>
+            <div class="value">-</div>
+          </div>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-        <div class="info-item">
-          <div class="label">CMS No.</div>
-          <div class="value">123456789</div>
-        </div>
-        <div class="info-item">
-          <div class="label">Assigned Staff</div>
-          <div class="value">Susan Ho Hui Ting (12345A)</div>
-        </div>
-        <div class="info-item">
-          <div class="label">Assigned Date</div>
-          <div class="value">-</div>
-        </div>
+      <div class="flex space-x-4 my-6">
+        <div class="tab-item tab-active">Actions</div>
+        <div class="tab-item tab-inactive">App Details</div>
+        <div class="tab-item tab-inactive">Checks</div>
+        <div class="tab-item tab-inactive">Documents</div>
+        <div class="tab-item tab-inactive">Journal</div>
       </div>
     </div>
-
-    <div class="flex space-x-4 my-6">
-      <div class="tab-item tab-active">Actions</div>
-      <div class="tab-item tab-inactive">App Details</div>
-      <div class="tab-item tab-inactive">Checks</div>
-      <div class="tab-item tab-inactive">Documents</div>
-      <div class="tab-item tab-inactive">Journal</div>
-    </div>
-</div>
 
     <!-- Card will be inserted here -->
     <div id="dynamic-card-container"></div>
@@ -180,18 +180,16 @@
     <div class="w-full">
       <p class="mb-6 text-gray-700 text-lg font-semibold">Select an action to get started</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-        <button class="action-box" id="box1">Box 1</button>
-        <button class="action-box" id="box2">Box 2</button>
-        <button class="action-box" id="box3">Box 3</button>
-        <button class="action-box" id="box4">Box 4</button>
-        <button class="action-box" id="box5">Box 5</button>
-        <button class="action-box" id="box6">Box 6</button>
-        <button class="action-box" id="box7">Box 7</button>
-        <button class="action-box" id="box8">Box 8</button>
-        <button class="action-box" id="box9">Box 9</button>
-        <button class="action-box" id="box10">Box 10</button>
-        <button class="action-box" id="box11">Box 11</button>
-        <button class="action-box" id="box12">Box 12</button>
+        <button class="action-box" id="box1">Amend application data</button>
+        <button class="action-box" id="box2">Amend household details</button>
+        <button class="action-box" id="box3">Impose or lift debarment</button>
+        <button class="action-box" id="box4">Compute fees</button>
+        <button class="action-box" id="box5">Compute grants</button>
+        <button class="action-box" id="box6">Prepare documents</button>
+        <button class="action-box" id="box7">Collect monies</button>
+        <button class="action-box" id="box8">Assign task</button>
+        <button class="action-box" id="box9">Schedule ad hoc appoinment</button>
+
       </div>
     </div>
 
@@ -220,7 +218,7 @@
     // Box 1 click - can add multiple card
     document.getElementById('box1').addEventListener('click', function () {
       const container = document.getElementById('dynamic-card-container');
-      const card = createCard('Dynamic Card Title 1', 'This is the content of the dynamic card.', 'dynamic-card-1-' + Date.now());
+      const card = createCard('Amend application data', 'This is the content of the dynamic card.', 'dynamic-card-1-' + Date.now());
       container.appendChild(card);
     });
 
@@ -229,13 +227,85 @@
     document.getElementById('box2').addEventListener('click', function () {
       const container = document.getElementById('dynamic-card-container');
       if (!document.getElementById('dynamic-card-2')) {
-        const card = createCard('Dynamic Card Title 2', 'This is the content of the dynamic card.', 'dynamic-card-2');
+        const card = createCard('Amend household details', 'This is the content of the dynamic card.', 'dynamic-card-2');
         //container.prepend(card);
         container.appendChild(card); // <-- This will add the card below any existing cards
-
+      } else {
+        alert('You cannot add more than 1 of this card.');
       }
+    });
+
+    // Box 3 click - add 1 card only
+    document.getElementById('box3').addEventListener('click', function () {
+      const container = document.getElementById('dynamic-card-container');
+      if (!document.getElementById('dynamic-card-3')) {
+        const card = createCard('Impose or lift debarment', 'This is the content of the dynamic card.', 'dynamic-card-3');
+        container.appendChild(card); // <-- This will add the card below any existing cards
+      } else {
+        alert('You cannot add more than 1 of this card.');
+      }
+    });
+
+
+    // Box 4 click - add 1 card only
+    document.getElementById('box4').addEventListener('click', function () {
+      const container = document.getElementById('dynamic-card-container');
+      if (!document.getElementById('dynamic-card-4')) {
+        const card = createCard('Compute fees', 'This is the content of the dynamic card.', 'dynamic-card-4');
+        container.appendChild(card); // <-- This will add the card below any existing cards
+      } else {
+        alert('You cannot add more than 1 of this card.');
+      }
+    });
+
+    // Box 5 click - add 1 card only
+    document.getElementById('box5').addEventListener('click', function () {
+      const container = document.getElementById('dynamic-card-container');
+      if (!document.getElementById('dynamic-card-5')) {
+        const card = createCard('Compute grants', 'This is the content of the dynamic card.', 'dynamic-card-5');
+        container.appendChild(card); // <-- This will add the card below any existing cards
+
+      } else {
+        alert('You cannot add more than 1 of this card.');
+      }
+    });
+
+    // Box 6 click - add 1 card only
+    document.getElementById('box6').addEventListener('click', function () {
+      const container = document.getElementById('dynamic-card-container');
+      if (!document.getElementById('dynamic-card-6')) {
+        const card = createCard('Prepare documents', 'This is the content of the dynamic card.', 'dynamic-card-6');
+        container.appendChild(card); // <-- This will add the card below any existing cards
+      } else {
+        alert('You cannot add more than 1 of this card.');
+      }
+      });
+
+    // Box 7 click - add 1 card only
+    document.getElementById('box7').addEventListener('click', function () {
+      const container = document.getElementById('dynamic-card-container');
+      if (!document.getElementById('dynamic-card-7')) {
+        const card = createCard('Collect monies', 'This is the content of the dynamic card.', 'dynamic-card-7');
+        container.appendChild(card); // <-- This will add the card below any existing cards
+      } else {
+        alert('You cannot add more than 1 of this card.');
+      }
+    });
+
+    // Box 8 click - can add multiple card
+    document.getElementById('box8').addEventListener('click', function () {
+      const container = document.getElementById('dynamic-card-container');
+      const card = createCard('Assign task', 'This is the content of the dynamic card.', 'dynamic-card-8-' + Date.now());
+      container.appendChild(card);
+    });
+
+    // Box 9 click - can add multiple card
+    document.getElementById('box9').addEventListener('click', function () {
+      const container = document.getElementById('dynamic-card-container');
+      const card = createCard('Schedule ad hoc appointment', 'This is the content of the dynamic card.', 'dynamic-card-9-' + Date.now());
+      container.appendChild(card);
     });
   </script>
 </body>
 
-</html>
+</html>    
