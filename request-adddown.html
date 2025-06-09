@@ -244,11 +244,21 @@
       return card;
     }
 
+   function scrollIfOutOfView(element) {
+  const rect = element.getBoundingClientRect();
+  // If the card is not fully visible in the viewport
+  if (rect.top < 0 || rect.bottom > window.innerHeight) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
     // Box 1 click - can add multiple card
     document.getElementById('box1').addEventListener('click', function () {
       const container = document.getElementById('dynamic-card-container');
       const card = createCard('Amend application data', 'This is the content of the dynamic card.', 'dynamic-card-1-' + Date.now());
       container.appendChild(card);
+      scrollIfOutOfView(card);
+
     });
 
 
@@ -259,6 +269,7 @@
         const card = createCard('Amend household details', 'This is the content of the dynamic card.', 'dynamic-card-2');
         //container.prepend(card);
         container.appendChild(card); // <-- This will add the card below any existing cards
+        scrollIfOutOfView(card);
       } else {
         alert('You cannot add more than 1 of this card.');
       }
