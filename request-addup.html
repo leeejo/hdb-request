@@ -209,17 +209,15 @@
     return card;
   }
 
-  // Box 1 click
-  document.getElementById('box1').addEventListener('click', function() {
-    const container = document.getElementById('dynamic-card-container');
-    if (!document.getElementById('dynamic-card-1')) {
-      const card = createCard('Dynamic Card Title 1', 'This is the content of the dynamic card.', 'dynamic-card-1');
-      container.prepend(card);
+  // Box 1 click - can add multiple card
+document.getElementById('box1').addEventListener('click', function() {
+  const container = document.getElementById('dynamic-card-container');
+  const card = createCard('Dynamic Card Title 1', 'This is the content of the dynamic card.', 'dynamic-card-1-' + Date.now());
+  container.prepend(card);
+});
 
-    }
-  });
 
-  // Box 2 click
+  // Box 2 click - add 1 card only
   document.getElementById('box2').addEventListener('click', function() {
     const container = document.getElementById('dynamic-card-container');
     if (!document.getElementById('dynamic-card-2')) {
