@@ -208,15 +208,15 @@
     <div class="w-full">
       <p class="mb-6 text-gray-700 text-lg font-semibold">Select an action to get started</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-        <button class="action-box" id="box1">Amend application data</button>
-        <button class="action-box" id="box2">Amend household details</button>
-        <button class="action-box" id="box3">Impose or lift debarment</button>
-        <button class="action-box" id="box4">Compute fees</button>
-        <button class="action-box" id="box5">Compute grants</button>
-        <button class="action-box" id="box6">Prepare documents</button>
-        <button class="action-box" id="box7">Collect monies</button>
-        <button class="action-box" id="box8">Assign task</button>
-        <button class="action-box" id="box9">Schedule ad hoc appoinment</button>
+        <button class="action-box" data-action="box1">Amend application data</button>
+        <button class="action-box" data-action="box2">Amend household details</button>
+        <button class="action-box" data-action="box3">Impose or lift debarment</button>
+        <button class="action-box" data-action="box4">Compute fees</button>
+        <button class="action-box" data-action="box5">Compute grants</button>
+        <button class="action-box" data-action="box6">Prepare documents</button>
+        <button class="action-box" data-action="box7">Collect monies</button>
+        <button class="action-box" data-action="box8">Assign task</button>
+        <button class="action-box" data-action="box9">Schedule ad hoc appoinment</button>
       </div>
     </div>
   </main>
@@ -229,9 +229,14 @@
       <!-- Floating Action Button and Menu -->
 <div id="fabContainer" class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-row items-center">
   <div id="fabMenu" class="hidden mr-4 bg-white rounded-lg shadow-lg p-3 space-y-2 transition-all">
-    <button class="block w-full text-left px-4 py-2 rounded hover:bg-gray-100">Menu Item 1</button>
-    <button class="block w-full text-left px-4 py-2 rounded hover:bg-gray-100">Menu Item 2</button>
-    <button class="block w-full text-left px-4 py-2 rounded hover:bg-gray-100">Menu Item 3</button>
+        <button class="action-box" data-action="box2">Amend household details</button>
+        <button class="action-box" data-action="box3">Impose or lift debarment</button>
+        <button class="action-box" data-action="box4">Compute fees</button>
+        <button class="action-box" data-action="box5">Compute grants</button>
+        <button class="action-box" data-action="box6">Prepare documents</button>
+        <button class="action-box" data-action="box7">Collect monies</button>
+        <button class="action-box" data-action="box8">Assign task</button>
+        <button class="action-box" data-action="box9">Schedule ad hoc appoinment</button>
   </div>
   <button id="fabBtn" class="w-14 h-14 rounded-full bg-blue-600 text-white shadow-lg flex items-center justify-center text-3xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
     +
@@ -240,6 +245,7 @@
 
 
   <script>
+    /* comment out archive 
     // Function to dynamically create a card
     function createCard(title, content, id) {
       const card = document.createElement('div');
@@ -358,6 +364,41 @@ const observer = new IntersectionObserver(
   { threshold: [0] }
 );
 observer.observe(sentinel);
+*/
+
+const cardTitles = {
+  1: 'Amend application data',
+  2: 'Amend household details',
+  3: 'Impose or lift debarment',
+  4: 'Compute fees',
+  5: 'Compute grants',
+  6: 'Prepare documents',
+  7: 'Collect monies',
+  8: 'Assign task',
+  9: 'Schedule ad hoc appointment'
+};
+
+document.querySelectorAll('.action-box').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const action = this.getAttribute('data-action');
+    const container = document.getElementById('dynamic-card-container');
+    if (action >= 1 && action <= 7) {
+      // Only allow one card for actions 2-7
+      const cardId = `dynamic-card-${action}`;
+      if (!document.getElementById(cardId)) {
+        const card = createCard(cardTitles[action], 'This is the content of the dynamic card.', cardId);
+        container.prepend(card);
+      } else {
+        alert('You cannot add more than 1 of this card.');
+      }
+    } else if (action == 1 || action == 8 || action == 9) {
+      // Allow multiple cards for 1, 8, 9
+      const cardId = `dynamic-card-${action}-${Date.now()}`;
+      const card = createCard(cardTitles[action], 'This is the content of the dynamic card.', cardId);
+      container.appendChild(card);
+    }
+  });
+});
 
 // FAB script
   const fabBtn = document.getElementById('fabBtn');
