@@ -75,7 +75,13 @@
       @apply bg-gray-200 p-6 rounded-md text-center text-gray-700 font-medium shadow-sm;
     }
 
-      /* sticky card */
+    /* FAB action menu: vertical listing */
+
+    #fabMenu .action-box {
+      @apply w-full text-left bg-transparent hover:bg-blue-50 px-4 py-3 rounded-md shadow-none;
+    }
+
+    /* sticky card */
   .stick-card.is-sticky {
   @apply fixed left-0 right-0 top-0 w-screen;
 }
@@ -228,7 +234,7 @@
 
       <!-- Floating Action Button and Menu -->
 <div id="fabContainer" class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-row items-center">
-  <div id="fabMenu" class="hidden mr-4 bg-white rounded-lg shadow-lg p-3 space-y-2 transition-all">
+  <div id="fabMenu" class="hidden flex flex-col mr-4 bg-white rounded-lg shadow-lg p-3 space-y-2 transition-all">
         <button class="action-box" data-action="box1">Amend application data</button>
         <button class="action-box" data-action="box2">Amend household details</button>
         <button class="action-box" data-action="box3">Impose or lift debarment</button>
@@ -312,22 +318,25 @@ document.querySelectorAll('.action-box').forEach(btn => {
 });
 
 // FAB script
-  const fabBtn = document.getElementById('fabBtn');
-  const fabMenu = document.getElementById('fabMenu');
-  let fabOpen = false;
+const fabBtn = document.getElementById('fabBtn');
+const fabMenu = document.getElementById('fabMenu');
+let fabOpen = false;
 
-  fabBtn.addEventListener('click', () => {
-    fabOpen = !fabOpen;
-    fabMenu.classList.toggle('hidden', !fabOpen);
-  });
+fabBtn.addEventListener('click', (e) => {
+  e.stopPropagation(); // Prevent document click from firing
+  fabOpen = !fabOpen;
+  fabMenu.classList.toggle('hidden', !fabOpen);
+});
 
-  // Optional: Click outside to close the menu
-  document.addEventListener('click', (e) => {
-    if (!fabBtn.contains(e.target) && !fabMenu.contains(e.target)) {
-      fabMenu.classList.add('hidden');
-      fabOpen = false;
-    }
-  });
+fabMenu.addEventListener('click', (e) => {
+  e.stopPropagation(); // Prevent document click from firing when clicking inside menu
+});
+
+// Click outside to close the menu
+document.addEventListener('click', () => {
+  fabMenu.classList.add('hidden');
+  fabOpen = false;
+});
   </script>
 </body>
 
