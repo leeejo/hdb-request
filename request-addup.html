@@ -229,6 +229,7 @@
       <!-- Floating Action Button and Menu -->
 <div id="fabContainer" class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-row items-center">
   <div id="fabMenu" class="hidden mr-4 bg-white rounded-lg shadow-lg p-3 space-y-2 transition-all">
+        <button class="action-box" data-action="box1">Amend application data</button>
         <button class="action-box" data-action="box2">Amend household details</button>
         <button class="action-box" data-action="box3">Impose or lift debarment</button>
         <button class="action-box" data-action="box4">Compute fees</button>
@@ -245,7 +246,7 @@
 
 
   <script>
-    /* comment out archive 
+
     // Function to dynamically create a card
     function createCard(title, content, id) {
       const card = document.createElement('div');
@@ -258,96 +259,6 @@
       return card;
     }
 
-    // Box 1 click - can add multiple card
-    document.getElementById('box1').addEventListener('click', function () {
-      const container = document.getElementById('dynamic-card-container');
-      const card = createCard('Amend application data', 'This is the content of the dynamic card.', 'dynamic-card-1-' + Date.now());
-      container.prepend(card);
-    });
-
-
-    // Box 2 click - add 1 card only
-    document.getElementById('box2').addEventListener('click', function () {
-      const container = document.getElementById('dynamic-card-container');
-      if (!document.getElementById('dynamic-card-2')) {
-        const card = createCard('Amend household details', 'This is the content of the dynamic card.', 'dynamic-card-2');
-        container.prepend(card);
-      } else {
-        alert('You cannot add more than 1 of this card.');
-      }
-    });
-
-    // Box 3 click - add 1 card only
-    document.getElementById('box3').addEventListener('click', function () {
-      const container = document.getElementById('dynamic-card-container');
-      if (!document.getElementById('dynamic-card-3')) {
-        const card = createCard('Impose or lift debarment', 'This is the content of the dynamic card.', 'dynamic-card-3');
-        container.prepend(card);
-      } else {
-        alert('You cannot add more than 1 of this card.');
-      }
-    });
-
-
-    // Box 4 click - add 1 card only
-    document.getElementById('box4').addEventListener('click', function () {
-      const container = document.getElementById('dynamic-card-container');
-      if (!document.getElementById('dynamic-card-4')) {
-        const card = createCard('Compute fees', 'This is the content of the dynamic card.', 'dynamic-card-4');
-        //container.prepend(card);
-        container.prepend(card);
-      } else {
-        alert('You cannot add more than 1 of this card.');
-      }
-    });
-
-    // Box 5 click - add 1 card only
-    document.getElementById('box5').addEventListener('click', function () {
-      const container = document.getElementById('dynamic-card-container');
-      if (!document.getElementById('dynamic-card-5')) {
-        const card = createCard('Compute grants', 'This is the content of the dynamic card.', 'dynamic-card-5');
-        container.prepend(card);
-
-      } else {
-        alert('You cannot add more than 1 of this card.');
-      }
-    });
-
-    // Box 6 click - add 1 card only
-    document.getElementById('box6').addEventListener('click', function () {
-      const container = document.getElementById('dynamic-card-container');
-      if (!document.getElementById('dynamic-card-6')) {
-        const card = createCard('Prepare documents', 'This is the content of the dynamic card.', 'dynamic-card-6');
-        container.prepend(card);
-      } else {
-        alert('You cannot add more than 1 of this card.');
-      }
-    });
-
-    // Box 7 click - add 1 card only
-    document.getElementById('box7').addEventListener('click', function () {
-      const container = document.getElementById('dynamic-card-container');
-      if (!document.getElementById('dynamic-card-7')) {
-        const card = createCard('Collect monies', 'This is the content of the dynamic card.', 'dynamic-card-7');
-        container.prepend(card);
-      } else {
-        alert('You cannot add more than 1 of this card.');
-      }
-    });
-
-    // Box 8 click - can add multiple card
-    document.getElementById('box8').addEventListener('click', function () {
-      const container = document.getElementById('dynamic-card-container');
-      const card = createCard('Assign task', 'This is the content of the dynamic card.', 'dynamic-card-8-' + Date.now());
-      container.appendChild(card);
-    });
-
-    // Box 9 click - can add multiple card
-    document.getElementById('box9').addEventListener('click', function () {
-      const container = document.getElementById('dynamic-card-container');
-      const card = createCard('Schedule ad hoc appointment', 'This is the content of the dynamic card.', 'dynamic-card-9-' + Date.now());
-      container.appendChild(card);
-    });
 
      // Sticky UI effect using a sentinel
 const stickCard = document.getElementById('stickCard');
@@ -364,7 +275,7 @@ const observer = new IntersectionObserver(
   { threshold: [0] }
 );
 observer.observe(sentinel);
-*/
+
 
 const cardTitles = {
   1: 'Amend application data',
@@ -380,22 +291,22 @@ const cardTitles = {
 
 document.querySelectorAll('.action-box').forEach(btn => {
   btn.addEventListener('click', function () {
-    const action = this.getAttribute('data-action');
+    const action = parseInt(this.getAttribute('data-action').replace('box', ''), 10);
     const container = document.getElementById('dynamic-card-container');
-    if (action >= 1 && action <= 7) {
-      // Only allow one card for actions 2-7
+    // Only allow multiple for 1, 7, 9
+    if (action === 1 || action === 7 || action === 9) {
+      const cardId = `dynamic-card-${action}-${Date.now()}`;
+      const card = createCard(cardTitles[action], 'This is the content of the dynamic card.', cardId);
+      container.prepend(card); // <-- always add to top
+    } else {
+      // All other actions: only one card allowed
       const cardId = `dynamic-card-${action}`;
       if (!document.getElementById(cardId)) {
         const card = createCard(cardTitles[action], 'This is the content of the dynamic card.', cardId);
-        container.prepend(card);
+        container.prepend(card); // <-- always add to top
       } else {
         alert('You cannot add more than 1 of this card.');
       }
-    } else if (action == 1 || action == 8 || action == 9) {
-      // Allow multiple cards for 1, 8, 9
-      const cardId = `dynamic-card-${action}-${Date.now()}`;
-      const card = createCard(cardTitles[action], 'This is the content of the dynamic card.', cardId);
-      container.appendChild(card);
     }
   });
 });
