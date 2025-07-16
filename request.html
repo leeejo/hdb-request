@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>HDB Request</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style type="text/tailwindcss">
+    /* Tailwind Configuration */
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  body {
+      /* Apply Inter font and background color via custom class on body */
+      @apply font-inter bg-white text-gray-900;
+  }
+
+  /* Custom Tailwind Components */
+  @layer components {
+    /* Primary Button */
+    .btn-primary {
+      @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-sm 
+             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 
+             transition duration-150 ease-in-out;
+    }
+
+    /* Outline Button */
+    .btn-outline {
+      @apply bg-white border border-blue-600 text-blue-600 font-semibold py-2 px-4 rounded-md shadow-sm 
+             hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 
+             transition duration-150 ease-in-out;
+    }
+
+    /* Base Card/Section Styling */
+    .card-base {
+      @apply rounded-lg p-6 border border-gray-200 bg-white shadow-sm;
+    }
+
+    /* Info Grid Item (for 'Case Status', 'Type' etc.) */
+    .info-item {
+      @apply flex flex-col;
+    }
+    .info-item .label { /* Specific styling for the label within info-item */
+      @apply font-semibold text-gray-600;
+    }
+    .info-item .value { /* Specific styling for the value within info-item */
+      @apply text-gray-800; /* Default value text color */
+    }
+
+
+    /* Navigation Tab Base Styling */
+    .tab-item {
+      @apply font-medium rounded-md p-3 text-center shadow-sm cursor-pointer 
+             transition duration-150 ease-in-out;
+    }
+    /* Active Navigation Tab */
+    .tab-active {
+      @apply bg-blue-50 border border-blue-600 text-blue-700;
+    }
+    /* Inactive Navigation Tab */
+    .tab-inactive {
+      @apply border border-gray-300 bg-white text-gray-700 hover:bg-gray-100;
+    }
+
+    /* Action Grid Box */
+    .action-box {
+      @apply bg-gray-200 p-6 rounded-md text-center text-gray-700 font-medium shadow-sm;
+    }
+
+    /* FAB action menu: vertical listing */
+
+    #fabMenu .action-box {
+      @apply w-full text-left bg-transparent hover:bg-blue-50 px-4 py-3 rounded-md shadow-none;
+    }
+
+    /* sticky card */
+  .stick-card.is-sticky {
+  @apply fixed left-0 right-0 top-0 w-screen;
+}
+.stick-card.is-sticky .card-base {
+  @apply my-0 pb-0;
+}
+.stick-card.is-sticky .tab-group {
+  @apply my-0 bg-gray-100 flex justify-center items-center py-2;
+}
+.stick-card.is-sticky .info-item-s{
+  @apply hidden;
+}
+  
+  
+  } /* End of Tailwind Components */
+</style>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'hdb-blue': '#0F477E', // Custom brand blue
+          },
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'], // Define a custom font family for Inter
+          }
+        },
+      },
+    }
+
+  </script>
+
+</head>
+
+<body>
+
+  <header class="flex items-center p-3 text-white bg-hdb-blue min-w-[320px] shadow-md">
+    <div class="mx-4">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="size-6 text-white">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+      </svg>
+    </div>
+    <h1 class="text-2xl font-medium leading-tight whitespace-nowrap">Sales Processing System</h1>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <div class="text-gray-500 text-sm mb-6">
+      Home / In-tray / Reg No. 8013197D / REQ123456
+    </div>
+
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h2 class="text-2xl font-bold">REQ123456</h2>
+        <p class="text-sm text-gray-500">Updated on Thurs, 02 Nov 2023 at 09:58 AM (SGT)</p>
+      </div>
+      <div class="flex space-x-4">
+        <button class="btn-outline">
+          Add journal
+        </button>
+        <button class="btn-primary">
+          Close request
+        </button>
+      </div>
+    </div>
+
+ <!-- Add this before #stickCard -->
+<div id="sticky-sentinel"></div>
+
+    <!-- Sticky Card -->
+<div class="stick-card sticky top-0 z-20 bg-white" id="stickCard">
+
+      <div class="card-base mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4 mb-6">
+          <div class="info-item">
+            <div class="label">Case Status</div>
+            <div class="value text-blue-600">Active</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="label">Type</div>
+            <div class="value">Change of family composition</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="label">Reason</div>
+            <div class="value">Material change</div>
+          </div>
+
+          <div class="info-item">
+            <div class="label">CMS No.</div>
+            <div class="value">123456789</div>
+          </div>
+
+          <div class="info-item-s">
+            <div class="label">Created date</div>
+            <div class="value">2023-05-30</div>
+          </div>
+          
+          <div class="info-item-s">
+              <div class="label">Assigned Staff</div>
+              <div class="value">Susan Ho Hui Ting (12345A)</div>
+            </div>
+           
+          <div class="info-item-s">
+              <div class="label">Assigned Date</div>
+              <div class="value">-</div>
+            </div>
+         
+          </div>
+        </div>
+  
+  
+
+      <div class="tab-group flex space-x-4 my-6">
+        <div class="tab-item tab-active">Actions</div>
+        <div class="tab-item tab-inactive">App Details</div>
+        <div class="tab-item tab-inactive">Checks</div>
+        <div class="tab-item tab-inactive">Documents</div>
+        <div class="tab-item tab-inactive">Journal</div>
+      </div>
+    </div>
+
+
+    <!-- Card will be inserted here -->
+    <div id="dynamic-card-container"></div>
+
+    <!--div class="w-full">
+      <p class="mb-6 text-gray-700 text-lg font-semibold">Select an action to get started</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+        <button class="action-box" data-action="box1">Amend application data</button>
+        <button class="action-box" data-action="box2">Amend household details</button>
+        <button class="action-box" data-action="box3">Impose or lift debarment</button>
+        <button class="action-box" data-action="box4">Compute fees</button>
+        <button class="action-box" data-action="box5">Compute grants</button>
+        <button class="action-box" data-action="box6">Prepare documents</button>
+        <button class="action-box" data-action="box7">Collect monies</button>
+        <button class="action-box" data-action="box8">Assign task</button>
+        <button class="action-box" data-action="box9">Schedule ad hoc appoinment</button>
+      </div>
+    </div-->
+  </main>
+
+  <footer class="bg-gray-200 p-4 text-center text-gray-600 text-sm border-t border-gray-300">
+    <div>&copy; 2024, Government of Singapore</div>
+    <div class="mt-1">Last updated 31 May 2024 v1.1.3</div>
+  </footer>
+
+      <!-- Floating Action Button and Menu -->
+<div id="fabContainer" class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-row items-center">
+  <div id="fabMenu" class="hidden flex flex-col mr-4 bg-white rounded-lg shadow-lg p-3 space-y-2 transition-all">
+        <button class="action-box" data-action="box1">Amend application data</button>
+        <button class="action-box" data-action="box2">Amend household details</button>
+        <button class="action-box" data-action="box3">Impose or lift debarment</button>
+        <button class="action-box" data-action="box4">Compute fees</button>
+        <button class="action-box" data-action="box5">Compute grants</button>
+        <button class="action-box" data-action="box6">Prepare documents</button>
+        <button class="action-box" data-action="box7">Collect monies</button>
+        <button class="action-box" data-action="box8">Assign task</button>
+        <button class="action-box" data-action="box9">Schedule ad hoc appoinment</button>
+  </div>
+  <button id="fabBtn" class="h-14 rounded-lg bg-blue-600 text-white shadow-lg flex items-center justify-center text-3xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.176 0l-3.38 2.454c-.784.57-1.838-.196-1.539-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/>
+  </svg>  
+  </div>
+
+<!-- walkthrough overlay -->
+<div id="fabWalkthroughOverlay" class="fixed inset-0 bg-black bg-opacity-30 z-[100] flex items-center justify-center">
+    <div class="absolute right-24 top-1/2 -translate-y-1/2 flex flex-col items-end">
+    <!-- Tooltip box -->
+    <div id="fabWalkthroughTooltip" class="relative flex items-center">
+      <div class="bg-white rounded-lg shadow-lg p-4 max-w-xs text-gray-800 text-base pointer-events-auto">
+        <strong>Get started:</strong><br>
+        Click the <span class="inline-block align-middle"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-500 inline" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.176 0l-3.38 2.454c-.784.57-1.838-.196-1.539-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg></span> button to add your first action.
+      </div>
+      <!-- Arrow pointing to FAB (right side, middle) -->
+      <div class="flex items-center h-full">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 text-white -ml-2 rotate-90">
+          <polygon points="12,0 24,24 0,24" fill="white"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    // Function to dynamically create a card
+    function createCard(title, content, id) {
+      const card = document.createElement('div');
+      card.className = 'card-base mb-6';
+      card.id = id;
+      card.innerHTML = `
+      <h3 class="text-lg font-semibold mb-4">${title}</h3>
+      <p class="text-gray-700">${content}</p>
+    `;
+      return card;
+    }
+
+
+     // Sticky UI effect using a sentinel
+const stickCard = document.getElementById('stickCard');
+const sentinel = document.getElementById('sticky-sentinel');
+
+const observer = new IntersectionObserver(
+  ([entry]) => {
+    if (entry.boundingClientRect.top < 0) {
+      stickCard.classList.add('is-sticky');
+    } else {
+      stickCard.classList.remove('is-sticky');
+    }
+  },
+  { threshold: [0] }
+);
+observer.observe(sentinel);
+
+
+const cardTitles = {
+  1: 'Amend application data',
+  2: 'Amend household details',
+  3: 'Impose or lift debarment',
+  4: 'Compute fees',
+  5: 'Compute grants',
+  6: 'Prepare documents',
+  7: 'Collect monies',
+  8: 'Assign task',
+  9: 'Schedule ad hoc appointment'
+};
+
+document.querySelectorAll('.action-box').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const action = parseInt(this.getAttribute('data-action').replace('box', ''), 10);
+    const container = document.getElementById('dynamic-card-container');
+    // Only allow multiple for 1, 7, 9
+    if (action === 1 || action === 7 || action === 9) {
+      const cardId = `dynamic-card-${action}-${Date.now()}`;
+      const card = createCard(cardTitles[action], 'This is the content of the dynamic card.', cardId);
+      container.prepend(card); // <-- always add to top
+    } else {
+      // All other actions: only one card allowed
+      const cardId = `dynamic-card-${action}`;
+      if (!document.getElementById(cardId)) {
+        const card = createCard(cardTitles[action], 'This is the content of the dynamic card.', cardId);
+        container.prepend(card); // <-- always add to top
+      } else {
+        alert('You cannot add more than 1 of this card.');
+      }
+    }
+  });
+});
+
+// FAB script
+const fabBtn = document.getElementById('fabBtn');
+const fabMenu = document.getElementById('fabMenu');
+let fabOpen = false;
+
+fabBtn.addEventListener('click', (e) => {
+  e.stopPropagation(); // Prevent document click from firing
+  fabOpen = !fabOpen;
+  fabMenu.classList.toggle('hidden', !fabOpen);
+});
+
+fabMenu.addEventListener('click', (e) => {
+  e.stopPropagation(); // Prevent document click from firing when clicking inside menu
+});
+
+// Click outside to close the menu
+document.addEventListener('click', () => {
+  fabMenu.classList.add('hidden');
+  fabOpen = false;
+});
+
+  // Show walkthrough overlay on first visit
+  function updateFabWalkthroughOverlay() {
+    const overlay = document.getElementById('fabWalkthroughOverlay');
+    const cardContainer = document.getElementById('dynamic-card-container');
+    // Show only if there are NO cards
+    if (cardContainer && cardContainer.children.length === 0) {
+      overlay.classList.remove('hidden');
+    } else {
+      overlay.classList.add('hidden');
+    }
+  }
+
+  // Initial check on page load
+  document.addEventListener('DOMContentLoaded', updateFabWalkthroughOverlay);
+
+  // Update overlay after any card is added
+  document.querySelectorAll('.action-box').forEach(btn => {
+    btn.addEventListener('click', function () {
+      setTimeout(updateFabWalkthroughOverlay, 100);
+    });
+  });
+
+  // Dismiss overlay when clicking outside the tooltip
+  document.getElementById('fabWalkthroughOverlay').addEventListener('click', function (e) {
+    const tooltip = document.getElementById('fabWalkthroughTooltip');
+    if (!tooltip.contains(e.target)) {
+      this.classList.add('hidden');
+    }
+  });
+  </script>
+</body>
+
+</html>
