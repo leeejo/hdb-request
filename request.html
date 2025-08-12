@@ -152,7 +152,6 @@
 
  <!-- Add this before #stickCard -->
 <div id="sticky-sentinel"></div>
-
     <!-- Sticky Card -->
 <div class="stick-card sticky top-0 z-20 bg-white" id="stickCard">
 
@@ -239,11 +238,11 @@
         <button class="action-box" data-action="box2">Amend household details</button>
         <button class="action-box" data-action="box3">Impose or lift debarment</button>
         <button class="action-box" data-action="box4">Compute fees</button>
-        <button class="action-box" data-action="box5">Compute grants</button>
+        <button class="action-box" data-action="box5">Collect monies</button>
         <button class="action-box" data-action="box6">Prepare documents</button>
         <button class="action-box" data-action="box7">Collect monies</button>
-        <button class="action-box" data-action="box8">Assign task</button>
-        <button class="action-box" data-action="box9">Schedule ad hoc appoinment</button>
+        <button class="action-box" data-action="box8">Schedule ad hoc appoinment</button>
+        <button class="action-box" data-action="box9">Assign tasks to others</button>
   </div>
   <button id="fabBtn" class="h-14 rounded-lg bg-blue-600 text-white shadow-lg flex items-center justify-center text-3xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
   <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -271,19 +270,6 @@
 </div>
 
   <script>
-    // Function to dynamically create a card
-    function createCard(title, content, id) {
-      const card = document.createElement('div');
-      card.className = 'card-base mb-6';
-      card.id = id;
-      card.innerHTML = `
-      <h3 class="text-lg font-semibold mb-4">${title}</h3>
-      <p class="text-gray-700">${content}</p>
-    `;
-      return card;
-    }
-
-
      // Sticky UI effect using a sentinel
 const stickCard = document.getElementById('stickCard');
 const sentinel = document.getElementById('sticky-sentinel');
@@ -301,17 +287,28 @@ const observer = new IntersectionObserver(
 observer.observe(sentinel);
 
 
-const cardTitles = {
-  1: 'Amend application data',
-  2: 'Amend household details',
-  3: 'Impose or lift debarment',
-  4: 'Compute fees',
-  5: 'Compute grants',
-  6: 'Prepare documents',
-  7: 'Collect monies',
-  8: 'Assign task',
-  9: 'Schedule ad hoc appointment'
-};
+// Usage in your createCard function:
+function createCard(action, id) {
+  const card = document.createElement('div');
+  card.className = 'card-base mb-6';
+  card.id = id;
+  card.innerHTML = `<div class="card-content">Loading...</div>`;
+
+  // Fetch the HTML content and insert it
+  fetch('cards.html')
+    .then(r => r.text())
+    .then(html => {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      const template = tempDiv.querySelector(`#card${action}`);
+      card.querySelector('.card-content').innerHTML = template ? template.innerHTML : '<p class="text-red-500">Card not found.</p>';
+    })
+    .catch(() => {
+      card.querySelector('.card-content').innerHTML = '<p class="text-red-500">Failed to load content.</p>';
+    });
+
+  return card;
+}
 
 document.querySelectorAll('.action-box').forEach(btn => {
   btn.addEventListener('click', function () {
@@ -320,13 +317,13 @@ document.querySelectorAll('.action-box').forEach(btn => {
     // Only allow multiple for 1, 7, 9
     if (action === 1 || action === 7 || action === 9) {
       const cardId = `dynamic-card-${action}-${Date.now()}`;
-      const card = createCard(cardTitles[action], 'This is the content of the dynamic card.', cardId);
+      const card = createCard(action, cardId);
       container.prepend(card); // <-- always add to top
     } else {
       // All other actions: only one card allowed
       const cardId = `dynamic-card-${action}`;
       if (!document.getElementById(cardId)) {
-        const card = createCard(cardTitles[action], 'This is the content of the dynamic card.', cardId);
+        const card = createCard(action, cardId);
         container.prepend(card); // <-- always add to top
       } else {
         alert('You cannot add more than 1 of this card.');
@@ -334,6 +331,7 @@ document.querySelectorAll('.action-box').forEach(btn => {
     }
   });
 });
+
 
 // FAB script
 const fabBtn = document.getElementById('fabBtn');
