@@ -318,12 +318,27 @@ document.querySelectorAll('.action-box').forEach(btn => {
       const cardId = `dynamic-card-${action}-${Date.now()}`;
       const card = createCard(action, cardId);
       container.prepend(card); // <-- always add to top
+
+      // Highlight the latest card
+  document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
+    c.classList.remove('border-yellow-400');
+    c.classList.remove('border-4');
+  });
+  card.classList.add('border-yellow-400', 'border-4');
+
     } else {
       // All other actions: only one card allowed
       const cardId = `dynamic-card-${action}`;
       if (!document.getElementById(cardId)) {
         const card = createCard(action, cardId);
         container.prepend(card); // <-- always add to top
+
+        // Highlight the latest card
+  document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
+    c.classList.remove('border-yellow-400');
+    c.classList.remove('border-4');
+  });
+  card.classList.add('border-yellow-400', 'border-4');
       } else {
         alert('You cannot add more than 1 of this card.');
       }
