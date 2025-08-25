@@ -8,9 +8,323 @@
   <div>Add, remove or change applicants or occupiers from the existing record. This is the content for Amend household details.</div>
 </template>
 
+<!-- Lift impose debarment -->
 <template id="card3">
-  <h3 class="text-lg font-semibold mb-4">Impose or lift debarement</h3>
-  <div>Ensure that the applicants receive the correct debarment code. This is the content for debarment.</div>
+<div class="flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-full overflow-hidden"
+>
+
+  <!-- section: title -->
+  <header class="flex items-center w-full h-[66px] gap-4 px-4">
+    <div class="flex items-center justify-center h-12 w-12 p-4 rounded-md bg-[#343a40]">
+      <span class="text-white">icn</span>
+    </div>
+    <h1 class="text-xl font-medium flex-grow">
+      Impose or lift debarment
+    </h1>
+    <button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4">
+      Delete
+    </button>
+  </header>
+
+  <!-- section: submission-->
+  <div class="flex flex-col py-4 px-4 w-full">
+    <p class="text-xl font-medium mb-1">Submission</p>
+    <p class="mb-4">
+      Input your approved submission reference number. You may also upload any relevant supporting documents from the Documents tab.
+    </p>
+    <div class="bg-[#f8f9fa] border-2 border-[#dee2e6] rounded p-4 w-full flex flex-col gap-4">
+      <p>Ref No. (optional)</p>
+      <input type="text" name="approval_no" placeholder="Approval no." class="w-[300px]">
+    </div>
+  </div>
+
+    <!-- section: deb code table -->
+      <div class="flex flex-col py-4 px-4 w-full">
+
+      
+        <div class="flex items-center w-full">
+          <div class="flex flex-col flex-grow gap-1">
+            <p class="text-xl font-medium mb-1">Debarment code</p>
+            <p class="mb-4">View the debarment code changes that have been applied to the debarment system for these applicants, occupier and enablers.</p>
+          </div>
+
+
+           <button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4">
+      View full list
+    </button>
+
+        </div>
+
+        
+        <div
+          class="flex flex-col justify-center items-start self-stretch flex-grow-0 flex-shrink-0 overflow-hidden gap-6 p-4 rounded bg-[#f8f9fa] border-2 border-[#dee2e6]"
+        >
+          <div class="w-full flex items-center gap-3">
+            <p class="font-bold">I want to</p>
+            <button type="button" class="flex items-center gap-2 px-3 py-2 rounded bg-[#1976d2]">
+              <p class="text-white">Impose new code</p>
+            </button>
+          </div>
+
+          <div
+            class="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0"
+          >
+            <div
+              class="flex flex-col justify-center items-start self-stretch flex-grow-0 flex-shrink-0 gap-6 p-4 rounded bg-white border border-[#dee2e6]"
+            >
+
+              <div class="flex justify-start items-center flex-grow-0 flex-shrink-0 gap-3">
+                <select>
+                  <option value="">All filters</option>
+                  <option value="identity">Identity No.</option>
+                  <option value="name">Name</option>
+                  <option value="scheme">Scheme Account No.</option>
+                  <option value="reason">Reason Code</option>
+                  <option value="owner">Owner</option>
+                  <option value="transaction">Transaction Reference</option>
+                  <option value="date">Effective Date</option>
+                  <option value="period">Period</option>
+                </select>
+
+               <select>
+                  <option value="">Names</option>
+                  <option value="name">Name</option>
+                </select>
+
+                <select>
+                  <option value="">Code</option>
+                  <option value="reason">Reason Code</option>
+                </select>
+              </div>
+              
+
+
+              <div
+                class="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0"
+              >
+                <div class="flex flex-col flex-grow gap-1 pb-2">
+            <p >Showing 1-10 of 85 items</p>
+          </div>
+
+
+       <table class="min-w-full mt-6">
+          <thead>
+            <tr class="bg-gray-100 border-b-2 border-black">
+              <th class="px-2 py-4">Identity No.</th>
+              <th class="px-2 py-4">Name</th>
+              <th class="px-2 py-4">Scheme Account No.</th>
+              <th class="px-2 py-4">Reason Code</th>
+              <th class="px-2 py-4">Owner</th>
+              <th class="px-2 py-4">Transaction Reference</th>
+              <th class="px-2 py-4">Effective Date</th>
+              <th class="px-2 py-4">Period</th>
+              <th class="px-2 py-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="px-2 py-4">S1234567A</td>
+              <td class="px-2 py-4">John Doe</td>
+              <td class="px-2 py-4">9019-1833-1-17</td>
+              <td class="px-2 py-4">6F</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">8013197D</td>
+              <td class="px-2 py-4">13-01-2025</td>
+              <td class="px-2 py-4">Indefinite</td>
+              <td class="px-2 py-4">
+               <button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 py-4">S2345678B</td>
+              <td class="px-2 py-4">Jane Smith</td>
+              <td class="px-2 py-4">9019-1833-1-18</td>
+              <td class="px-2 py-4">7A</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">SL/XXXXXXX/YYYY</td>
+              <td class="px-2 py-4">14-02-2025</td>
+              <td class="px-2 py-4">001</td>
+              <td class="px-2 py-4"><button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button></td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 py-4">S3456789C</td>
+              <td class="px-2 py-4">Alice Tan</td>
+              <td class="px-2 py-4">9019-1833-1-19</td>
+              <td class="px-2 py-4">8B</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">SL/XXXXXXX/YYYY</td>
+              <td class="px-2 py-4">15-03-2025</td>
+              <td class="px-2 py-4">Indefinite</td>
+              <td class="px-2 py-4"><button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button></td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 py-4">S4567890D</td>
+              <td class="px-2 py-4">Bob Lee</td>
+              <td class="px-2 py-4">9019-1833-1-20</td>
+              <td class="px-2 py-4">9C</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">SL/XXXXXXX/YYYY</td>
+              <td class="px-2 py-4">16-04-2025</td>
+              <td class="px-2 py-4">060</td>
+              <td class="px-2 py-4"><button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button></td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 py-4">S5678901E</td>
+              <td class="px-2 py-4">Carol Lim</td>
+              <td class="px-2 py-4">9019-1833-1-21</td>
+              <td class="px-2 py-4">10D</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">SL/XXXXXXX/YYYY</td>
+              <td class="px-2 py-4">17-05-2025</td>
+              <td class="px-2 py-4">001</td>
+              <td class="px-2 py-4"><button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button></td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 py-4">S6789012F</td>
+              <td class="px-2 py-4">David Ong</td>
+              <td class="px-2 py-4">9019-1833-1-22</td>
+              <td class="px-2 py-4">11E</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">SL/XXXXXXX/YYYY</td>
+              <td class="px-2 py-4">18-06-2025</td>
+              <td class="px-2 py-4">060</td>
+              <td class="px-2 py-4"><button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button></td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 py-4">S7890123G</td>
+              <td class="px-2 py-4">Eve Goh</td>
+              <td class="px-2 py-4">9019-1833-1-23</td>
+              <td class="px-2 py-4">12F</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">SL/XXXXXXX/YYYY</td>
+              <td class="px-2 py-4">19-07-2025</td>
+              <td class="px-2 py-4">Indefinite</td>
+              <td class="px-2 py-4"><button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button></td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 py-4">S8901234H</td>
+              <td class="px-2 py-4">Frank Chua</td>
+              <td class="px-2 py-4">9019-1833-1-24</td>
+              <td class="px-2 py-4">13G</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">SL/XXXXXXX/YYYY</td>
+              <td class="px-2 py-4">20-08-2025</td>
+              <td class="px-2 py-4">001</td>
+              <td class="px-2 py-4"><button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button></td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 py-4">S9012345I</td>
+              <td class="px-2 py-4">Grace Teo</td>
+              <td class="px-2 py-4">9019-1833-1-25</td>
+              <td class="px-2 py-4">14H</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">SL/XXXXXXX/YYYY</td>
+              <td class="px-2 py-4">21-09-2025</td>
+              <td class="px-2 py-4">Indefinite</td>
+              <td class="px-2 py-4"><button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button></td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-2 py-4">S0123456J</td>
+              <td class="px-2 py-4">Henry Yeo</td>
+              <td class="px-2 py-4">9019-1833-1-26</td>
+              <td class="px-2 py-4">15I</td>
+              <td class="px-2 py-4">SL</td>
+              <td class="px-2 py-4">SL/XXXXXXX/YYYY</td>
+              <td class="px-2 py-4">22-10-2025</td>
+              <td class="px-2 py-4">060</td>
+              <td class="px-2 py-4"><button class="text-[#145ea8] bg-transparent border-none cursor-pointer ml-4"> Lift </button></td>
+            </tr>
+          </tbody>
+        </table>
+
+      <div class="flex items-center justify-between w-full mt-2">
+
+        <div class="flex-1 text-left">Total 10 items</div>
+
+        <div class="flex-1 flex justify-center">
+          <button class="px-3 py-1 mx-1 bg-gray-200 rounded">&lt;</button>
+          <button class="px-3 py-1 mx-1 bg-blue-600 text-white rounded">1</button>
+          <button class="px-3 py-1 mx-1 bg-gray-200 rounded">2</button>
+          <button class="px-3 py-1 mx-1 bg-gray-200 rounded">3</button>
+          <button class="px-3 py-1 mx-1 bg-gray-200 rounded">&gt;</button>
+        </div>
+
+        <div class="flex-1 flex justify-end">
+          <select>
+            <option>10 / page</option>
+            <option>20 / page</option>
+            <option>50 / page</option>
+          </select>
+        </div>
+      </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      
+    </div>
+
+    <!-- section: approval -->
+      <div class="flex flex-col py-4 px-4 w-full">
+
+          <div class="w-full">
+          <p class="text-xl font-medium mb-1">Approval</p>
+          <p class="mb-4">
+           Submit for approval for your changes.
+          </p>
+        </div>
+
+      <div class="flex items-center gap-3 p-4 mb-4 rounded bg-[#f8f9fa] border-2 border-[#dee2e6]">
+        <div>
+        <button type="button" class="bg-[#1976d2] flex gap-2 px-3 py-2 mb-3 rounded">
+          <p class="text-white">Request approval</p>
+        </button>
+        <p class="flex-grow-0 flex-shrink-0">
+          Request by [Officer name] on 12-08-2024 10:25:58 AM
+        </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 p-4 rounded bg-[#d7eee6]">
+        <div>
+          <p class="text-2xl font-medium mb-1">Approval obtained</p>
+          <p>Approved by [Officer name] on 12-08-2024 10:25:58 AM</p>
+        </div>
+      </div>
+    </div>
+
+
+    </div>
+
+    </div>
+
+    <!-- section: follow up actions -->
+    <div
+      class="flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-full overflow-hidden border-t"
+    >
+      <div class="flex flex-col py-4 px-4 w-full">
+        <div class="w-full">
+          <p class="text-xl font-medium mb-1">Possible follow-up actions</p>
+          <p class="mb-4">
+           Subtitle/description
+          </p>
+        </div>
+
+    
+      <div class="w-full p-4 rounded bg-[#f8f9fa] border-2 border-[#dee2e6]">
+        <ul class="text-base text-left text-[#212529] list-disc pl-5">
+          <li>New legal documents are needed</li>
+          <li>Recover any previously disbursed grant</li>
+        </ul>
+      </div>
+</div>
+
+<!-- section : footer-->
+<div class="w-full px-4 py-2 bg-black/5 border-t">
+  <p class="text-base text-left text-[#212529]">Created: [officer name], [date/time]</p>
+</div>
+
 </template>
 
 <template id="card4">
