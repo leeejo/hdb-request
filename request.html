@@ -25,6 +25,19 @@
 
   /* Custom Tailwind Components */
   @layer components {
+    /* Ghost Loader Skeleton */
+    .ghost-loader {
+      @apply animate-pulse bg-gray-200 rounded-md;
+      min-height: 32px;
+    }
+    .ghost-loader.sm {
+      min-height: 20px;
+      width: 80px;
+    }
+    .ghost-loader.lg {
+      min-height: 32px;
+      width: 160px;
+    }
     /* Primary Button */
     .btn-primary {
       @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-sm 
@@ -141,6 +154,33 @@
         <p class="text-sm text-gray-500">Updated on Thurs, 02 Nov 2023 at 09:58 AM (SGT)</p>
       </div>
       <div class="flex space-x-4">
+        <div class="relative">
+          <button id="moreActionsBtn" class="btn-outline flex items-center">
+            More actions
+            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="moreActionsMenu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-30 hidden">
+            <button class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Reassign staff</button>
+            <button class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">View history</button>
+            <button class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Export request</button>
+          </div>
+        </div>
+        <script>
+          const moreBtn = document.getElementById('moreActionsBtn');
+          const moreMenu = document.getElementById('moreActionsMenu');
+          moreBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            moreMenu.classList.toggle('hidden');
+          });
+          document.addEventListener('click', function() {
+            moreMenu.classList.add('hidden');
+          });
+          moreMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+          });
+        </script>
         <button class="btn-outline">
           Add journal
         </button>
@@ -154,57 +194,64 @@
 <div id="sticky-sentinel"></div>
     <!-- Sticky Card -->
 <div class="stick-card sticky top-0 z-20 bg-white" id="stickCard">
-
-      <div class="card-base mb-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4 mb-6">
-          <div class="info-item">
-            <div class="label">Case Status</div>
-            <div class="value text-blue-600">Active</div>
-          </div>
-          
-          <div class="info-item">
-            <div class="label">Type</div>
-            <div class="value">Change of family composition</div>
-          </div>
-          
-          <div class="info-item">
-            <div class="label">Reason</div>
-            <div class="value">Material change</div>
-          </div>
-
-          <div class="info-item">
-            <div class="label">CMS No.</div>
-            <div class="value">123456789</div>
-          </div>
-
-          <div class="info-item-s">
-            <div class="label">Created date</div>
-            <div class="value">2023-05-30</div>
-          </div>
-          
-          <div class="info-item-s">
-              <div class="label">Assigned Staff</div>
-              <div class="value">Susan Ho Hui Ting (12345A)</div>
-            </div>
-           
-          <div class="info-item-s">
-              <div class="label">Assigned Date</div>
-              <div class="value">-</div>
-            </div>
-         
-          </div>
-        </div>
-  
-  
-
-      <div class="tab-group flex space-x-4 my-6">
-        <div class="tab-item tab-active">Actions</div>
-        <div class="tab-item tab-inactive">App Details</div>
-        <div class="tab-item tab-inactive">Checks</div>
-        <div class="tab-item tab-inactive">Documents</div>
-        <div class="tab-item tab-inactive">Journal</div>
+  <!-- Ghost Loader State -->
+  <div class="card-base mb-8 p-4 ghost-loader-state ">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4 mb-6">
+      <div class="animate-pulse bg-gray-200 rounded-md h-8 w-40"></div>
+      <div class="animate-pulse bg-gray-200 rounded-md h-8 w-40"></div>
+      <div class="animate-pulse bg-gray-200 rounded-md h-8 w-40"></div>
+      <div class="animate-pulse bg-gray-200 rounded-md h-8 w-40"></div>
+    </div>
+    <div class="tab-group flex space-x-4 my-6">
+      <div class="animate-pulse bg-gray-200 rounded-md h-5 w-20"></div>
+      <div class="animate-pulse bg-gray-200 rounded-md h-5 w-20"></div>
+      <div class="animate-pulse bg-gray-200 rounded-md h-5 w-20"></div>
+      <div class="animate-pulse bg-gray-200 rounded-md h-5 w-20"></div>
+      <div class="animate-pulse bg-gray-200 rounded-md h-5 w-20"></div>
+    </div>
+  </div>
+  <div class="card-base mb-8 p-4 real-content hidden">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4 mb-6">
+      <div class="info-item">
+        <div class="label font-semibold text-gray-600">Case Status</div>
+        <div class="value text-blue-600">Active</div>
+      </div>
+      <div class="info-item">
+        <div class="label font-semibold text-gray-600">Type</div>
+        <div class="value text-gray-800">Change of family composition</div>
+      </div>
+      <div class="info-item">
+        <div class="label font-semibold text-gray-600">Reason</div>
+        <div class="value text-gray-800">Material change</div>
+      </div>
+      <div class="info-item">
+        <div class="label font-semibold text-gray-600">CMS No.</div>
+        <div class="value text-gray-800">123456789</div>
+      </div>
+      <div class="info-item-s">
+        <div class="label font-semibold text-gray-600">Created date</div>
+        <div class="value text-gray-800">2023-05-30</div>
+      </div>
+      <div class="info-item-s">
+        <div class="label font-semibold text-gray-600">Assigned Staff</div>
+        <div class="value text-gray-800">Susan Ho Hui Ting (12345A)</div>
+      </div>
+      <div class="info-item-s">
+        <div class="label font-semibold text-gray-600">Assigned Date</div>
+        <div class="value text-gray-800">-</div>
       </div>
     </div>
+    </div>
+
+    <div class="tab-group flex space-x-4 my-6">
+      <div class="tab-item tab-active bg-blue-50 border border-blue-600 text-blue-700 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Actions</div>
+      <div class="tab-item tab-inactive border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">App Details</div>
+      <div class="tab-item tab-inactive border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Checks</div>
+      <div class="tab-item tab-inactive border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Documents</div>
+      <div class="tab-item tab-inactive border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Journal</div>
+    </div>
+  </div>
+
 
 
     <!-- Card will be inserted here -->
