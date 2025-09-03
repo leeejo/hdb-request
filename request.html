@@ -167,7 +167,7 @@
             <button class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Export request</button>
           </div>
         </div>
-        <script>
+     <script>
           const moreBtn = document.getElementById('moreActionsBtn');
           const moreMenu = document.getElementById('moreActionsMenu');
           moreBtn.addEventListener('click', function(e) {
@@ -192,6 +192,7 @@
 
  <!-- Add this before #stickCard -->
 <div id="sticky-sentinel"></div>
+
     <!-- Sticky Card -->
 <div class="stick-card sticky top-0 z-20 bg-white" id="stickCard">
   <!-- Ghost Loader State -->
@@ -252,15 +253,7 @@
     </div>
   </div>
 
-<!-- quick card menu -->
-  <div id="card-nav" class="flex flex-col md:flex-row items-center gap-4 mb-6">
-  <select
-    id="card-jump"
-    class="border border-gray-300 rounded px-3 py-2 w-full md:w-64"
-  >
-    <option value="">Jump to card...</option>
-  </select>
-</div>
+
 
     <!-- Card will be inserted here -->
     <div id="dynamic-card-container"></div>
@@ -333,13 +326,10 @@ function createCard(action, id) {
           // Insert the dot menu at the end of the header (right side)
           const dotMenu = createDotMenu([
             { label: 'Get sharable link', onClick: () => alert('Get link clicked!') },
-            { label: 'Delete', onClick: () => { card.remove(); updateCardJumpDropdown(); } }
+            { label: 'Delete', onClick: () => { card.remove(); } }
           ]);
           header.appendChild(dotMenu);
         }
-        // Assign a unique data attribute for jump navigation
-        card.setAttribute('data-card-title', card.querySelector('.card-title')?.textContent?.trim() || id);
-        updateCardJumpDropdown();
       } else {
         card.querySelector('.card-content').innerHTML = '<p class="text-red-500">Card not found.</p>';
       }
@@ -440,7 +430,7 @@ document.addEventListener('click', () => {
     }
   });
 
-  // Card dot menu
+   // Card dot menu
   function createDotMenu(options = []) {
   const wrapper = document.createElement('div');
   wrapper.className = 'relative inline-block';
@@ -452,7 +442,7 @@ document.addEventListener('click', () => {
   btn.innerHTML = '<span class="text-2xl text-[#145ea8]">⋯</span>';
 
   const menu = document.createElement('div');
-  menu.className = 'absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg hidden z-10 dot-dropdown-menu';
+  menu.className = 'absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg hidden z-10 dot-dropdown-menu';
 
 options.forEach(opt => {
   const optBtn = document.createElement('button');
@@ -482,44 +472,8 @@ options.forEach(opt => {
 
   return wrapper;
 }
-
-// card jump menu
-function updateCardJumpDropdown() {
-  const cardContainer = document.getElementById('dynamic-card-container');
-  const jumpSelect = document.getElementById('card-jump');
-  jumpSelect.innerHTML = '<option value="">Jump to card...</option>';
-
-  // Track how many of each title exist
-  const titleCount = {};
-  const cards = Array.from(cardContainer.querySelectorAll('.card-base'));
-  cards.forEach((card, idx) => {
-    let baseTitle = card.querySelector('.card-title')?.textContent?.trim() || card.id || 'Untitled Card';
-    if (!titleCount[baseTitle]) titleCount[baseTitle] = 1;
-    else titleCount[baseTitle]++;
-    let instance = titleCount[baseTitle];
-    let title = baseTitle;
-    if (instance > 1) title += ' ' + instance;
-    let jumpId = 'card-jump-' + idx;
-    card.setAttribute('data-jump-id', jumpId);
-    let option = document.createElement('option');
-    option.value = jumpId;
-    option.textContent = title;
-    jumpSelect.appendChild(option);
-  });
-}
-
-document.getElementById('card-jump').addEventListener('change', e => {
-  const jumpId = e.target.value;
-  if (jumpId) {
-    const card = document.querySelector(`.card-base[data-jump-id='${jumpId}']`);
-    if (card) {
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      card.classList.add('ring-2', 'ring-blue-400');
-      setTimeout(() => card.classList.remove('ring-2', 'ring-blue-400'), 1200);
-    }
-  }
-});
   </script>
+
 </body>
 
 </html>
