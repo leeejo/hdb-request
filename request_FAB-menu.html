@@ -252,42 +252,53 @@
     </div>
   </div>
 
-<!-- quick card menu -->
-  <div id="card-nav" class="flex flex-col md:flex-row items-center gap-4 mb-6">
-  <select
-    id="card-jump"
-    class="border border-gray-300 rounded px-3 py-2 w-full md:w-64"
-  >
-    <option value="">Jump to card...</option>
-  </select>
-</div>
+
 
     <!-- Card will be inserted here -->
     <div id="dynamic-card-container"></div>
-
-
-    <!-- Menu Boxes: 3 columns x 3 rows -->
-
-<div class="w-full mx-auto mb-8">
-  <p class="mb-4 font-medium">Select an action to get started</p>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box1">Amend application data</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box2">Amend household details</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box3">Impose or lift ad-hoc debarment</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box4">Compute fees</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box5">Collect monies</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box6">Prepare documents</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box7">Schedule ad hoc appointment</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box8">Assign tasks to others</button>
-</div>
-
   </main>
 
-  <footer class="bg-gray-200 p-4 text-right text-sm border-t border-gray-300">
+  <footer class="bg-gray-200 p-4 text-center text-gray-600 text-sm border-t border-gray-300">
     <div>&copy; 2024, Government of Singapore</div>
     <div class="mt-1">Last updated 31 May 2024 v1.1.3</div>
   </footer>
 
+      <!-- Floating Action Button and Menu -->
+<div id="fabContainer" class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-row items-center">
+  <div id="fabMenu" class="hidden flex flex-col mr-4 bg-white rounded-lg shadow-lg p-3 space-y-2 transition-all">
+        <button class="action-box" data-action="box1">Amend application data</button>
+        <button class="action-box" data-action="box2">Amend household details</button>
+        <button class="action-box" data-action="box3">Impose or lift debarment</button>
+        <button class="action-box" data-action="box4">Compute fees</button>
+        <button class="action-box" data-action="box5">Collect monies</button>
+        <button class="action-box" data-action="box6">Prepare documents</button>
+        <button class="action-box" data-action="box7">Schedule ad hoc appoinment</button>
+        <button class="action-box" data-action="box8">Assign tasks to others</button>
+  </div>
+  <button id="fabBtn" class="h-14 rounded-lg bg-blue-600 text-white shadow-lg flex items-center justify-center text-3xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.176 0l-3.38 2.454c-.784.57-1.838-.196-1.539-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/>
+  </svg>  
+  </div>
+
+<!-- walkthrough overlay -->
+<div id="fabWalkthroughOverlay" class="fixed inset-0 bg-black bg-opacity-30 z-[100] flex items-center justify-center">
+    <div class="absolute right-24 top-1/2 -translate-y-1/2 flex flex-col items-end">
+    <!-- Tooltip box -->
+    <div id="fabWalkthroughTooltip" class="relative flex items-center">
+      <div class="bg-white rounded-lg shadow-lg p-4 max-w-xs text-gray-800 text-base pointer-events-auto">
+        <strong>Get started:</strong><br>
+        Click the <span class="inline-block align-middle"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-500 inline" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.176 0l-3.38 2.454c-.784.57-1.838-.196-1.539-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg></span> button to add your first action.
+      </div>
+      <!-- Arrow pointing to FAB (right side, middle) -->
+      <div class="flex items-center h-full">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 text-white -ml-2 rotate-90">
+          <polygon points="12,0 24,24 0,24" fill="white"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
 
   <script>
      // Sticky UI effect using a sentinel
@@ -321,28 +332,7 @@ function createCard(action, id) {
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = html;
       const template = tempDiv.querySelector(`#card${action}`);
-      if (template) {
-        card.querySelector('.card-content').innerHTML = template.innerHTML;
-
-        // Find the header in the loaded card content
-        const header = card.querySelector('header');
-        if (header) {
-          // Find the card title (h1 in header)
-          const titleEl = header.querySelector('h1');
-          if (titleEl) titleEl.classList.add('card-title');
-          // Insert the dot menu at the end of the header (right side)
-          const dotMenu = createDotMenu([
-            { label: 'Get sharable link', onClick: () => alert('Get link clicked!') },
-            { label: 'Delete', onClick: () => { card.remove(); updateCardJumpDropdown(); } }
-          ]);
-          header.appendChild(dotMenu);
-        }
-        // Assign a unique data attribute for jump navigation
-        card.setAttribute('data-card-title', card.querySelector('.card-title')?.textContent?.trim() || id);
-        updateCardJumpDropdown();
-      } else {
-        card.querySelector('.card-content').innerHTML = '<p class="text-red-500">Card not found.</p>';
-      }
+      card.querySelector('.card-content').innerHTML = template ? template.innerHTML : '<p class="text-red-500">Card not found.</p>';
     })
     .catch(() => {
       card.querySelector('.card-content').innerHTML = '<p class="text-red-500">Failed to load content.</p>';
@@ -359,28 +349,28 @@ document.querySelectorAll('.action-box').forEach(btn => {
     if (action === 1 || action === 7 || action === 9) {
       const cardId = `dynamic-card-${action}-${Date.now()}`;
       const card = createCard(action, cardId);
-      container.appendChild(card); // <-- always add to top
+      container.prepend(card); // <-- always add to top
 
       // Highlight the latest card
   document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
-    c.classList.remove('border-gray-800');
+    c.classList.remove('border-yellow-400');
     c.classList.remove('border-4');
   });
-  card.classList.add('border-gray-800', 'border-4');
+  card.classList.add('border-yellow-400', 'border-4');
 
     } else {
       // All other actions: only one card allowed
       const cardId = `dynamic-card-${action}`;
       if (!document.getElementById(cardId)) {
         const card = createCard(action, cardId);
-        container.appendChild(card); // <-- always add to top
+        container.prepend(card); // <-- always add to top
 
         // Highlight the latest card
   document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
-    c.classList.remove('border-gray-800');
+    c.classList.remove('border-yellow-400');
     c.classList.remove('border-4');
   });
-  card.classList.add('border-gray-800', 'border-4');
+  card.classList.add('border-yellow-400', 'border-4');
       } else {
         alert('You cannot add more than 1 of this card.');
       }
@@ -439,86 +429,6 @@ document.addEventListener('click', () => {
       this.classList.add('hidden');
     }
   });
-
-  // Card dot menu
-  function createDotMenu(options = []) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'relative inline-block';
-
-  const btn = document.createElement('button');
-  btn.className = 'flex items-center justify-center w-10 h-10 bg-transparent border-none cursor-pointer ml-4 rounded hover:bg-gray-100';
-  btn.setAttribute('aria-label', 'More options');
-  btn.type = 'button';
-  btn.innerHTML = '<span class="text-2xl text-[#145ea8]">⋯</span>';
-
-  const menu = document.createElement('div');
-  menu.className = 'absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg hidden z-10 dot-dropdown-menu';
-
-options.forEach(opt => {
-  const optBtn = document.createElement('button');
-  let btnClass = 'w-full text-left px-4 py-2 hover:bg-gray-100';
-  if (opt.label.toLowerCase() === 'delete') btnClass += ' text-red-600';
-  optBtn.className = btnClass;
-  optBtn.type = 'button';
-  optBtn.textContent = opt.label;
-  if (opt.onClick) optBtn.onclick = opt.onClick;
-  menu.appendChild(optBtn);
-});
-
-  btn.onclick = (e) => {
-    e.stopPropagation();
-    menu.classList.toggle('hidden');
-  };
-
-  wrapper.appendChild(btn);
-  wrapper.appendChild(menu);
-
-  // Close dropdown when clicking outside
-  document.addEventListener('click', function(e) {
-    if (!wrapper.contains(e.target)) {
-      menu.classList.add('hidden');
-    }
-  });
-
-  return wrapper;
-}
-
-// card jump menu
-function updateCardJumpDropdown() {
-  const cardContainer = document.getElementById('dynamic-card-container');
-  const jumpSelect = document.getElementById('card-jump');
-  jumpSelect.innerHTML = '<option value="">Jump to card...</option>';
-
-  // Track how many of each title exist
-  const titleCount = {};
-  const cards = Array.from(cardContainer.querySelectorAll('.card-base'));
-  cards.forEach((card, idx) => {
-    let baseTitle = card.querySelector('.card-title')?.textContent?.trim() || card.id || 'Untitled Card';
-    if (!titleCount[baseTitle]) titleCount[baseTitle] = 1;
-    else titleCount[baseTitle]++;
-    let instance = titleCount[baseTitle];
-    let title = baseTitle;
-    if (instance > 1) title += ' ' + instance;
-    let jumpId = 'card-jump-' + idx;
-    card.setAttribute('data-jump-id', jumpId);
-    let option = document.createElement('option');
-    option.value = jumpId;
-    option.textContent = title;
-    jumpSelect.appendChild(option);
-  });
-}
-
-document.getElementById('card-jump').addEventListener('change', e => {
-  const jumpId = e.target.value;
-  if (jumpId) {
-    const card = document.querySelector(`.card-base[data-jump-id='${jumpId}']`);
-    if (card) {
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      card.classList.add('ring-2', 'ring-blue-400');
-      setTimeout(() => card.classList.remove('ring-2', 'ring-blue-400'), 1200);
-    }
-  }
-});
   </script>
 </body>
 
