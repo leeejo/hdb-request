@@ -6,6 +6,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link rel="icon" href="" type="image/png">
+
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,10 +109,45 @@
 .stick-card.is-sticky .info-item-s{
   @apply hidden;
 }
-  
-  
-  } /* End of Tailwind Components */
+
+    /* Floating Action Button (FAB) - Tailwind utility only, no @apply or pseudo/selectors */
+    .fab-shimmer {
+      /* Use only Tailwind utility classes in HTML: relative overflow-hidden */
+    }
+   } 
 </style>
+
+<style>
+  /* FAB shimmer animation (for CDN compatibility, only here) */
+  .fab-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .fab-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(120deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.2) 100%);
+    opacity: 0;
+    pointer-events: none;
+    animation: shimmer-blink 1.2s linear 2;
+  }
+  .fab-shimmer.fab-shimmer-animate::after {
+    opacity: 1;
+  }
+  @keyframes shimmer-blink {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0; }
+  }
+
+  /* Remove skeleton shimmer for pill nav */
+.fab-shimmer.fab-shimmer-animate::before {
+  content: none;
+  animation: none;
+}
+</style> 
 
   <script>
     tailwind.config = {
@@ -131,6 +168,49 @@
 </head>
 
 <body>
+  <!-- Jump Card FAB and Hover Menu -->
+  <div id="jump-card-fab-wrapper" class="fixed left-1/2 bottom-4 -translate-x-1/2 z-50 group focus-within:z-50">
+      <button id="jump-card-fab" class="flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 focus:bg-blue-700 transition-all outline-none focus:ring-2 focus:ring-blue-400" aria-haspopup="true" aria-expanded="false" type="button">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25V6.75A2.25 2.25 0 0 0 14.25 4.5h-4.5A2.25 2.25 0 0 0 7.5 6.75v1.5m9 0v8.25A2.25 2.25 0 0 1 14.25 18.75h-4.5A2.25 2.25 0 0 1 7.5 16.5V8.25m9 0H7.5" /></svg>
+      <span class="text-base">Jump to Card</span>
+    </button>
+      <nav id="card-jump-nav" class="absolute left-0 bottom-14 bg-white border border-gray-300 rounded-lg shadow-lg px-3 py-2 min-w-[220px] max-h-[60vh] overflow-y-auto flex flex-col gap-2 transition-all opacity-0 invisible" tabindex="-1">
+      <div id="card-jump-list" class="flex flex-col gap-1"></div>
+    </nav>
+  </div>
+    <script>
+      // Show/hide jump menu on hover/focus of either button or menu
+      (function() {
+        const wrapper = document.getElementById('jump-card-fab-wrapper');
+        const fab = document.getElementById('jump-card-fab');
+        const menu = document.getElementById('card-jump-nav');
+        let hideTimeout = null;
+        function showMenu() {
+          menu.classList.remove('opacity-0', 'invisible');
+          menu.classList.add('opacity-100', 'visible');
+        }
+        function hideMenu() {
+          menu.classList.remove('opacity-100', 'visible');
+          menu.classList.add('opacity-0', 'invisible');
+        }
+        function delayedHide() {
+          hideTimeout = setTimeout(hideMenu, 120);
+        }
+        fab.addEventListener('mouseenter', showMenu);
+        fab.addEventListener('mouseleave', delayedHide);
+        fab.addEventListener('focus', showMenu);
+        fab.addEventListener('blur', delayedHide);
+        menu.addEventListener('mouseenter', function() {
+          if (hideTimeout) clearTimeout(hideTimeout);
+          showMenu();
+        });
+        menu.addEventListener('mouseleave', delayedHide);
+        // Optional: close on click outside
+        document.addEventListener('click', function(e) {
+          if (!wrapper.contains(e.target)) hideMenu();
+        });
+      })();
+    </script>
 
   <header class="flex items-center p-3 text-white bg-hdb-blue min-w-[320px] shadow-md">
     <div class="mx-4">
@@ -144,6 +224,8 @@
   </header>
 
   <main class="container mx-auto px-4 py-8">
+  <!-- Dynamic spacer to prevent sticky jump -->
+  <div id="sticky-spacer" style="height:0;"></div>
     <div class="text-gray-500 text-sm mb-6">
       Home / In-tray / Reg No. 8013197D / RQ123456
     </div>
@@ -162,6 +244,7 @@
             </svg>
           </button>
           <div id="moreActionsMenu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-30 hidden">
+            <button class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Edit request</button>
             <button class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Reassign staff</button>
             <button class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">View history</button>
             <button class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Export request</button>
@@ -277,35 +360,51 @@
   </main>
 
   <footer class="bg-gray-200 p-4 text-right text-sm border-t border-gray-300 fixed bottom-0 w-full">
-    <div>&copy; 2024, Government of Singapore</div>
-    <div class="mt-1">Last updated 31 May 2024 v1.1.3</div>
-  </footer>
+
+    <!-- Sticky Sentinel at the bottom to prevent sticky overlap with footer -->
+    <div id="sticky-sentinel-bottom" style="height: 1px;"></div>
 
 
   <script>
      // Sticky UI effect using a sentinel
+
+
 const stickCard = document.getElementById('stickCard');
-const sentinel = document.getElementById('sticky-sentinel');
+const sentinelTop = document.getElementById('sticky-sentinel');
+const sentinelBottom = document.getElementById('sticky-sentinel-bottom');
+let isStickyActive = false;
 
 const observer = new IntersectionObserver(
-  ([entry]) => {
-    if (entry.boundingClientRect.top < 0) {
+  (entries) => {
+    let topVisible = false;
+    let bottomVisible = false;
+    entries.forEach(entry => {
+      if (entry.target === sentinelTop) topVisible = entry.isIntersecting;
+      if (entry.target === sentinelBottom) bottomVisible = entry.isIntersecting;
+    });
+    // Only sticky if top sentinel is not visible and bottom sentinel is not visible
+    if (!topVisible && !bottomVisible) {
       stickCard.classList.add('is-sticky');
+      isStickyActive = true;
     } else {
       stickCard.classList.remove('is-sticky');
+      isStickyActive = false;
     }
   },
   { threshold: [0] }
 );
-observer.observe(sentinel);
+if (sentinelTop) observer.observe(sentinelTop);
+if (sentinelBottom) observer.observe(sentinelBottom);
 
 
 // Usage in your createCard function:
 function createCard(action, id) {
+  console.log('[createCard] called with action:', action, 'id:', id);
   const card = document.createElement('div');
   card.className = 'card-base mb-6';
   card.id = id;
   card.innerHTML = `<div class="card-content">Loading...</div>`;
+
 
   // Fetch the HTML content and insert it
   fetch('cards.html')
@@ -326,16 +425,19 @@ function createCard(action, id) {
           // Insert the dot menu at the end of the header (right side)
           const dotMenu = createDotMenu([
             { label: 'Get sharable link', onClick: () => alert('Get link clicked!') },
-            { label: 'Delete', onClick: () => { card.remove(); } }
+            { label: 'Delete', onClick: () => { card.remove(); updateCardJumpMenu(); } }
           ]);
           header.appendChild(dotMenu);
         }
       } else {
         card.querySelector('.card-content').innerHTML = '<p class="text-red-500">Card not found.</p>';
       }
+      // Update jump menu after content loads
+      updateCardJumpMenu();
     })
     .catch(() => {
       card.querySelector('.card-content').innerHTML = '<p class="text-red-500">Failed to load content.</p>';
+      updateCardJumpMenu();
     });
 
   return card;
@@ -344,91 +446,100 @@ function createCard(action, id) {
 document.querySelectorAll('.action-box').forEach(btn => {
   btn.addEventListener('click', function () {
     const action = parseInt(this.getAttribute('data-action').replace('box', ''), 10);
-    const container = document.getElementById('dynamic-card-container');
-    // Only allow multiple for 1, 7, 9
-    if (action === 1 || action === 7 || action === 9) {
-      const cardId = `dynamic-card-${action}-${Date.now()}`;
+    handleActionBoxClick(action);
+  });
+});
+
+// Refactored card creation logic
+function handleActionBoxClick(action) {
+  console.log('[handleActionBoxClick] action:', action);
+  const container = document.getElementById('dynamic-card-container');
+  // Only allow multiple for 1, 7, 9
+  if (action === 1 || action === 7 || action === 9) {
+    const cardId = `dynamic-card-${action}-${Date.now()}`;
+    const card = createCard(action, cardId);
+    container.appendChild(card); // <-- always add to top
+
+    // Highlight the latest card
+    document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
+      c.classList.remove('border-gray-800');
+      c.classList.remove('border-4');
+    });
+    card.classList.add('border-gray-800', 'border-4');
+    updateCardJumpMenu();
+  } else {
+    // All other actions: only one card allowed
+    const cardId = `dynamic-card-${action}`;
+    if (!document.getElementById(cardId)) {
       const card = createCard(action, cardId);
       container.appendChild(card); // <-- always add to top
 
       // Highlight the latest card
-  document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
-    c.classList.remove('border-gray-800');
-    c.classList.remove('border-4');
-  });
-  card.classList.add('border-gray-800', 'border-4');
-
+      document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
+        c.classList.remove('border-gray-800');
+        c.classList.remove('border-4');
+      });
+      card.classList.add('border-gray-800', 'border-4');
+      updateCardJumpMenu();
     } else {
-      // All other actions: only one card allowed
-      const cardId = `dynamic-card-${action}`;
-      if (!document.getElementById(cardId)) {
-        const card = createCard(action, cardId);
-        container.appendChild(card); // <-- always add to top
-
-        // Highlight the latest card
-  document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
-    c.classList.remove('border-gray-800');
-    c.classList.remove('border-4');
-  });
-  card.classList.add('border-gray-800', 'border-4');
-      } else {
-        alert('You cannot add more than 1 of this card.');
-      }
-    }
-  });
-});
-
-
-// FAB script
-const fabBtn = document.getElementById('fabBtn');
-const fabMenu = document.getElementById('fabMenu');
-let fabOpen = false;
-
-fabBtn.addEventListener('click', (e) => {
-  e.stopPropagation(); // Prevent document click from firing
-  fabOpen = !fabOpen;
-  fabMenu.classList.toggle('hidden', !fabOpen);
-});
-
-fabMenu.addEventListener('click', (e) => {
-  e.stopPropagation(); // Prevent document click from firing when clicking inside menu
-});
-
-// Click outside to close the menu
-document.addEventListener('click', () => {
-  fabMenu.classList.add('hidden');
-  fabOpen = false;
-});
-
-  // Show walkthrough overlay on first visit
-  function updateFabWalkthroughOverlay() {
-    const overlay = document.getElementById('fabWalkthroughOverlay');
-    const cardContainer = document.getElementById('dynamic-card-container');
-    // Show only if there are NO cards
-    if (cardContainer && cardContainer.children.length === 0) {
-      overlay.classList.remove('hidden');
-    } else {
-      overlay.classList.add('hidden');
+      alert('You cannot add more than 1 of this card.');
     }
   }
+}
 
-  // Initial check on page load
-  document.addEventListener('DOMContentLoaded', updateFabWalkthroughOverlay);
-
-  // Update overlay after any card is added
-  document.querySelectorAll('.action-box').forEach(btn => {
-    btn.addEventListener('click', function () {
-      setTimeout(updateFabWalkthroughOverlay, 100);
-    });
-  });
-
-  // Dismiss overlay when clicking outside the tooltip
-  document.getElementById('fabWalkthroughOverlay').addEventListener('click', function (e) {
-    const tooltip = document.getElementById('fabWalkthroughTooltip');
-    if (!tooltip.contains(e.target)) {
-      this.classList.add('hidden');
+// Update the quick jump navigation menu
+function updateCardJumpMenu() {
+  const list = document.getElementById('card-jump-list');
+  if (!list) return;
+  list.innerHTML = '';
+  const cards = document.querySelectorAll('#dynamic-card-container .card-base');
+  cards.forEach(card => {
+    // Try to get the card title (wait for content to load)
+    let title = card.querySelector('h1')?.textContent?.trim();
+    if (!title) {
+      // fallback: look for .card-content and get first text
+      const content = card.querySelector('.card-content');
+      title = content ? content.textContent.trim().split('\n')[0] : card.id;
     }
+    if (!title) title = card.id;
+    const btn = document.createElement('button');
+    btn.className = 'w-full text-left px-2 py-1 rounded hover:bg-blue-50 text-sm truncate border border-transparent hover:border-blue-300';
+    btn.textContent = title;
+    btn.onclick = function() {
+      const stickCard = document.getElementById('stickCard');
+      const isSticky = stickCard && stickCard.classList.contains('is-sticky');
+      // Hide menu after click for accessibility
+      document.getElementById('card-jump-nav').style.opacity = 0;
+      document.getElementById('card-jump-nav').style.pointerEvents = 'none';
+      setTimeout(() => {
+        document.getElementById('card-jump-nav').style.opacity = '';
+        document.getElementById('card-jump-nav').style.pointerEvents = '';
+      }, 500);
+      if (isSticky) {
+        // Get sticky header height
+        const stickyRect = stickCard.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        // Calculate scroll offset: card's top minus sticky's height, relative to viewport
+        const scrollY = window.scrollY + cardRect.top - stickyRect.height;
+        window.scrollTo({ top: scrollY, behavior: 'smooth' });
+      } else {
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      card.classList.add('ring', 'ring-blue-400');
+      setTimeout(() => card.classList.remove('ring', 'ring-blue-400'), 1200);
+    };
+    list.appendChild(btn);
   });
+}
+
+// Observe card container for changes (add/remove)
+const cardContainer = document.getElementById('dynamic-card-container');
+if (cardContainer) {
+  const observer = new MutationObserver(updateCardJumpMenu);
+  observer.observe(cardContainer, { childList: true });
+}
+
+
 
    // Card dot menu
   function createDotMenu(options = []) {
@@ -472,8 +583,10 @@ options.forEach(opt => {
 
   return wrapper;
 }
-  </script>
 
+// --- END OF SCRIPT ---
+</script>
 </body>
-
+</html>
+  </body>
 </html>
