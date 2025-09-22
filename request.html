@@ -409,31 +409,27 @@ function createCard(action, id) {
   card.innerHTML = `<div class="card-content">Loading...</div>`;
 
 
-  // Fetch the HTML content and insert it
-  fetch('cards.html')
-    .then(r => r.text())
+  // Fetch the HTML content for the specific cardN.html and insert it
+  fetch(`card${action}.html`)
+    .then(r => {
+      if (!r.ok) throw new Error('Not found');
+      return r.text();
+    })
     .then(html => {
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = html;
-      const template = tempDiv.querySelector(`#card${action}`);
-      if (template) {
-        card.querySelector('.card-content').innerHTML = template.innerHTML;
+      card.querySelector('.card-content').innerHTML = html;
 
-        // Find the header in the loaded card content
-        const header = card.querySelector('header');
-        if (header) {
-          // Find the card title (h1 in header)
-          const titleEl = header.querySelector('h1');
-          if (titleEl) titleEl.classList.add('card-title');
-          // Insert the dot menu at the end of the header (right side)
-          const dotMenu = createDotMenu([
-            { label: 'Get sharable link', onClick: () => alert('Get link clicked!') },
-            { label: 'Delete', onClick: () => { card.remove(); updateCardJumpMenu(); } }
-          ]);
-          header.appendChild(dotMenu);
-        }
-      } else {
-        card.querySelector('.card-content').innerHTML = '<p class="text-red-500">Card not found.</p>';
+      // Find the header in the loaded card content
+      const header = card.querySelector('header');
+      if (header) {
+        // Find the card title (h1 in header)
+        const titleEl = header.querySelector('h1');
+        if (titleEl) titleEl.classList.add('card-title');
+        // Insert the dot menu at the end of the header (right side)
+        const dotMenu = createDotMenu([
+          { label: 'Get sharable link', onClick: () => alert('Get link clicked!') },
+          { label: 'Delete', onClick: () => { card.remove(); updateCardJumpMenu(); } }
+        ]);
+        header.appendChild(dotMenu);
       }
       // Update jump menu after content loads
       updateCardJumpMenu();
