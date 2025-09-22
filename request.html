@@ -8,7 +8,8 @@
 
   <link rel="icon" href="" type="image/png">
 
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.3?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -168,13 +169,14 @@
 </head>
 
 <body>
+
   <!-- Jump Card FAB and Hover Menu -->
-  <div id="jump-card-fab-wrapper" class="fixed left-1/2 bottom-4 -translate-x-1/2 z-50 group focus-within:z-50">
-      <button id="jump-card-fab" class="flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 focus:bg-blue-700 transition-all outline-none focus:ring-2 focus:ring-blue-400" aria-haspopup="true" aria-expanded="false" type="button">
+  <div id="jump-card-fab-wrapper" class="fixed left-1/2 bottom-4 -translate-x-1/2 z-50 group focus-within:z-50" style="display:none;">
+      <button id="jump-card-fab" class="flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 focus:bg-blue-700 transition-all outline-none focus:ring-2 focus:ring-blue-400" type="button">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25V6.75A2.25 2.25 0 0 0 14.25 4.5h-4.5A2.25 2.25 0 0 0 7.5 6.75v1.5m9 0v8.25A2.25 2.25 0 0 1 14.25 18.75h-4.5A2.25 2.25 0 0 1 7.5 16.5V8.25m9 0H7.5" /></svg>
       <span class="text-base">Jump to Card</span>
     </button>
-      <nav id="card-jump-nav" class="absolute left-0 bottom-14 bg-white border border-gray-300 rounded-lg shadow-lg px-3 py-2 min-w-[220px] max-h-[60vh] overflow-y-auto flex flex-col gap-2 transition-all opacity-0 invisible" tabindex="-1">
+  <nav id="card-jump-nav" class="absolute left-0 bottom-12 bg-white border border-gray-300 rounded-lg shadow-lg px-3 py-2 min-w-[220px] max-h-[60vh] overflow-y-auto flex flex-col gap-2 transition-all opacity-0 invisible" tabindex="-1">
       <div id="card-jump-list" class="flex flex-col gap-1"></div>
     </nav>
   </div>
@@ -211,6 +213,7 @@
         });
       })();
     </script>
+
 
   <header class="flex items-center p-3 text-white bg-hdb-blue min-w-[320px] shadow-md">
     <div class="mx-4">
@@ -490,9 +493,22 @@ function handleActionBoxClick(action) {
 // Update the quick jump navigation menu
 function updateCardJumpMenu() {
   const list = document.getElementById('card-jump-list');
-  if (!list) return;
+  const jumpFabWrapper = document.getElementById('jump-card-fab-wrapper');
+  if (!list || !jumpFabWrapper) return;
   list.innerHTML = '';
   const cards = document.querySelectorAll('#dynamic-card-container .card-base');
+  // Show jump FAB only if more than 1 card
+  if (cards.length > 1) {
+    jumpFabWrapper.style.display = '';
+  } else {
+    jumpFabWrapper.style.display = 'none';
+    // Also hide the menu if open
+    const menu = document.getElementById('card-jump-nav');
+    if (menu) {
+      menu.classList.remove('opacity-100', 'visible');
+      menu.classList.add('opacity-0', 'invisible');
+    }
+  }
   cards.forEach(card => {
     // Try to get the card title (wait for content to load)
     let title = card.querySelector('h1')?.textContent?.trim();
