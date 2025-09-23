@@ -148,6 +148,13 @@
   content: none;
   animation: none;
 }
+
+/* action deb style */
+  .row-detail-active {
+    border-left-width: 2px !important;
+    border-left-color: #2563eb !important; /* Tailwind blue-600 */
+  }
+
 </style> 
 
   <script>
@@ -561,7 +568,7 @@ if (cardContainer) {
   btn.className = 'flex items-center justify-center w-10 h-10 bg-transparent border-none cursor-pointer ml-4 rounded hover:bg-gray-100';
   btn.setAttribute('aria-label', 'More options');
   btn.type = 'button';
-  btn.innerHTML = '<span class="text-2xl text-[#145ea8]">⋯</span>';
+  btn.innerHTML = '<span class="text-2xl text-blue-700">⋯</span>';
 
   const menu = document.createElement('div');
   menu.className = 'absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg hidden z-10 dot-dropdown-menu';
@@ -594,6 +601,35 @@ options.forEach(opt => {
 
   return wrapper;
 }
+
+// action card debarment interaction
+console.log('row-detail script loaded');
+// Row detail expand/collapse logic (using style.display instead of Tailwind 'hidden')
+
+// Use event delegation for row-detail-btn so it works with dynamically loaded content
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.row-detail-btn');
+  if (btn) {
+    console.log('row-detail-btn CLICKED', btn);
+    const tr = btn.closest('tr');
+    const detailRow = tr.nextElementSibling;
+    console.log('Clicked row-detail-btn tr:', tr, 'detailRow:', detailRow);
+    if (detailRow && detailRow.classList.contains('row-detail-content')) {
+      const isHidden = detailRow.style.display === 'none' || detailRow.style.display === '';
+      if (isHidden) {
+        detailRow.style.display = 'table-row';
+        tr.classList.add('row-detail-active');
+        detailRow.classList.add('row-detail-active');
+      } else {
+        detailRow.style.display = 'none';
+        tr.classList.remove('row-detail-active');
+        detailRow.classList.remove('row-detail-active');
+      }
+    }
+  }
+});
+
+
 
 // --- END OF SCRIPT ---
 </script>
