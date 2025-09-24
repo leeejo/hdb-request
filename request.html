@@ -514,7 +514,7 @@ function createCard(action, id) {
   return card;
 }
 
-document.querySelectorAll('.action-box').forEach(btn => {
+document.querySelectorAll('.btn-menu-box').forEach(btn => {
   btn.addEventListener('click', function () {
     const action = parseInt(this.getAttribute('data-action').replace('box', ''), 10);
     handleActionBoxClick(action);
