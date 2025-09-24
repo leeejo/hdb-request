@@ -434,6 +434,7 @@
 
   </main>
 
+
   <footer class="bg-gray-200 p-4 text-right text-sm border-t border-gray-300 fixed bottom-0 w-full">
 
     <!-- Sticky Sentinel at the bottom to prevent sticky overlap with footer -->
@@ -708,6 +709,73 @@ document.addEventListener('click', function(e) {
 
 
 // --- END OF SCRIPT ---
+
+// Modal logic for "Impose new code" (works with dynamically loaded modal in card3.html)
+function getImposeModalElements() {
+  const overlay = document.getElementById('impose-modal-overlay');
+  const closeBtn = document.getElementById('impose-modal-close');
+  const cancelBtn = document.getElementById('impose-modal-cancel');
+  const form = document.getElementById('impose-modal-form');
+  return { overlay, closeBtn, cancelBtn, form };
+}
+
+function openImposeModal() {
+  const { overlay, form } = getImposeModalElements();
+  if (!overlay) return;
+  overlay.style.display = 'flex';
+  setTimeout(() => {
+    overlay.classList.remove('opacity-0', 'pointer-events-none');
+    overlay.classList.add('opacity-100');
+  }, 10);
+  setTimeout(() => {
+    const firstInput = form?.querySelector('input,select,textarea,button');
+    if (firstInput) firstInput.focus();
+  }, 100);
+}
+function closeImposeModal() {
+  const { overlay } = getImposeModalElements();
+  if (!overlay) return;
+  overlay.classList.remove('opacity-100');
+  overlay.classList.add('opacity-0', 'pointer-events-none');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+  }, 200);
+}
+
+
+// Event delegation for modal open/close/submit
+document.addEventListener('click', function(e) {
+  // Open modal
+  const btn = e.target.closest('button');
+  if (btn && btn.textContent && btn.textContent.trim() === 'Impose new code') {
+    openImposeModal();
+    return;
+  }
+  // Close modal (close button)
+  if (btn && btn.id === 'impose-modal-close') {
+    closeImposeModal();
+    return;
+  }
+  // Close modal (cancel button)
+  if (btn && btn.id === 'impose-modal-cancel') {
+    closeImposeModal();
+    return;
+  }
+});
+// Overlay click to close
+document.addEventListener('click', function(e) {
+  const { overlay } = getImposeModalElements();
+  if (overlay && e.target === overlay) closeImposeModal();
+});
+// Form submit
+document.addEventListener('submit', function(e) {
+  const { form } = getImposeModalElements();
+  if (form && e.target === form) {
+    e.preventDefault();
+    closeImposeModal();
+    alert('Debarment code imposed! (Demo only)');
+  }
+});
 </script>
 </body>
 </html>
