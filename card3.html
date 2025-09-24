@@ -22,7 +22,7 @@
           </div> 
 
 
-           <button type="button" class="text-blue-700 bg-transparent border-none cursor-pointer ml-4">
+           <button type="button" class="text-blue-500 bg-transparent border-none cursor-pointer ml-4">
     <span class="inline-flex items-center gap-1">
         List of debarment code
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-external-link"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" /><path d="M11 13l9 -9" /><path d="M15 4h5v5" /></svg>
@@ -37,8 +37,8 @@
         >
           <div class="w-full flex items-center gap-3 bg-gray-200 p-4">
             <strong>I want to</strong>
-            <button type="button" class="flex items-center gap-2 px-3 py-2 rounded bg-blue-700">
-              <p class="text-white">Impose new code</p>
+            <button class="btn-primary">
+              Impose new code
             </button>
           </div>
 
@@ -176,7 +176,7 @@
 
         <div class="flex-1 flex justify-center">
           <button class="px-3 py-1 mx-1 bg-gray-200 rounded">&lt;</button>
-          <button class="px-3 py-1 mx-1 bg-blue-600 text-white rounded">1</button>
+          <button class="px-3 py-1 mx-1 bg-blue-500 text-white rounded">1</button>
           <button class="px-3 py-1 mx-1 bg-gray-200 rounded">2</button>
           <button class="px-3 py-1 mx-1 bg-gray-200 rounded">3</button>
           <button class="px-3 py-1 mx-1 bg-gray-200 rounded">&gt;</button>
@@ -202,17 +202,25 @@
       <div class="w-full">
 
           <div class="w-full">
-          <h2 class="mb-1 text-lg">Approval</h2>
-          <p class="mb-4">Submit for approval for your changes.</p>
+          <h2 class="mb-1 text-lg">Request for counter-check</h2>
+          <p class="mb-4">Send your changes for counter-checking by another officer. Debarment record will be locked and cannot be edited while pending verification.</p>
         </div>
 
   <div class="flex items-center gap-3 p-4 mb-4 rounded bg-gray-50 border-2 border-gray-200">
-        <div>
-        <button type="button" class="bg-[#1976d2] flex gap-2 px-3 py-2 mb-3 rounded">
-          <span class="text-white">Request approval</span>
-        </button>
-        <p class="flex-grow-0 flex-shrink-0">Request by [Officer name] on 12-08-2024 10:25:58 AM</p>
-        </div>
+      
+        <form>
+          <label for="officer-select" class="block mb-2">Checking officer</label>
+          <select id="officer-select" name="officer" class="mb-3 block w-full">
+            <option value="" disabled selected>Select an officer</option>
+            <option value="officer-1">Staff name (XXXXXA)</option>
+          </select>
+          <div class="w-full">
+            <button type="submit" class="btn-primary">
+              Send request
+            </button>
+          </div>
+        </form>
+        
       </div>
 
   <div class="flex items-center gap-3 p-4 rounded bg-emerald-100">

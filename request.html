@@ -90,6 +90,9 @@
     .action-box {
       @apply bg-gray-200 p-6 rounded-md text-center text-gray-700 font-medium shadow-sm;
     }
+    .btn-menu-box {
+      @apply bg-gray-100 border-2 hover:bg-blue-200 hover:border-2 hover:border-blue-400 rounded-lg shadow-sm p-4 text-left font-medium transition flex items-start gap-4;
+    }
 
     /* FAB action menu: vertical listing */
 
@@ -356,14 +359,77 @@
 <div class="w-full mx-auto mb-8">
   <p class="mb-4 font-medium">Select an action to get started</p>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box1">Amend application data</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box2">Amend household details</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box3">Impose or lift ad-hoc debarment</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box4">Compute fees</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box5">Collect monies</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box6">Prepare documents</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box7">Schedule ad hoc appointment</button>
-    <button class="action-box bg-gray-200 hover:bg-hdb-blue hover:text-white border border-gray-200 rounded-lg shadow-sm p-6 text-center font-medium transition" data-action="box8">Assign tasks to others</button>
+  <button class="btn-menu-box" data-action="box1">
+      <span class="flex-shrink-0 mt-1"> 
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-star"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>      </span>
+      <span>
+        <div class="font-bold">Amend application data</div>
+        <div class="text-sm font-normal">Amend any information in the application as required.</div>
+      </span>
+    </button>
+
+  <button class="btn-menu-box" data-action="box2">
+      <span class="flex-shrink-0 mt-1"> 
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>      </span>
+      <span>
+        <div class="font-bold">Amend household details</div>
+        <div class="text-sm font-normal">Add, remove or change applicants or occupiers from the existing record.</div>
+      </span>
+    </button>
+
+  <button class="btn-menu-box" data-action="box3">
+      <span class="flex-shrink-0 mt-1">
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-arrows-exchange"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10h14l-4 -4" /><path d="M17 14h-14l4 4" /></svg>      </span>
+      <span>
+        <div class="font-bold">Impose or lift ad-hoc debarment</div>
+        <div class="text-sm font-normal">Ensure that the applicants receive the correct debarment code.</div>
+      </span>
+    </button>
+
+  <button class="btn-menu-box" data-action="box6">
+      <span class="flex-shrink-0 mt-1"> 
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-files"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 3v4a1 1 0 0 0 1 1h4" /><path d="M18 17h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h4l5 5v7a2 2 0 0 1 -2 2z" /><path d="M16 17v2a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2" /></svg>      </span>
+      <span>
+        <div class="font-bold">Prepare documents</div>
+        <div class="text-sm font-normal">Prepare the necessary documents.</div>
+      </span>
+    </button>    
+    
+  <button class="btn-menu-box" data-action="box4">
+      <span class="flex-shrink-0 mt-1">
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-math-symbols"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12l18 0" /><path d="M12 3l0 18" /><path d="M16.5 4.5l3 3" /><path d="M19.5 4.5l-3 3" /><path d="M6 4l0 4" /><path d="M4 6l4 0" /><path d="M18 16l.01 0" /><path d="M18 20l.01 0" /><path d="M4 18l4 0" /></svg>      </span>
+      <span>
+        <div class="font-bold">Compute fees</div>
+        <div class="text-sm font-normal">Calculate additional collections and payments to be made.</div>
+      </span>
+    </button>
+
+  <button class="btn-menu-box" data-action="box5">
+      <span class="flex-shrink-0 mt-1"> 
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-businessplan"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 6m-5 0a5 3 0 1 0 10 0a5 3 0 1 0 -10 0" /><path d="M11 6v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" /><path d="M11 10v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" /><path d="M11 14v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4" /><path d="M7 9h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" /><path d="M5 15v1m0 -8v1" /></svg>      </span>
+      <span>
+        <div class="font-bold">Collect monies</div>
+        <div class="text-sm font-normal">Process additional collections and payments to be made.</div>
+      </span>
+    </button>
+
+  <button class="btn-menu-box" data-action="box5">
+      <span class="flex-shrink-0 mt-1"> 
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M16 3l0 4" /><path d="M8 3l0 4" /><path d="M4 11l16 0" /><path d="M8 15h2v2h-2z" /></svg>      </span>
+      <span>
+        <div class="font-bold">Schedule ad hoc appointment</div>
+        <div class="text-sm font-normal">Set up an appointment via BookingSG.</div>
+      </span>
+    </button>
+
+  <button class="btn-menu-box" data-action="box5">
+      <span class="flex-shrink-0 mt-1"> 
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checklist"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" /><path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>      </span>
+      <span>
+        <div class="font-bold">Assign tasks to others</div>
+        <div class="text-sm font-normal">Create and assign tasks to members of other teams for their action.</div>
+      </span>
+    </button>
 </div>
 
   </main>
