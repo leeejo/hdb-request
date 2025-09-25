@@ -48,6 +48,12 @@
              transition duration-150 ease-in-out;
     }
 
+    .btn-danger {
+      @apply bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow-sm 
+             focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75 
+             transition duration-150 ease-in-out;
+    }
+
     /* Outline Button */
     .btn-outline {
       @apply bg-white border border-blue-600 text-blue-600 font-semibold py-2 px-4 rounded-md shadow-sm 
@@ -679,10 +685,6 @@ options.forEach(opt => {
   return wrapper;
 }
 
-// action card debarment interaction
-console.log('row-detail script loaded');
-// Row detail expand/collapse logic (using style.display instead of Tailwind 'hidden')
-
 // Use event delegation for row-detail-btn so it works with dynamically loaded content
 document.addEventListener('click', function(e) {
   const btn = e.target.closest('.row-detail-btn');
@@ -707,9 +709,6 @@ document.addEventListener('click', function(e) {
 });
 
 
-
-// --- END OF SCRIPT ---
-
 // Modal logic for "Impose new code" (works with dynamically loaded modal in card3.html)
 function getImposeModalElements() {
   const overlay = document.getElementById('impose-modal-overlay');
@@ -726,6 +725,22 @@ function openImposeModal() {
   setTimeout(() => {
     overlay.classList.remove('opacity-0', 'pointer-events-none');
     overlay.classList.add('opacity-100');
+    // Call setupSelectAllPersonsCheckbox after modal is visible and DOM is ready
+    setupSelectAllPersonsCheckbox();
+    // Call again after a short delay in case content is loaded asynchronously
+    setTimeout(setupSelectAllPersonsCheckbox, 100);
+    // Setup effective date enable/disable logic for dynamic modal content
+    const useCloseDate = document.getElementById('use-close-date');
+    const effectiveDate = document.getElementById('effective-date');
+    function toggleDateDisabled() {
+      if (effectiveDate && useCloseDate) {
+        effectiveDate.disabled = useCloseDate.checked;
+      }
+    }
+    if (useCloseDate && effectiveDate) {
+      useCloseDate.addEventListener('change', toggleDateDisabled);
+      toggleDateDisabled();
+    }
   }, 10);
   setTimeout(() => {
     const firstInput = form?.querySelector('input,select,textarea,button');
@@ -742,12 +757,37 @@ function closeImposeModal() {
   }, 200);
 }
 
+// Select all checkboxes logic for modal (run after modal is opened)
+function setupSelectAllPersonsCheckbox() {
+  console.log('[Select All Persons] Checkbox logic running');
+  const selectAll = document.getElementById('select-all-persons');
+  const checkboxes = document.querySelectorAll('.person-checkbox');
+  if (selectAll) {
+    selectAll.addEventListener('change', function() {
+      console.log('[Select All Persons] Checkbox clicked, checked:', selectAll.checked);
+      checkboxes.forEach(cb => { cb.checked = selectAll.checked; });
+    });
+    // Optional: update select-all if any row is unchecked
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', function() {
+        if (!cb.checked) {
+          selectAll.checked = false;
+        } else if ([...checkboxes].every(c => c.checked)) {
+          selectAll.checked = true;
+        }
+      });
+    });
+  }
+}
+
+            
 
 // Event delegation for modal open/close/submit
 document.addEventListener('click', function(e) {
   // Open modal
   const btn = e.target.closest('button');
   if (btn && btn.textContent && btn.textContent.trim() === 'Impose new code') {
+    editingRow = null; // Ensure create mode
     openImposeModal();
     return;
   }
@@ -767,15 +807,168 @@ document.addEventListener('click', function(e) {
   const { overlay } = getImposeModalElements();
   if (overlay && e.target === overlay) closeImposeModal();
 });
+// Track the row being edited
+let editingRow = null;
 // Form submit
 document.addEventListener('submit', function(e) {
   const { form } = getImposeModalElements();
   if (form && e.target === form) {
     e.preventDefault();
+    if (editingRow) {
+      // Update the existing row with new values (for demo, just update first cell and highlight)
+      editingRow.cells[0].innerHTML = "UPDATED PERSON <span class='ml-2 inline-block px-2 py-1 text-xs bg-yellow-300 text-yellow-900 rounded'>Edited</span>";
+      editingRow.classList.add('bg-orange-50');
+    setTimeout(() => editingRow.classList.remove('animate-pulse'), 2000);
+      editingRow = null;
+    } else {
+      // Add a new row to the DEB table with a highlight indicator and Edit button
+      const debTable = document.getElementById('deb-record');
+      if (debTable) {
+        const tbody = debTable.querySelector('tbody');
+        if (tbody) {
+          const newRow = document.createElement('tr');
+          newRow.className = 'border-b main-row bg-orange-50 animate-pulse';
+          newRow.innerHTML = `
+            <td class="px-2 py-4 text-left font-bold">NEW PERSON <span class='ml-2 inline-block px-2 py-1 text-xs bg-yellow-300 text-yellow-900 rounded'>New</span></td>
+            <td class="px-2 py-4 text-left">Self</td>
+            <td class="px-2 py-4 text-left">Y</td>
+            <td class="px-2 py-4 text-left">9019-1833-1-17</td>
+            <td class="px-2 py-4 text-left">6F</td>
+            <td class="px-2 py-4 text-left">13-01-2025</td>
+            <td class="px-2 py-4 text-left">Indefinite</td>
+            <td class="px-2 py-4 text-left"><button class="edit-deb-btn text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Edit </button></td>
+            <td class="px-2 py-4 text-left"><button class="row-detail-btn"><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon icon-tabler icons-tabler-outline icon-tabler-chevron-down'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M6 9l6 6l6 -6'/></svg></button></td>
+          `;
+          // Create the detail row
+          const detailRow = document.createElement('tr');
+          detailRow.className = 'row-detail-content border-b';
+          detailRow.style.display = 'none';
+          detailRow.innerHTML = `
+            <td colspan="9" class="pt-2 p-6 text-left">
+              <div class="w-full">
+                <div class="flex lex-row gap-4 mb-4">
+                  <div class="flex flex-col">
+                    <span class="font-bold">Code</span>
+                    <span>NEW</span>
+                  </div>
+                  <div class="flex flex-col w-full">
+                    <span class="font-bold">Description</span>
+                    <span>Newly imposed debarment record. (Demo content)</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="font-bold">Owner</span>
+                    <span>SL</span>
+                  </div>
+                </div>
+                <hr class="my-5 border-gray-300">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+                  <div>
+                    <span class="block">Transaction Reference</span>
+                    <span class="block font-bold mt-1">SL/XXXXXXX/YYYY</span>
+                  </div>
+                  <div>
+                    <span class="block">Amount Owed (S$)</span>
+                    <span class="block font-bold mt-1">0.00</span>
+                  </div>
+                  <div>
+                    <span class="block">Address</span>
+                    <span class="block font-bold mt-1">-</span>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
+                  <div>
+                    <span class="block">Grant HH Eligible</span>
+                    <span class="block font-bold mt-1">-</span>
+                  </div>
+                  <div>
+                    <span class="block">Grant Amount (S$)</span>
+                    <span class="block font-bold mt-1">-</span>
+                  </div>
+                  <div>
+                    <span class="block">Grant HH Income (S$)</span>
+                    <span class="block font-bold mt-1">-</span>
+                  </div>
+                </div>
+                <div class="gap-4 mb-2 mt-4">
+                  <span class="block">Reason for Backdating</span>
+                  <p class="block font-bold mt-1">-</p>
+                </div>
+              </div>
+            </td>
+          `;
+          // Insert both rows at the top
+          tbody.prepend(detailRow);
+          tbody.prepend(newRow);
+          setTimeout(() => {
+            newRow.classList.remove('animate-pulse');
+          }, 2000);
+        }
+      }
+    }
     closeImposeModal();
-    alert('Debarment code imposed! (Demo only)');
   }
 });
+
+// Edit button logic for DEB table
+document.addEventListener('click', function(e) {
+  const editBtn = e.target.closest('.edit-deb-btn');
+  if (editBtn) {
+    // Open modal in edit mode, pass the row
+    editingRow = editBtn.closest('tr');
+    openImposeModal('edit');
+  }
+});
+
+// Patch openImposeModal to show Delete button in footer if in edit mode, and update heading
+const originalOpenImposeModal = openImposeModal;
+openImposeModal = function(mode) {
+  originalOpenImposeModal();
+  setTimeout(() => {
+    const heading = document.querySelector('#impose-modal-form h2');
+    if (heading) heading.textContent = (mode === 'edit') ? 'Edit record' : 'Impose debarment';
+    const footer = document.querySelector('#impose-modal-form .sticky.bottom-0');
+    // Remove Delete button and left wrapper if not in edit mode
+    if (footer && mode !== 'edit') {
+      const leftWrapper = footer.querySelector('.footer-left');
+      if (leftWrapper) leftWrapper.remove();
+      footer.classList.remove('justify-between');
+      footer.classList.add('justify-end');
+    }
+    if (mode === 'edit' && footer && !footer.querySelector('.delete-deb-btn')) {
+      footer.classList.remove('justify-end');
+      footer.classList.add('justify-between');
+      let leftWrapper = footer.querySelector('.footer-left');
+      if (!leftWrapper) {
+        leftWrapper = document.createElement('div');
+        leftWrapper.className = 'footer-left flex items-center';
+        footer.insertBefore(leftWrapper, footer.firstChild);
+      }
+      leftWrapper.innerHTML = '';
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'delete-deb-btn btn-danger';
+      delBtn.textContent = 'Delete';
+      leftWrapper.appendChild(delBtn);
+      let rightWrapper = footer.querySelector('.footer-right');
+      if (!rightWrapper) {
+        rightWrapper = document.createElement('div');
+        rightWrapper.className = 'footer-right flex gap-2';
+        Array.from(footer.querySelectorAll('button:not(.delete-deb-btn)')).forEach(btn => {
+          rightWrapper.appendChild(btn);
+        });
+        footer.appendChild(rightWrapper);
+      }
+      // Delete logic
+      delBtn.onclick = function() {
+        if (editingRow) {
+          editingRow.remove();
+          editingRow = null;
+          closeImposeModal();
+        }
+      };
+    }
+  }, 50);
+}
 </script>
 </body>
 </html>

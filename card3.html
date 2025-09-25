@@ -1,33 +1,158 @@
-<!-- Modal for Impose New Code (now loaded with this card only) -->
+<!-- Modal for Impose Debarment (redesigned) -->
 <div id="impose-modal-overlay"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-200 opacity-0 pointer-events-none"
   style="display:none;">
-  <div class="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 relative">
-    <button id="impose-modal-close"
-      class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none"
-      aria-label="Close modal">&times;</button>
-    <h2 class="text-xl font-semibold mb-4">Impose New Debarment Code</h2>
-    <form id="impose-modal-form" class="space-y-4">
-      <div>
-        <label class="block mb-1 font-medium" for="debar-person">Person</label>
-        <input id="debar-person" name="person" type="text" class="w-full border border-gray-300 rounded px-3 py-2"
-          placeholder="Enter name or ID" required />
+  <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full p-0 relative flex flex-col max-h-[90vh] overflow-y-auto">
+
+    <form id="impose-modal-form" class="flex flex-col">
+      <!-- Header with sticky close button -->
+      <div class="sticky top-0 z-10 bg-white p-4 rounded-t-lg border-b flex items-center justify-between">
+        <h2 class="text-2xl font-semibold">Impose debarment</h2>
+        <button id="impose-modal-close" class="text-3xl z-30 p-1 ml-4"
+          type="button" aria-label="Close modal">&times;</button>
       </div>
-      <div>
-        <label class="block mb-1 font-medium" for="debar-code">Debarment Code</label>
-        <input id="debar-code" name="code" type="text" class="w-full border border-gray-300 rounded px-3 py-2"
-          placeholder="Enter code" required />
+      <!-- Scrollable content (header, content, and footer all scroll together) -->
+      <div class="flex-1 overflow-y-auto p-4">
+
+          <!-- Debarment code section -->
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-xl">Debarment code</h3>
+              <a href="#" class="text-blue-600 flex items-center gap-1 hover:underline" tabindex="0">
+                List of debarment codes
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-external-link">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+                  <path d="M11 13l9 -9" />
+                  <path d="M15 4h5v5" />
+                </svg>
+              </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 border rounded-sm p-4">
+
+              <div>
+                <label class="block mb-1" for="reason-code">Reason Code</label>
+
+                  <select id="period" class="w-full">
+                   <option value="" disabled selected >Please select</option>
+                    <option value="code">Code</option>
+                </select>
+              </div>
+              <div>
+                <label class="block mb-1" for="period">Period (Months)</label>
+                <select id="period" class="w-full">
+                   <option value="" disabled selected >Please select</option>
+                    <option value="month">Months</option>
+                </select>
+              </div>
+              <div>
+                <label class="block mb-1" for="effective-date">Effective Date</label>
+
+                <input id="effective-date" type="date" class="w-full disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed" value="2025-06-17" disabled />
+
+                <div class="flex items-center mt-2">
+                  <input id="use-close-date" type="checkbox"
+                    class="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" checked />
+                  <label for="use-close-date" class="text-sm select-none">Use request close date</label>
+                </div>
+   
+              </div>
+            </div>
+          </div>
+          <!-- Details section -->
+          <div class="mb-6">
+            <div class=" mb-2">
+              <h3 class="text-xl">Details</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 rounded p-4 bg-gray-50">
+              <div>
+                <div class="mb-2">Scheme Account No.</div>
+                <div class="font-bold">9019-1833-1-17</div>
+              </div>
+              <div>
+                <div class="mb-2">Transaction Reference</div>
+                <div class="font-bold">SL/XXXXXXX/YYYY</div>
+              </div>
+            </div>
+          </div>
+          <!-- Required persons section -->
+          <div class="mb-4">
+            <div class=" mb-2">
+              <h3 class="text-xl">Required person</h3>
+              <p>Select all persons required.</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full table-fixed">
+                <thead>
+                  <tr class="bg-gray-100 border-b-2 border-black">
+                    <th class="p-2 font-medium text-left"><input type="checkbox" id="select-all-persons" /></th>
+                    <th class="p-2 font-medium text-left">Name</th>
+                    <th class="p-2 font-medium text-left">ID No.</th>
+                    <th class="p-2 font-medium text-left">Relationship to HA1</th>
+                    <th class="p-2 font-medium text-left">Core Nucleus</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b last:border-b-0">
+                    <td class="p-2"><input type="checkbox" class="person-checkbox" /></td>
+                    <td class="p-2">SITI AMEERAH BINTE MUHAMAD</td>
+                    <td class="p-2">S12345678F</td>
+                    <td class="p-2">Spouse</td>
+                    <td class="p-2">Y</td>
+                  </tr>
+                  <tr class="border-b last:border-b-0">
+                    <td class="p-2"><input type="checkbox" class="person-checkbox" /></td>
+                    <td class="p-2">FANG DE MING</td>
+                    <td class="p-2">S23456789F</td>
+                    <td class="p-2">Son</td>
+                    <td class="p-2">Y</td>
+                  </tr>
+                  <tr class="border-b last:border-b-0">
+                    <td class="p-2"><input type="checkbox" class="person-checkbox" /></td>
+                    <td class="p-2">Another name</td>
+                    <td class="p-2">S23456789F</td>
+                    <td class="p-2">In-law</td>
+                    <td class="p-2">Y</td>
+                  </tr>
+                  <tr class="border-b last:border-b-0">
+                    <td class="p-2"><input type="checkbox" class="person-checkbox" /></td>
+                    <td class="p-2">Parent name</td>
+                    <td class="p-2">S23456789F</td>
+                    <td class="p-2">In-law</td>
+                    <td class="p-2">Y</td>
+                  </tr>
+                  <tr class="border-b last:border-b-0">
+                    <td class="p-2"><input type="checkbox" class="person-checkbox" /></td>
+                    <td class="p-2">Parent name</td>
+                    <td class="p-2">S23456789F</td>
+                    <td class="p-2">In-law</td>
+                    <td class="p-2">Y</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2"><input type="checkbox" class="person-checkbox" /></td>
+                    <td class="p-2">New person name</td>
+                    <td class="p-2">S23456789F</td>
+                    <td class="p-2">fiancée</td>
+                    <td class="p-2">Y</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        
       </div>
-      <div>
-        <label class="block mb-1 font-medium" for="debar-date">Effective Date</label>
-        <input id="debar-date" name="date" type="date" class="w-full border border-gray-300 rounded px-3 py-2"
-          required />
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
+      <!-- End scrollable content -->
+      <!-- Footer -->
+    <div class="sticky bottom-0 z-10 bg-white p-4 border-t rounded-b-lg flex justify-end gap-2">
         <button type="button" id="impose-modal-cancel" class="btn-outline">Cancel</button>
-        <button type="submit" class="btn-primary">Impose</button>
+        <button type="submit" class="btn-primary">Proceed</button>
       </div>
     </form>
+    
   </div>
 </div>
 
@@ -123,10 +248,10 @@
                   </div>
 
 
-                  <table class="min-w-full mt-6 table-fixed">
+                  <table id="deb-record" class="min-w-full table-fixed">
                     <colgroup>
-                      <col class="w-2/12" />
-                      <col class="w-2/12" />
+                      <col class="w-4/12" />
+                      <col class="w-1/12" />
                       <col class="w-1/12" />
                       <col class="w-2/12" />
                       <col class="w-1/12" />
@@ -151,7 +276,257 @@
                     <tbody>
                       <!-- row set -->
                       <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
+                        <td class="px-2 py-4 text-left">
+                          <span class="flex flex-col gap-0.5">
+                            <span class="relative group max-w-xs">
+                              <span class="inline-block truncate max-w-[340px] align-bottom cursor-pointer"
+                                style="vertical-align:bottom;" title="FANG DE MING JEROME">
+                                FANG DE MING JEROME
+                              </span>
+                              <span
+                                class="absolute left-0 top-full z-50 mt-1 hidden group-hover:flex w-max min-w-[220px] max-w-xs bg-white text-gray-900 text-sm font-medium rounded shadow-lg border border-gray-200 px-4 py-2 whitespace-normal break-words"
+                                style="word-break:break-word;">
+                                FANG DE MING JEROME
+                              </span>
+                            </span>
+                            <span class="inline-block">S1234567A</span>
+                          </span>
+                        </td>
+                        <td class="px-2 py-4 text-left">Self</td>
+                        <td class="px-2 py-4 text-left">Y</td>
+                        <td class="px-2 py-4 text-left">9019-1833-1-17</td>
+                        <td class="px-2 py-4 text-left">6F</td>
+                        <td class="px-2 py-4 text-left">13-01-2025</td>
+                        <td class="px-2 py-4 text-left">Indefinite</td>
+                        <td class="px-2 py-4 text-left">
+                          <button class="text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Lift </button>
+                        </td>
+                        <td class="px-2 py-4 text-left">
+                          <button class="row-detail-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <path d="M6 9l6 6l6 -6" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <tr class="row-detail-content border-b" style="display: none;">
+                        <td colspan="9" class="pt-2 p-6 text-left">
+                          <div class="w-full">
+                            <!-- Top Row: Code, Description, Owner -->
+                            <div class="flex lex-row gap-4">
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Code</span>
+                                <span class=" ">AG</span>
+                              </div>
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Description</span>
+                                <span class=" ">
+                                  Debarred from renting flat from HDB, buying or taking over the lease of an HDB flat
+                                  (both direct purchase and resale flat) or buying an EC unit from developer (taking
+                                  over an EC unit within the minimum occupation period. Can be allowed to rent from HDB,
+                                  purchase or take over the lease of a subsidized flat/DBSS flat/EC unit only after the
+                                  Additional Housing Grant (with interest) is fully recovered. Please check with CPF
+                                  board on the interest amount to be recovered.
+                                </span>
+                              </div>
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Owner</span>
+                                <span class="">SL</span>
+                              </div>
+
+                            </div>
+
+                            <hr class="my-5 border-gray-300">
+
+                            <!-- Transaction Reference Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+                              <div>
+                                <span class="block">Transaction Reference</span>
+                                <span class="block font-bold mt-1">SL/XXXXXXX/YYYY</span>
+                              </div>
+                              <div>
+                                <span class="block">Amount Owed (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                              <div>
+                                <span class="block">Address</span>
+                                <span class="block font-bold mt-1">Blk 246A Ang Mo Kio St 21 #05-101 S(561248)</span>
+                              </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
+                              <div>
+                                <span class="block">Grant HH Eligible</span>
+                                <span class="block font-bold mt-1">ABCXYZ</span>
+                              </div>
+                              <div>
+                                <span class="block">Grant Amount (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                              <div>
+                                <span class="block">Grant HH Income (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                            </div>
+
+                            <!-- Reason for Backdating -->
+                            <div class="gap-4 mb-2 mt-4">
+                              <span class="block">Reason for Backdating</span>
+                              <p class="block font-bold mt-1">
+                                The record is being backdated due to a clerical error that occurred during the initial
+                                data entry process. This adjustment ensures that the information accurately reflects the
+                                original transaction date.
+                              </p>
+                            </div>
+
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- row set -->
+                      <tr class="border-b main-row">
+                        <td class="px-2 py-4 text-left">
+                          <span class="flex flex-col gap-0.5">
+                            <span class="relative group max-w-xs">
+                              <span class="inline-block truncate max-w-[340px] align-bottom cursor-pointer"
+                                style="vertical-align:bottom;"
+                                title="SITI AMEERAH BINTI MUHAMMAD ABDUL RAHMAN AL-MUHAJIRAH AL-ZAHRA">
+                                SITI AMEERAH BINTI MUHAMMAD ABDUL RAHMAN AL-MUHAJIRAH AL-ZAHRA
+                              </span>
+                              <span
+                                class="absolute left-0 top-full z-50 mt-1 hidden group-hover:flex w-max min-w-[220px] max-w-xs bg-white text-gray-900 text-sm font-medium rounded shadow-lg border border-gray-200 px-4 py-2 whitespace-normal break-words"
+                                style="word-break:break-word;">
+                                SITI AMEERAH BINTI MUHAMMAD ABDUL RAHMAN AL-MUHAJIRAH AL-ZAHRA
+                              </span>
+                            </span>
+                            <span class="inline-block">S1234567A</span>
+                          </span>
+                        </td>
+                        <td class="px-2 py-4 text-left">Self</td>
+                        <td class="px-2 py-4 text-left">Y</td>
+                        <td class="px-2 py-4 text-left">9019-1833-1-17</td>
+                        <td class="px-2 py-4 text-left">6F</td>
+                        <td class="px-2 py-4 text-left">13-01-2025</td>
+                        <td class="px-2 py-4 text-left">Indefinite</td>
+                        <td class="px-2 py-4 text-left">
+                          <button class="text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Lift </button>
+                        </td>
+                        <td class="px-2 py-4 text-left">
+                          <button class="row-detail-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <path d="M6 9l6 6l6 -6" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <tr class="row-detail-content border-b" style="display: none;">
+                        <td colspan="9" class="pt-2 p-6 text-left">
+                          <div class="w-full">
+                            <!-- Top Row: Code, Description, Owner -->
+                            <div class="flex lex-row gap-4">
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Code</span>
+                                <span class=" ">AG</span>
+                              </div>
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Description</span>
+                                <span class=" ">
+                                  Debarred from renting flat from HDB, buying or taking over the lease of an HDB flat
+                                  (both direct purchase and resale flat) or buying an EC unit from developer (taking
+                                  over an EC unit within the minimum occupation period. Can be allowed to rent from HDB,
+                                  purchase or take over the lease of a subsidized flat/DBSS flat/EC unit only after the
+                                  Additional Housing Grant (with interest) is fully recovered. Please check with CPF
+                                  board on the interest amount to be recovered.
+                                </span>
+                              </div>
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Owner</span>
+                                <span class="">SL</span>
+                              </div>
+
+                            </div>
+
+                            <hr class="my-5 border-gray-300">
+
+                            <!-- Transaction Reference Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+                              <div>
+                                <span class="block">Transaction Reference</span>
+                                <span class="block font-bold mt-1">SL/XXXXXXX/YYYY</span>
+                              </div>
+                              <div>
+                                <span class="block">Amount Owed (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                              <div>
+                                <span class="block">Address</span>
+                                <span class="block font-bold mt-1">Blk 246A Ang Mo Kio St 21 #05-101 S(561248)</span>
+                              </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
+                              <div>
+                                <span class="block">Grant HH Eligible</span>
+                                <span class="block font-bold mt-1">ABCXYZ</span>
+                              </div>
+                              <div>
+                                <span class="block">Grant Amount (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                              <div>
+                                <span class="block">Grant HH Income (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                            </div>
+
+                            <!-- Reason for Backdating -->
+                            <div class="gap-4 mb-2 mt-4">
+                              <span class="block">Reason for Backdating</span>
+                              <p class="block font-bold mt-1">
+                                The record is being backdated due to a clerical error that occurred during the initial
+                                data entry process. This adjustment ensures that the information accurately reflects the
+                                original transaction date.
+                              </p>
+                            </div>
+
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- row set -->
+                      <tr class="border-b main-row">
+                        <td class="px-2 py-4 text-left">
+                          <span class="flex flex-col gap-0.5">
+                            <span class="relative group max-w-xs">
+                              <span class="inline-block truncate max-w-[340px] align-bottom cursor-pointer"
+                                style="vertical-align:bottom;" title="FANG DE MING JEROME">
+                                FANG DE MING JEROME
+                              </span>
+                              <span
+                                class="absolute left-0 top-full z-50 mt-1 hidden group-hover:flex w-max min-w-[220px] max-w-xs bg-white text-gray-900 text-sm font-medium rounded shadow-lg border border-gray-200 px-4 py-2 whitespace-normal break-words"
+                                style="word-break:break-word;">
+                                FANG DE MING JEROME
+                              </span>
+                            </span>
+                            <span class="inline-block">S1234567A</span>
+                          </span>
+                        </td>
                         <td class="px-2 py-4 text-left">Self</td>
                         <td class="px-2 py-4 text-left">Y</td>
                         <td class="px-2 py-4 text-left">9019-1833-1-17</td>
@@ -253,7 +628,23 @@
 
                       <!-- row set -->
                       <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
+                        <td class="px-2 py-4 text-left">
+                          <span class="flex flex-col gap-0.5">
+                            <span class="relative group max-w-xs">
+                              <span class="inline-block truncate max-w-[340px] align-bottom cursor-pointer"
+                                style="vertical-align:bottom;"
+                                title="SITI AMEERAH BINTI MUHAMMAD ABDUL RAHMAN AL-MUHAJIRAH AL-ZAHRA">
+                                SITI AMEERAH BINTI MUHAMMAD ABDUL RAHMAN AL-MUHAJIRAH AL-ZAHRA
+                              </span>
+                              <span
+                                class="absolute left-0 top-full z-50 mt-1 hidden group-hover:flex w-max min-w-[220px] max-w-xs bg-white text-gray-900 text-sm font-medium rounded shadow-lg border border-gray-200 px-4 py-2 whitespace-normal break-words"
+                                style="word-break:break-word;">
+                                SITI AMEERAH BINTI MUHAMMAD ABDUL RAHMAN AL-MUHAJIRAH AL-ZAHRA
+                              </span>
+                            </span>
+                            <span class="inline-block">S1234567A</span>
+                          </span>
+                        </td>
                         <td class="px-2 py-4 text-left">Self</td>
                         <td class="px-2 py-4 text-left">Y</td>
                         <td class="px-2 py-4 text-left">9019-1833-1-17</td>
@@ -352,418 +743,10 @@
                           </div>
                         </td>
                       </tr>
-
-<!-- row set -->
-                      <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
-                        <td class="px-2 py-4 text-left">Self</td>
-                        <td class="px-2 py-4 text-left">Y</td>
-                        <td class="px-2 py-4 text-left">9019-1833-1-17</td>
-                        <td class="px-2 py-4 text-left">6F</td>
-                        <td class="px-2 py-4 text-left">13-01-2025</td>
-                        <td class="px-2 py-4 text-left">Indefinite</td>
-                        <td class="px-2 py-4 text-left">
-                          <button class="text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Lift </button>
-                        </td>
-                        <td class="px-2 py-4 text-left">
-                          <button class="row-detail-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M6 9l6 6l6 -6" />
-                            </svg>
-                          </button>
-                        </td>
-                      </tr>
-
-                      <tr class="row-detail-content" style="display: none;">
-                        <td colspan="9" class="pt-2 p-6 text-left">
-                          <div class="w-full">
-                            <!-- Top Row: Code, Description, Owner -->
-                            <div class="flex lex-row gap-4">
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Code</span>
-                                <span class=" ">AG</span>
-                              </div>
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Description</span>
-                                <span class=" ">
-                                  Debarred from renting flat from HDB, buying or taking over the lease of an HDB flat
-                                  (both direct purchase and resale flat) or buying an EC unit from developer (taking
-                                  over an EC unit within the minimum occupation period. Can be allowed to rent from HDB,
-                                  purchase or take over the lease of a subsidized flat/DBSS flat/EC unit only after the
-                                  Additional Housing Grant (with interest) is fully recovered. Please check with CPF
-                                  board on the interest amount to be recovered.
-                                </span>
-                              </div>
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Owner</span>
-                                <span class="">SL</span>
-                              </div>
-
-                            </div>
-
-                            <hr class="my-5 border-gray-300">
-
-                            <!-- Transaction Reference Row -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-                              <div>
-                                <span class="block">Transaction Reference</span>
-                                <span class="block font-bold mt-1">SL/XXXXXXX/YYYY</span>
-                              </div>
-                              <div>
-                                <span class="block">Amount Owed (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                              <div>
-                                <span class="block">Address</span>
-                                <span class="block font-bold mt-1">Blk 246A Ang Mo Kio St 21 #05-101 S(561248)</span>
-                              </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
-                              <div>
-                                <span class="block">Grant HH Eligible</span>
-                                <span class="block font-bold mt-1">ABCXYZ</span>
-                              </div>
-                              <div>
-                                <span class="block">Grant Amount (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                              <div>
-                                <span class="block">Grant HH Income (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                            </div>
-
-                            <!-- Reason for Backdating -->
-                            <div class="gap-4 mb-2 mt-4">
-                              <span class="block">Reason for Backdating</span>
-                              <p class="block font-bold mt-1">
-                                The record is being backdated due to a clerical error that occurred during the initial
-                                data entry process. This adjustment ensures that the information accurately reflects the
-                                original transaction date.
-                              </p>
-                            </div>
-
-                          </div>
-                        </td>
-                      </tr>
-
-<!-- row set -->
-                      <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
-                        <td class="px-2 py-4 text-left">Self</td>
-                        <td class="px-2 py-4 text-left">Y</td>
-                        <td class="px-2 py-4 text-left">9019-1833-1-17</td>
-                        <td class="px-2 py-4 text-left">6F</td>
-                        <td class="px-2 py-4 text-left">13-01-2025</td>
-                        <td class="px-2 py-4 text-left">Indefinite</td>
-                        <td class="px-2 py-4 text-left">
-                          <button class="text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Lift </button>
-                        </td>
-                        <td class="px-2 py-4 text-left">
-                          <button class="row-detail-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M6 9l6 6l6 -6" />
-                            </svg>
-                          </button>
-                        </td>
-                      </tr>
-
-                      <tr class="row-detail-content" style="display: none;">
-                        <td colspan="9" class="pt-2 p-6 text-left">
-                          <div class="w-full">
-                            <!-- Top Row: Code, Description, Owner -->
-                            <div class="flex lex-row gap-4">
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Code</span>
-                                <span class=" ">AG</span>
-                              </div>
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Description</span>
-                                <span class=" ">
-                                  Debarred from renting flat from HDB, buying or taking over the lease of an HDB flat
-                                  (both direct purchase and resale flat) or buying an EC unit from developer (taking
-                                  over an EC unit within the minimum occupation period. Can be allowed to rent from HDB,
-                                  purchase or take over the lease of a subsidized flat/DBSS flat/EC unit only after the
-                                  Additional Housing Grant (with interest) is fully recovered. Please check with CPF
-                                  board on the interest amount to be recovered.
-                                </span>
-                              </div>
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Owner</span>
-                                <span class="">SL</span>
-                              </div>
-
-                            </div>
-
-                            <hr class="my-5 border-gray-300">
-
-                            <!-- Transaction Reference Row -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-                              <div>
-                                <span class="block">Transaction Reference</span>
-                                <span class="block font-bold mt-1">SL/XXXXXXX/YYYY</span>
-                              </div>
-                              <div>
-                                <span class="block">Amount Owed (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                              <div>
-                                <span class="block">Address</span>
-                                <span class="block font-bold mt-1">Blk 246A Ang Mo Kio St 21 #05-101 S(561248)</span>
-                              </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
-                              <div>
-                                <span class="block">Grant HH Eligible</span>
-                                <span class="block font-bold mt-1">ABCXYZ</span>
-                              </div>
-                              <div>
-                                <span class="block">Grant Amount (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                              <div>
-                                <span class="block">Grant HH Income (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                            </div>
-
-                            <!-- Reason for Backdating -->
-                            <div class="gap-4 mb-2 mt-4">
-                              <span class="block">Reason for Backdating</span>
-                              <p class="block font-bold mt-1">
-                                The record is being backdated due to a clerical error that occurred during the initial
-                                data entry process. This adjustment ensures that the information accurately reflects the
-                                original transaction date.
-                              </p>
-                            </div>
-
-                          </div>
-                        </td>
-                      </tr>
-                      
-<!-- row set -->
-                      <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
-                        <td class="px-2 py-4 text-left">Self</td>
-                        <td class="px-2 py-4 text-left">Y</td>
-                        <td class="px-2 py-4 text-left">9019-1833-1-17</td>
-                        <td class="px-2 py-4 text-left">6F</td>
-                        <td class="px-2 py-4 text-left">13-01-2025</td>
-                        <td class="px-2 py-4 text-left">Indefinite</td>
-                        <td class="px-2 py-4 text-left">
-                          <button class="text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Lift </button>
-                        </td>
-                        <td class="px-2 py-4 text-left">
-                          <button class="row-detail-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M6 9l6 6l6 -6" />
-                            </svg>
-                          </button>
-                        </td>
-                      </tr>
-
-                      <tr class="row-detail-content" style="display: none;">
-                        <td colspan="9" class="pt-2 p-6 text-left">
-                          <div class="w-full">
-                            <!-- Top Row: Code, Description, Owner -->
-                            <div class="flex lex-row gap-4">
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Code</span>
-                                <span class=" ">AG</span>
-                              </div>
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Description</span>
-                                <span class=" ">
-                                  Debarred from renting flat from HDB, buying or taking over the lease of an HDB flat
-                                  (both direct purchase and resale flat) or buying an EC unit from developer (taking
-                                  over an EC unit within the minimum occupation period. Can be allowed to rent from HDB,
-                                  purchase or take over the lease of a subsidized flat/DBSS flat/EC unit only after the
-                                  Additional Housing Grant (with interest) is fully recovered. Please check with CPF
-                                  board on the interest amount to be recovered.
-                                </span>
-                              </div>
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Owner</span>
-                                <span class="">SL</span>
-                              </div>
-
-                            </div>
-
-                            <hr class="my-5 border-gray-300">
-
-                            <!-- Transaction Reference Row -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-                              <div>
-                                <span class="block">Transaction Reference</span>
-                                <span class="block font-bold mt-1">SL/XXXXXXX/YYYY</span>
-                              </div>
-                              <div>
-                                <span class="block">Amount Owed (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                              <div>
-                                <span class="block">Address</span>
-                                <span class="block font-bold mt-1">Blk 246A Ang Mo Kio St 21 #05-101 S(561248)</span>
-                              </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
-                              <div>
-                                <span class="block">Grant HH Eligible</span>
-                                <span class="block font-bold mt-1">ABCXYZ</span>
-                              </div>
-                              <div>
-                                <span class="block">Grant Amount (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                              <div>
-                                <span class="block">Grant HH Income (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                            </div>
-
-                            <!-- Reason for Backdating -->
-                            <div class="gap-4 mb-2 mt-4">
-                              <span class="block">Reason for Backdating</span>
-                              <p class="block font-bold mt-1">
-                                The record is being backdated due to a clerical error that occurred during the initial
-                                data entry process. This adjustment ensures that the information accurately reflects the
-                                original transaction date.
-                              </p>
-                            </div>
-
-                          </div>
-                        </td>
-                      </tr>
-                      
-<!-- row set -->
-                      <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
-                        <td class="px-2 py-4 text-left">Self</td>
-                        <td class="px-2 py-4 text-left">Y</td>
-                        <td class="px-2 py-4 text-left">9019-1833-1-17</td>
-                        <td class="px-2 py-4 text-left">6F</td>
-                        <td class="px-2 py-4 text-left">13-01-2025</td>
-                        <td class="px-2 py-4 text-left">Indefinite</td>
-                        <td class="px-2 py-4 text-left">
-                          <button class="text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Lift </button>
-                        </td>
-                        <td class="px-2 py-4 text-left">
-                          <button class="row-detail-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M6 9l6 6l6 -6" />
-                            </svg>
-                          </button>
-                        </td>
-                      </tr>
-
-                      <tr class="row-detail-content" style="display: none;">
-                        <td colspan="9" class="pt-2 p-6 text-left">
-                          <div class="w-full">
-                            <!-- Top Row: Code, Description, Owner -->
-                            <div class="flex lex-row gap-4">
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Code</span>
-                                <span class=" ">AG</span>
-                              </div>
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Description</span>
-                                <span class=" ">
-                                  Debarred from renting flat from HDB, buying or taking over the lease of an HDB flat
-                                  (both direct purchase and resale flat) or buying an EC unit from developer (taking
-                                  over an EC unit within the minimum occupation period. Can be allowed to rent from HDB,
-                                  purchase or take over the lease of a subsidized flat/DBSS flat/EC unit only after the
-                                  Additional Housing Grant (with interest) is fully recovered. Please check with CPF
-                                  board on the interest amount to be recovered.
-                                </span>
-                              </div>
-
-                              <div class="flex flex-col">
-                                <span class="font-bold">Owner</span>
-                                <span class="">SL</span>
-                              </div>
-
-                            </div>
-
-                            <hr class="my-5 border-gray-300">
-
-                            <!-- Transaction Reference Row -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-                              <div>
-                                <span class="block">Transaction Reference</span>
-                                <span class="block font-bold mt-1">SL/XXXXXXX/YYYY</span>
-                              </div>
-                              <div>
-                                <span class="block">Amount Owed (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                              <div>
-                                <span class="block">Address</span>
-                                <span class="block font-bold mt-1">Blk 246A Ang Mo Kio St 21 #05-101 S(561248)</span>
-                              </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
-                              <div>
-                                <span class="block">Grant HH Eligible</span>
-                                <span class="block font-bold mt-1">ABCXYZ</span>
-                              </div>
-                              <div>
-                                <span class="block">Grant Amount (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                              <div>
-                                <span class="block">Grant HH Income (S$)</span>
-                                <span class="block font-bold mt-1">4,000.00</span>
-                              </div>
-                            </div>
-
-                            <!-- Reason for Backdating -->
-                            <div class="gap-4 mb-2 mt-4">
-                              <span class="block">Reason for Backdating</span>
-                              <p class="block font-bold mt-1">
-                                The record is being backdated due to a clerical error that occurred during the initial
-                                data entry process. This adjustment ensures that the information accurately reflects the
-                                original transaction date.
-                              </p>
-                            </div>
-
-                          </div>
-                        </td>
-                      </tr>                      
 
                       <!-- row set -->
                       <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
+                        <td class="px-2 py-4 text-left">LIANG WEI CHEN, LEO<br>S1234567A</td>
                         <td class="px-2 py-4 text-left">Self</td>
                         <td class="px-2 py-4 text-left">Y</td>
                         <td class="px-2 py-4 text-left">9019-1833-1-17</td>
@@ -833,7 +816,6 @@
                                 <span class="block font-bold mt-1">Blk 246A Ang Mo Kio St 21 #05-101 S(561248)</span>
                               </div>
                             </div>
-
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
                               <div>
                                 <span class="block">Grant HH Eligible</span>
@@ -863,9 +845,9 @@
                         </td>
                       </tr>
 
-<!-- row set -->
+                      <!-- row set -->
                       <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
+                        <td class="px-2 py-4 text-left">JAMES JIA MING TAN<br>S1234567A</td>
                         <td class="px-2 py-4 text-left">Self</td>
                         <td class="px-2 py-4 text-left">Y</td>
                         <td class="px-2 py-4 text-left">9019-1833-1-17</td>
@@ -964,10 +946,10 @@
                           </div>
                         </td>
                       </tr>
-                      
-<!-- row set -->
+
+                      <!-- row set -->
                       <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
+                        <td class="px-2 py-4 text-left">FANG DE MING JEROME<br>S1234567A</td>
                         <td class="px-2 py-4 text-left">Self</td>
                         <td class="px-2 py-4 text-left">Y</td>
                         <td class="px-2 py-4 text-left">9019-1833-1-17</td>
@@ -1066,10 +1048,10 @@
                           </div>
                         </td>
                       </tr>
-                      
-<!-- row set -->
+
+                      <!-- row set -->
                       <tr class="border-b main-row">
-                        <td class="px-2 py-4 text-left">John Doe <br>S1234567A</td>
+                        <td class="px-2 py-4 text-left">FANG DE MING JEROME<br>S1234567A</td>
                         <td class="px-2 py-4 text-left">Self</td>
                         <td class="px-2 py-4 text-left">Y</td>
                         <td class="px-2 py-4 text-left">9019-1833-1-17</td>
@@ -1168,8 +1150,212 @@
                           </div>
                         </td>
                       </tr>
-                      
-                      
+
+                      <!-- row set -->
+                      <tr class="border-b main-row">
+                        <td class="px-2 py-4 text-left">WANG XIU-YING LI-HUA CHEN-JING<br>S1234567A</td>
+                        <td class="px-2 py-4 text-left">Self</td>
+                        <td class="px-2 py-4 text-left">Y</td>
+                        <td class="px-2 py-4 text-left">9019-1833-1-17</td>
+                        <td class="px-2 py-4 text-left">6F</td>
+                        <td class="px-2 py-4 text-left">13-01-2025</td>
+                        <td class="px-2 py-4 text-left">Indefinite</td>
+                        <td class="px-2 py-4 text-left">
+                          <button class="text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Lift </button>
+                        </td>
+                        <td class="px-2 py-4 text-left">
+                          <button class="row-detail-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <path d="M6 9l6 6l6 -6" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <tr class="row-detail-content" style="display: none;">
+                        <td colspan="9" class="pt-2 p-6 text-left">
+                          <div class="w-full">
+                            <!-- Top Row: Code, Description, Owner -->
+                            <div class="flex lex-row gap-4">
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Code</span>
+                                <span class=" ">AG</span>
+                              </div>
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Description</span>
+                                <span class=" ">
+                                  Debarred from renting flat from HDB, buying or taking over the lease of an HDB flat
+                                  (both direct purchase and resale flat) or buying an EC unit from developer (taking
+                                  over an EC unit within the minimum occupation period. Can be allowed to rent from HDB,
+                                  purchase or take over the lease of a subsidized flat/DBSS flat/EC unit only after the
+                                  Additional Housing Grant (with interest) is fully recovered. Please check with CPF
+                                  board on the interest amount to be recovered.
+                                </span>
+                              </div>
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Owner</span>
+                                <span class="">SL</span>
+                              </div>
+
+                            </div>
+
+                            <hr class="my-5 border-gray-300">
+
+                            <!-- Transaction Reference Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+                              <div>
+                                <span class="block">Transaction Reference</span>
+                                <span class="block font-bold mt-1">SL/XXXXXXX/YYYY</span>
+                              </div>
+                              <div>
+                                <span class="block">Amount Owed (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                              <div>
+                                <span class="block">Address</span>
+                                <span class="block font-bold mt-1">Blk 246A Ang Mo Kio St 21 #05-101 S(561248)</span>
+                              </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
+                              <div>
+                                <span class="block">Grant HH Eligible</span>
+                                <span class="block font-bold mt-1">ABCXYZ</span>
+                              </div>
+                              <div>
+                                <span class="block">Grant Amount (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                              <div>
+                                <span class="block">Grant HH Income (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                            </div>
+
+                            <!-- Reason for Backdating -->
+                            <div class="gap-4 mb-2 mt-4">
+                              <span class="block">Reason for Backdating</span>
+                              <p class="block font-bold mt-1">
+                                The record is being backdated due to a clerical error that occurred during the initial
+                                data entry process. This adjustment ensures that the information accurately reflects the
+                                original transaction date.
+                              </p>
+                            </div>
+
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- row set -->
+                      <tr class="border-b main-row">
+                        <td class="px-2 py-4 text-left">WANG XIU-YING LI-HUA CHEN-JING<br>S1234567A</td>
+                        <td class="px-2 py-4 text-left">Self</td>
+                        <td class="px-2 py-4 text-left">Y</td>
+                        <td class="px-2 py-4 text-left">9019-1833-1-17</td>
+                        <td class="px-2 py-4 text-left">6F</td>
+                        <td class="px-2 py-4 text-left">13-01-2025</td>
+                        <td class="px-2 py-4 text-left">Indefinite</td>
+                        <td class="px-2 py-4 text-left">
+                          <button class="text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Lift </button>
+                        </td>
+                        <td class="px-2 py-4 text-left">
+                          <button class="row-detail-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-down">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <path d="M6 9l6 6l6 -6" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <tr class="row-detail-content" style="display: none;">
+                        <td colspan="9" class="pt-2 p-6 text-left">
+                          <div class="w-full">
+                            <!-- Top Row: Code, Description, Owner -->
+                            <div class="flex lex-row gap-4">
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Code</span>
+                                <span class=" ">AG</span>
+                              </div>
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Description</span>
+                                <span class=" ">
+                                  Debarred from renting flat from HDB, buying or taking over the lease of an HDB flat
+                                  (both direct purchase and resale flat) or buying an EC unit from developer (taking
+                                  over an EC unit within the minimum occupation period. Can be allowed to rent from HDB,
+                                  purchase or take over the lease of a subsidized flat/DBSS flat/EC unit only after the
+                                  Additional Housing Grant (with interest) is fully recovered. Please check with CPF
+                                  board on the interest amount to be recovered.
+                                </span>
+                              </div>
+
+                              <div class="flex flex-col">
+                                <span class="font-bold">Owner</span>
+                                <span class="">SL</span>
+                              </div>
+
+                            </div>
+
+                            <hr class="my-5 border-gray-300">
+
+                            <!-- Transaction Reference Row -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+                              <div>
+                                <span class="block">Transaction Reference</span>
+                                <span class="block font-bold mt-1">SL/XXXXXXX/YYYY</span>
+                              </div>
+                              <div>
+                                <span class="block">Amount Owed (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                              <div>
+                                <span class="block">Address</span>
+                                <span class="block font-bold mt-1">Blk 246A Ang Mo Kio St 21 #05-101 S(561248)</span>
+                              </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-4">
+                              <div>
+                                <span class="block">Grant HH Eligible</span>
+                                <span class="block font-bold mt-1">ABCXYZ</span>
+                              </div>
+                              <div>
+                                <span class="block">Grant Amount (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                              <div>
+                                <span class="block">Grant HH Income (S$)</span>
+                                <span class="block font-bold mt-1">4,000.00</span>
+                              </div>
+                            </div>
+
+                            <!-- Reason for Backdating -->
+                            <div class="gap-4 mb-2 mt-4">
+                              <span class="block">Reason for Backdating</span>
+                              <p class="block font-bold mt-1">
+                                The record is being backdated due to a clerical error that occurred during the initial
+                                data entry process. This adjustment ensures that the information accurately reflects the
+                                original transaction date.
+                              </p>
+                            </div>
+
+                          </div>
+                        </td>
+                      </tr>
+
+
                     </tbody>
                   </table>
 
