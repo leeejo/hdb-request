@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -167,6 +168,20 @@
 </style> 
 
   <script>
+// Event delegation for Send request button in dynamically loaded card3.html
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('#send-request-btn');
+  if (btn) {
+    // Find the nearest card section (if needed)
+    const card = btn.closest('.flex.flex-col.w-full') || document;
+    // Show #requested
+    const requested = card.querySelector('#requested') || document.getElementById('requested');
+    if (requested) requested.classList.remove('hidden');
+    // Hide #requesting
+    const requesting = card.querySelector('#requesting') || document.getElementById('requesting');
+    if (requesting) requesting.classList.add('hidden');
+  }
+});
     tailwind.config = {
       theme: {
         extend: {
@@ -269,6 +284,7 @@
             <button class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Export request</button>
           </div>
         </div>
+
      <script>
           const moreBtn = document.getElementById('moreActionsBtn');
           const moreMenu = document.getElementById('moreActionsMenu');
@@ -283,6 +299,7 @@
             e.stopPropagation();
           });
         </script>
+
         <button class="btn-outline">
           Add journal
         </button>
@@ -816,9 +833,9 @@ document.addEventListener('submit', function(e) {
     e.preventDefault();
     if (editingRow) {
       // Update the existing row with new values (for demo, just update first cell and highlight)
-      editingRow.cells[0].innerHTML = "UPDATED PERSON <span class='ml-2 inline-block px-2 py-1 text-xs bg-yellow-300 text-yellow-900 rounded'>Edited</span>";
+      editingRow.cells[0].innerHTML = "UPDATED PERSON";
       editingRow.classList.add('bg-orange-50');
-    setTimeout(() => editingRow.classList.remove('animate-pulse'), 2000);
+      setTimeout(() => editingRow.classList.remove('animate-pulse'), 2000);
       editingRow = null;
     } else {
       // Add a new row to the DEB table with a highlight indicator and Edit button
@@ -829,14 +846,23 @@ document.addEventListener('submit', function(e) {
           const newRow = document.createElement('tr');
           newRow.className = 'border-b main-row bg-orange-50 animate-pulse';
           newRow.innerHTML = `
-            <td class="px-2 py-4 text-left font-bold">NEW PERSON <span class='ml-2 inline-block px-2 py-1 text-xs bg-yellow-300 text-yellow-900 rounded'>New</span></td>
+            <td class="px-2 py-4 text-left font-bold">NEW PERSON</td>
             <td class="px-2 py-4 text-left">Self</td>
             <td class="px-2 py-4 text-left">Y</td>
             <td class="px-2 py-4 text-left">9019-1833-1-17</td>
             <td class="px-2 py-4 text-left">6F</td>
             <td class="px-2 py-4 text-left">13-01-2025</td>
             <td class="px-2 py-4 text-left">Indefinite</td>
-            <td class="px-2 py-4 text-left"><button class="edit-deb-btn text-blue-700 bg-transparent border-none cursor-pointer ml-4"> Edit </button></td>
+            <td class="px-2 py-4 text-left">
+              <div class="flex flex-col items-start gap-1 w-full">
+                <span class='inline-block px-2 py-1 text-xs bg-yellow-300 text-yellow-900 rounded w-fit'>To impose</span>
+                <!-- To lift tag will be inserted here dynamically if needed -->
+                <div class="action-btn-row flex flex-row gap-2 mt-1">
+                  <button class="edit-deb-btn text-blue-700 bg-transparent border-none cursor-pointer">Edit</button>
+                  <!-- If you want to add Lift/Undo for new rows in the future, add here -->
+                </div>
+              </div>
+            </td>
             <td class="px-2 py-4 text-left"><button class="row-detail-btn"><svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon icon-tabler icons-tabler-outline icon-tabler-chevron-down'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M6 9l6 6l6 -6'/></svg></button></td>
           `;
           // Create the detail row
@@ -919,7 +945,7 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Patch openImposeModal to show Delete button in footer if in edit mode, and update heading
+// Patch openImposeModal to show Delete button in footer if in edit mode, update heading, and switch Required person to radio in edit mode
 const originalOpenImposeModal = openImposeModal;
 openImposeModal = function(mode) {
   originalOpenImposeModal();
@@ -967,10 +993,98 @@ openImposeModal = function(mode) {
         }
       };
     }
+    // Switch Required person to radio in edit mode
+    const personCells = document.querySelectorAll('.person-checkbox');
+    if (mode === 'edit') {
+      personCells.forEach(cb => {
+        if (cb.type !== 'radio') {
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.className = cb.className;
+          radio.name = 'person-radio';
+          radio.checked = cb.checked;
+          radio.disabled = cb.disabled;
+          cb.parentNode.replaceChild(radio, cb);
+        }
+      });
+    } else {
+      // Restore to checkbox if needed (for robustness)
+      personCells.forEach(rb => {
+        if (rb.type === 'radio') {
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.className = rb.className;
+          cb.checked = rb.checked;
+          cb.disabled = rb.disabled;
+          rb.parentNode.replaceChild(cb, rb);
+        }
+      });
+    }
   }, 50);
+
+      // Hide select-all checkbox in header if in edit mode (radio)
+    const selectAllTh = document.querySelector('#select-all-persons');
+    if (mode === 'edit' && selectAllTh) {
+      selectAllTh.style.display = 'none';
+    } else if (selectAllTh) {
+      selectAllTh.style.display = '';
+    }
 }
+
+
+// Lift/Undo button toggle for debarment record table
+// Lift/Undo toggle for all rows in the debarment table (works for dynamically loaded card3.html)
+document.addEventListener('click', function(e) {
+  const liftBtn = e.target.closest('.lift-btn');
+  if (liftBtn) {
+    const td = liftBtn.closest('td');
+    const tr = liftBtn.closest('tr');
+    if (!td || !tr) return;
+    // Find the tag container (the flex-col div)
+    const tagContainer = td.querySelector('div.flex.flex-col');
+    const btnRow = tagContainer?.querySelector('.action-btn-row');
+    if (liftBtn.textContent.trim() === 'Lift') {
+      // Remove any existing pill for safety
+      if (td) {
+        td.querySelectorAll('.to-be-lifted').forEach(function(pill) {
+          pill.remove();
+        });
+      }
+      // Create and insert the pill before the Undo/Lift button
+      const tag = document.createElement('span');
+      tag.className = 'to-be-lifted text-xs bg-gray-400 text-white rounded px-2 py-1 w-fit';
+      tag.textContent = 'To lift';
+      if (liftBtn.parentNode) {
+        liftBtn.parentNode.insertBefore(tag, liftBtn);
+      } else if (tagContainer && btnRow) {
+        tagContainer.insertBefore(tag, btnRow);
+      } else if (tagContainer) {
+        tagContainer.appendChild(tag);
+      } else {
+        td.insertBefore(tag, liftBtn);
+      }
+  tr.classList.add('bg-gray-50', 'animate-pulse');
+  setTimeout(() => {
+    tr.classList.remove('animate-pulse', 'bg-orange-50');
+    tr.classList.add('bg-gray-50');
+  }, 2000);
+  liftBtn.textContent = 'Undo';
+    } else {
+      // Remove the pill robustly from anywhere in the action cell
+      if (td) {
+        td.querySelectorAll('.to-be-lifted').forEach(function(pill) {
+          pill.remove();
+        });
+      }
+      tr.classList.remove('bg-gray-200', 'text-gray-400');
+      liftBtn.textContent = 'Lift';
+    }
+  }
+});
+
 </script>
 </body>
+ 
 </html>
   </body>
 </html>

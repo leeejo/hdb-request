@@ -229,20 +229,127 @@
         </div>
     </div>
 
-<div class="flex space-x-4 mb-8">
-  <div class="border border-gray-300 rounded p-2">App Details</div>
-  <div class="border border-gray-300 rounded p-2">Q Checks</div>
-  <div class="border border-gray-300 rounded p-2">Finances</div>
-  <div class="border border-gray-300 rounded p-2">Tasks</div>
-  <div class="border border-gray-300 rounded p-2">Appointments</div>
-  <div class="border border-gray-300 rounded p-2">Documents</div>
-  <div class="border border-gray-300 rounded p-2 bg-blue-100 text-blue-700">Requests</div>
+<div class="tab-group flex space-x-4 mb-8">
+  <div class="tab-item tab-active bg-blue-50 border border-blue-600 text-blue-700 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">App Details</div>
+  <div class="tab-item tab-inactive border border-gray-300 bg-white hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Q Checks</div>
+  <div class="tab-item tab-inactive border border-gray-300 bg-white hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Finances</div>
+  <div class="tab-item tab-inactive border border-gray-300 bg-white hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Tasks</div>
+  <div class="tab-item tab-inactive border border-gray-300 bg-white hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Appointments</div>
+  <div class="tab-item tab-inactive border border-gray-300 bg-white hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Documents</div>
+  <div class="tab-item tab-inactive border border-gray-300 bg-white hover:bg-blue-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Requests</div>
 </div>
 
-<div class="border border-gray-300 rounded p-4">
-  <div class="text-center text-gray-500">Your request list is empty.</div>
-  <button id="openModalBtn" class="bg-blue-700 text-white rounded p-2 mt-4 block mx-auto">Create Request</button>
+<div id="main-card" class="border border-gray-300 rounded p-4">
+  <!-- ...existing code... -->
+     <!-- 8 Section Boxes -->
+  <div id="section-1" class="card-base mb-8 p-6 scroll-mt-24">
+    <h2 class="text-xl font-bold mb-2">Section 1</h2>
+    <p>Content for section 1 goes here.</p>
+  </div>
+  <div id="section-2" class="card-base mb-8 p-6 scroll-mt-24">
+    <h2 class="text-xl font-bold mb-2">Section 2</h2>
+    <p>Content for section 2 goes here.</p>
+  </div>
+  <div id="section-3" class="card-base mb-8 p-6 scroll-mt-24">
+    <h2 class="text-xl font-bold mb-2">Section 3</h2>
+    <p>Content for section 3 goes here.</p>
+  </div>
+  <div id="section-4" class="card-base mb-8 p-6 scroll-mt-24">
+    <h2 class="text-xl font-bold mb-2">Section 4</h2>
+    <p>Content for section 4 goes here.</p>
+  </div>
+  <div id="section-5" class="card-base mb-8 p-6 scroll-mt-24">
+    <h2 class="text-xl font-bold mb-2">Section 5</h2>
+    <p>Content for section 5 goes here.</p>
+  </div>
+  <div id="section-6" class="card-base mb-8 p-6 scroll-mt-24">
+    <h2 class="text-xl font-bold mb-2">Section 6</h2>
+    <p>Content for section 6 goes here.</p>
+  </div>
+  <div id="section-7" class="card-base mb-8 p-6 scroll-mt-24">
+    <h2 class="text-xl font-bold mb-2">Section 7</h2>
+    <p>Content for section 7 goes here.</p>
+  </div>
+  <div id="section-8" class="card-base mb-8 p-6 scroll-mt-24">
+    <h2 class="text-xl font-bold mb-2">Section 8</h2>
+    <p>Content for section 8 goes here.</p>
+  </div>
+</main>
+
+
+<!-- Floating Quick Jump FAB and Menu (like request.html) -->
+<div id="jump-card-fab-wrapper" class="fixed left-1/2 bottom-6 -translate-x-1/2 z-50 group focus-within:z-50 transition-all duration-300 opacity-100 scale-100">
+  <button id="jump-card-fab" class="flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 focus:bg-blue-700 transition-all outline-none focus:ring-2 focus:ring-blue-400" type="button">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25V6.75A2.25 2.25 0 0 0 14.25 4.5h-4.5A2.25 2.25 0 0 0 7.5 6.75v1.5m9 0v8.25A2.25 2.25 0 0 1 14.25 18.75h-4.5A2.25 2.25 0 0 1 7.5 16.5V8.25m9 0H7.5" /></svg>
+    <span class="text-base">Jump to Section</span>
+  </button>
+  <nav id="card-jump-nav" class="absolute left-0 bottom-12 bg-white border border-gray-300 rounded-lg shadow-lg px-3 py-2 min-w-[220px] max-h-[60vh] overflow-y-auto flex flex-col gap-2 transition-all opacity-0 invisible" tabindex="-1">
+    <div id="card-jump-list" class="flex flex-col gap-1">
+      <button class="jump-btn w-full text-left px-2 py-1 rounded hover:bg-blue-50 text-sm truncate border border-transparent hover:border-blue-300" data-jump="section-1">Section 1</button>
+      <button class="jump-btn w-full text-left px-2 py-1 rounded hover:bg-blue-50 text-sm truncate border border-transparent hover:border-blue-300" data-jump="section-2">Section 2</button>
+      <button class="jump-btn w-full text-left px-2 py-1 rounded hover:bg-blue-50 text-sm truncate border border-transparent hover:border-blue-300" data-jump="section-3">Section 3</button>
+      <button class="jump-btn w-full text-left px-2 py-1 rounded hover:bg-blue-50 text-sm truncate border border-transparent hover:border-blue-300" data-jump="section-4">Section 4</button>
+      <button class="jump-btn w-full text-left px-2 py-1 rounded hover:bg-blue-50 text-sm truncate border border-transparent hover:border-blue-300" data-jump="section-5">Section 5</button>
+      <button class="jump-btn w-full text-left px-2 py-1 rounded hover:bg-blue-50 text-sm truncate border border-transparent hover:border-blue-300" data-jump="section-6">Section 6</button>
+      <button class="jump-btn w-full text-left px-2 py-1 rounded hover:bg-blue-50 text-sm truncate border border-transparent hover:border-blue-300" data-jump="section-7">Section 7</button>
+      <button class="jump-btn w-full text-left px-2 py-1 rounded hover:bg-blue-50 text-sm truncate border border-transparent hover:border-blue-300" data-jump="section-8">Section 8</button>
+    </div>
+  </nav>
 </div>
+
+
+</div>
+</main>
+
+<script>
+// Floating Quick Jump FAB logic (like request.html)
+(function() {
+  const wrapper = document.getElementById('jump-card-fab-wrapper');
+  const fab = document.getElementById('jump-card-fab');
+  const menu = document.getElementById('card-jump-nav');
+  let hideTimeout = null;
+  function showMenu() {
+    menu.classList.remove('opacity-0', 'invisible');
+    menu.classList.add('opacity-100', 'visible');
+  }
+  function hideMenu() {
+    menu.classList.remove('opacity-100', 'visible');
+    menu.classList.add('opacity-0', 'invisible');
+  }
+  function delayedHide() {
+    hideTimeout = setTimeout(hideMenu, 120);
+  }
+  fab.addEventListener('mouseenter', showMenu);
+  fab.addEventListener('mouseleave', delayedHide);
+  fab.addEventListener('focus', showMenu);
+  fab.addEventListener('blur', delayedHide);
+  menu.addEventListener('mouseenter', function() {
+    if (hideTimeout) clearTimeout(hideTimeout);
+    showMenu();
+  });
+  menu.addEventListener('mouseleave', delayedHide);
+  // Optional: close on click outside
+  document.addEventListener('click', function(e) {
+    if (!wrapper.contains(e.target)) hideMenu();
+  });
+})();
+
+// Section jump logic
+document.querySelectorAll('#card-jump-list .jump-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const targetId = btn.getAttribute('data-jump');
+    const target = document.getElementById(targetId);
+    if (target) {
+      // Remove highlight from all
+      document.querySelectorAll('.card-base').forEach(card => card.classList.remove('ring', 'ring-blue-400'));
+      // Scroll and highlight
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target.classList.add('ring', 'ring-blue-400');
+      setTimeout(() => target.classList.remove('ring', 'ring-blue-400'), 1200);
+    }
+  });
+});
+</script>
 
 </div>
 
@@ -257,7 +364,7 @@
   <div class="modal-content">
     <div class="modal-header">
       <h2 class="text-lg font-bold">Create Request</h2>
-      <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700">
+      <button id="closeModalBtn" class="text-gray-500 hover">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
