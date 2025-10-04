@@ -201,51 +201,6 @@ document.addEventListener('click', function(e) {
 
 <body>
 
-  <!-- Jump Card FAB and Hover Menu -->
-  <div id="jump-card-fab-wrapper" class="fixed left-1/2 bottom-4 -translate-x-1/2 z-50 group focus-within:z-50 transition-all duration-300 opacity-0 scale-95" style="display:none;">
-      <button id="jump-card-fab" class="flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 focus:bg-blue-700 transition-all outline-none focus:ring-2 focus:ring-blue-400" type="button">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25V6.75A2.25 2.25 0 0 0 14.25 4.5h-4.5A2.25 2.25 0 0 0 7.5 6.75v1.5m9 0v8.25A2.25 2.25 0 0 1 14.25 18.75h-4.5A2.25 2.25 0 0 1 7.5 16.5V8.25m9 0H7.5" /></svg>
-      <span class="text-base">Jump to Card</span>
-    </button>
-  <nav id="card-jump-nav" class="absolute left-0 bottom-12 bg-white border border-gray-300 rounded-lg shadow-lg px-3 py-2 min-w-[220px] max-h-[60vh] overflow-y-auto flex flex-col gap-2 transition-all opacity-0 invisible" tabindex="-1">
-      <div id="card-jump-list" class="flex flex-col gap-1"></div>
-    </nav>
-  </div>
-    <script>
-      // Show/hide jump menu on hover/focus of either button or menu
-      (function() {
-        const wrapper = document.getElementById('jump-card-fab-wrapper');
-        const fab = document.getElementById('jump-card-fab');
-        const menu = document.getElementById('card-jump-nav');
-        let hideTimeout = null;
-        function showMenu() {
-          menu.classList.remove('opacity-0', 'invisible');
-          menu.classList.add('opacity-100', 'visible');
-        }
-        function hideMenu() {
-          menu.classList.remove('opacity-100', 'visible');
-          menu.classList.add('opacity-0', 'invisible');
-        }
-        function delayedHide() {
-          hideTimeout = setTimeout(hideMenu, 120);
-        }
-        fab.addEventListener('mouseenter', showMenu);
-        fab.addEventListener('mouseleave', delayedHide);
-        fab.addEventListener('focus', showMenu);
-        fab.addEventListener('blur', delayedHide);
-        menu.addEventListener('mouseenter', function() {
-          if (hideTimeout) clearTimeout(hideTimeout);
-          showMenu();
-        });
-        menu.addEventListener('mouseleave', delayedHide);
-        // Optional: close on click outside
-        document.addEventListener('click', function(e) {
-          if (!wrapper.contains(e.target)) hideMenu();
-        });
-      })();
-    </script>
-
-
   <header class="flex items-center p-3 text-white bg-hdb-blue min-w-[320px] shadow-md">
     <div class="mx-4">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -457,14 +412,131 @@ document.addEventListener('click', function(e) {
 
   </main>
 
+  <footer class="bg-gray-200 p-4 text-right text-sm border-t border-gray-300 w-full"> 
+    &copy; 2025 Government of Singapore<br>
+    Last updated 2 Oct 2025<br>
+    v0.0.0
+  </footer>
 
-  <footer class="bg-gray-200 p-4 text-right text-sm border-t border-gray-300 fixed bottom-0 w-full">
 
     <!-- Sticky Sentinel at the bottom to prevent sticky overlap with footer -->
     <div id="sticky-sentinel-bottom" style="height: 1px;"></div>
 
 
-  <script>
+      <!-- FAB Bar: Place this at the bottom of your <body>, before </body> -->
+  <div id="fab-bar" class="fixed left-1/2 bottom-4 z-50 flex items-end gap-4 -translate-x-1/2 pointer-events-none">
+    <!-- Update the Jump Card FAB menu to be center-aligned with the button on hover -->
+    <div id="jump-card-fab-wrapper" class="group focus-within:z-50 pointer-events-auto opacity-0 scale-95 transition-all duration-300" style="display:none;">
+      <button id="jump-card-fab" class="flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 focus:bg-blue-700 transition-all outline-none focus:ring-2 focus:ring-blue-400" type="button">
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-bounce-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 15.5c3 -1 5.5 -.5 8 4.5c.5 -3 1.5 -5.5 3 -8" /><path d="M18 9a2 2 0 1 1 0 -4a2 2 0 0 1 0 4z" /></svg>        <span class="text-base">Jump to Card</span>
+      </button>
+      <nav id="card-jump-nav"
+        class="absolute left-1/2 -translate-x-1/2 bottom-12 bg-white border border-gray-300 rounded-lg shadow-lg px-3 py-2 min-w-[220px] max-h-[60vh] overflow-y-auto flex flex-col gap-2 transition-all opacity-0 invisible"
+        tabindex="-1">
+        <div id="card-jump-list" class="flex flex-col gap-1"></div>
+      </nav>
+    </div>
+  
+    <!-- Add Action FAB (always visible + hover/focus menu) -->
+    <div id="add-action-fab-wrapper" class="group focus-within:z-50 pointer-events-auto relative">
+      <button id="add-action-fab" class="flex items-center gap-2 px-5 py-2 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 focus:bg-blue-700 transition-all outline-none focus:ring-2 focus:ring-blue-400" type="button">
+<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-star"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>        <span class="text-base">Add action</span>
+      </button>
+      <div id="add-action-menu"
+        class="absolute left-1/2 -translate-x-1/2 bottom-14 bg-white border border-gray-300 rounded-lg shadow-lg p-6 min-w-[720px] flex flex-col gap-2 transition-all opacity-0 invisible z-50">
+        <div> <p class="pb-2">Select an action to get started</p></div>
+        <div id="add-action-menu-grid" class="grid grid-cols-2 gap-2"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  /* quick jump fab */
+      // Show/hide jump menu on hover/focus of either button or menu
+      (function() {
+        const wrapper = document.getElementById('jump-card-fab-wrapper');
+        const fab = document.getElementById('jump-card-fab');
+        const menu = document.getElementById('card-jump-nav');
+        let hideTimeout = null;
+        function showMenu() {
+          menu.classList.remove('opacity-0', 'invisible');
+          menu.classList.add('opacity-100', 'visible');
+        }
+        function hideMenu() {
+          menu.classList.remove('opacity-100', 'visible');
+          menu.classList.add('opacity-0', 'invisible');
+        }
+        function delayedHide() {
+          hideTimeout = setTimeout(hideMenu, 120);
+        }
+        fab.addEventListener('mouseenter', showMenu);
+        fab.addEventListener('mouseleave', delayedHide);
+        fab.addEventListener('focus', showMenu);
+        fab.addEventListener('blur', delayedHide);
+        menu.addEventListener('mouseenter', function() {
+          if (hideTimeout) clearTimeout(hideTimeout);
+          showMenu();
+        });
+        menu.addEventListener('mouseleave', delayedHide);
+        // Optional: close on click outside
+        document.addEventListener('click', function(e) {
+          if (!wrapper.contains(e.target)) hideMenu();
+        });
+      })();
+
+/* add menu fab */  
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Clone btn-menu-box buttons for the FAB menu
+  function getActionMenuItems() {
+    return Array.from(document.querySelectorAll('.btn-menu-box')).map(btn => {
+      const clone = btn.cloneNode(true);
+      clone.classList.add('w-full');
+      clone.onclick = function(e) {
+        e.preventDefault();
+        btn.click(); // Trigger the original action
+        hideMenu();
+      };
+      return clone;
+    });
+  }
+
+  // 2. Show/hide logic for the Add Action FAB menu (hover/focus)
+  const wrapper = document.getElementById('add-action-fab-wrapper');
+  const fab = document.getElementById('add-action-fab');
+  const menu = document.getElementById('add-action-menu');
+  const menuGrid = document.getElementById('add-action-menu-grid');
+  let hideTimeout = null;
+
+  function showMenu() {
+    menuGrid.innerHTML = '';
+    getActionMenuItems().forEach(item => menuGrid.appendChild(item));
+    menu.classList.remove('opacity-0', 'invisible');
+    menu.classList.add('opacity-100', 'visible');
+  }
+  function hideMenu() {
+    menu.classList.remove('opacity-100', 'visible');
+    menu.classList.add('opacity-0', 'invisible');
+  }
+  function delayedHide() {
+    hideTimeout = setTimeout(hideMenu, 120);
+  }
+
+  fab.addEventListener('mouseenter', showMenu);
+  fab.addEventListener('mouseleave', delayedHide);
+  fab.addEventListener('focus', showMenu);
+  fab.addEventListener('blur', delayedHide);
+  menu.addEventListener('mouseenter', function() {
+    if (hideTimeout) clearTimeout(hideTimeout);
+    showMenu();
+  });
+  menu.addEventListener('mouseleave', delayedHide);
+
+  // Optional: close on click outside
+  document.addEventListener('click', function(e) {
+    if (!wrapper.contains(e.target)) hideMenu();
+  });
+});
+
      // Sticky UI effect using a sentinel
 
 
@@ -1076,15 +1148,13 @@ document.addEventListener('click', function(e) {
           pill.remove();
         });
       }
-      tr.classList.remove('bg-gray-200', 'text-gray-400');
+      tr.classList.remove('bg-gray-50', 'bg-gray-200', 'text-gray-400', 'animate-pulse');
       liftBtn.textContent = 'Lift';
     }
   }
 });
 
 </script>
-</body>
- 
-</html>
-  </body>
+
+</body> 
 </html>
