@@ -264,9 +264,6 @@ document.addEventListener('click', function(e) {
       </div>
     </div>
 
- <!-- Add this before #stickCard -->
-<div id="sticky-sentinel"></div>
-
     <!-- Sticky Card -->
 <div class="stick-card sticky top-0 z-20 bg-white" id="stickCard">
   <!-- Ghost Loader State -->
@@ -325,6 +322,9 @@ document.addEventListener('click', function(e) {
       <div class="tab-item tab-inactive border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 font-medium rounded-md p-3 text-center shadow-sm cursor-pointer transition duration-150 ease-in-out">Documents</div>
     </div>
   </div>
+
+          <!-- Sticky Sentinel at the bottom to prevent sticky overlap with footer -->
+    <div id="sticky-sentinel-bottom" ></div>
 
 
 
@@ -417,11 +417,6 @@ document.addEventListener('click', function(e) {
     Last updated 2 Oct 2025<br>
     v0.0.0
   </footer>
-
-
-    <!-- Sticky Sentinel at the bottom to prevent sticky overlap with footer -->
-    <div id="sticky-sentinel-bottom" style="height: 1px;"></div>
-
 
       <!-- FAB Bar: Place this at the bottom of your <body>, before </body> -->
   <div id="fab-bar" class="fixed left-1/2 bottom-4 z-50 flex items-end gap-4 -translate-x-1/2 pointer-events-none">
@@ -541,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 const stickCard = document.getElementById('stickCard');
-const sentinelTop = document.getElementById('sticky-sentinel');
+//const sentinelTop = document.getElementById('sticky-sentinel');
 const sentinelBottom = document.getElementById('sticky-sentinel-bottom');
 let isStickyActive = false;
 
@@ -550,11 +545,11 @@ const observer = new IntersectionObserver(
     let topVisible = false;
     let bottomVisible = false;
     entries.forEach(entry => {
-      if (entry.target === sentinelTop) topVisible = entry.isIntersecting;
+      //if (entry.target === sentinelTop) topVisible = entry.isIntersecting;
       if (entry.target === sentinelBottom) bottomVisible = entry.isIntersecting;
     });
     // Only sticky if top sentinel is not visible and bottom sentinel is not visible
-    if (!topVisible && !bottomVisible) {
+    if (!bottomVisible) {
       stickCard.classList.add('is-sticky');
       isStickyActive = true;
     } else {
@@ -564,7 +559,7 @@ const observer = new IntersectionObserver(
   },
   { threshold: [0] }
 );
-if (sentinelTop) observer.observe(sentinelTop);
+//if (sentinelTop) observer.observe(sentinelTop);
 if (sentinelBottom) observer.observe(sentinelBottom);
 
 
