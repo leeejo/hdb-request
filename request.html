@@ -150,9 +150,7 @@
       /* Use only Tailwind utility classes in HTML: relative overflow-hidden */
     }
    } 
-</style>
 
-<style>
   /* FAB shimmer animation (for CDN compatibility, only here) */
   .fab-shimmer {
     position: relative;
@@ -189,37 +187,37 @@
     border-left-color: #2563eb !important; /* Tailwind blue-600 */
   }
 
-</style> 
+</style>
 
-  <script>
-// Event delegation for Send request button in dynamically loaded card3.html
-document.addEventListener('click', function(e) {
-  const btn = e.target.closest('#send-request-btn');
-  if (btn) {
-    // Find the nearest card section (if needed)
-    const card = btn.closest('.flex.flex-col.w-full') || document;
-    // Show #requested
-    const requested = card.querySelector('#requested') || document.getElementById('requested');
-    if (requested) requested.classList.remove('hidden');
-    // Hide #requesting
-    const requesting = card.querySelector('#requesting') || document.getElementById('requesting');
-    if (requesting) requesting.classList.add('hidden');
-  }
-});
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'hdb-blue': '#0F477E', // Custom brand blue
-          },
-          fontFamily: {
-            inter: ['Inter', 'sans-serif'], // Define a custom font family for Inter
-          }
-        },
-      },
+<script>
+  // Event delegation for Send request button in dynamically loaded card3.html
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('#send-request-btn');
+    if (btn) {
+      // Find the nearest card section (if needed)
+      const card = btn.closest('.flex.flex-col.w-full') || document;
+      // Show #requested
+      const requested = card.querySelector('#requested') || document.getElementById('requested');
+      if (requested) requested.classList.remove('hidden');
+      // Hide #requesting
+      const requesting = card.querySelector('#requesting') || document.getElementById('requesting');
+      if (requesting) requesting.classList.add('hidden');
     }
+  });
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'hdb-blue': '#0F477E', // Custom brand blue
+        },
+        fontFamily: {
+          inter: ['Inter', 'sans-serif'], // Define a custom font family for Inter
+        }
+      },
+    },
+  }
 
-  </script>
+</script>
 
 </head>
 
