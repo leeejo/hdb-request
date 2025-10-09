@@ -27,7 +27,7 @@
 })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', '69e0b013-3760-41d3-b9fa-da2d6ea757c4');
 </script>
 
-  <title>HDB Request</title>
+  <title>HDB Request - Requestor</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -190,20 +190,6 @@
 </style>
 
 <script>
-  // Event delegation for Send request button in dynamically loaded card3.html
-  document.addEventListener('click', function (e) {
-    const btn = e.target.closest('#send-request-btn');
-    if (btn) {
-      // Find the nearest card section (if needed)
-      const card = btn.closest('.flex.flex-col.w-full') || document;
-      // Show #requested
-      const requested = card.querySelector('#requested') || document.getElementById('requested');
-      if (requested) requested.classList.remove('hidden');
-      // Hide #requesting
-      const requesting = card.querySelector('#requesting') || document.getElementById('requesting');
-      if (requesting) requesting.classList.add('hidden');
-    }
-  });
   tailwind.config = {
     theme: {
       extend: {
@@ -217,6 +203,40 @@
     },
   }
 
+  // Event delegation for Send request button in dynamically loaded card3.html
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('#send-request-btn');
+  if (btn) {
+    // Show #requested, hide #requesting (existing logic)
+    const card = btn.closest('.flex.flex-col.w-full') || document;
+    const requested = card.querySelector('#requested') || document.getElementById('requested');
+    if (requested) requested.classList.remove('hidden');
+    const requesting = card.querySelector('#requesting') || document.getElementById('requesting');
+    if (requesting) requesting.classList.add('hidden');
+
+    // Change the table top bar to "locked" state UI
+    const debCard = btn.closest('.card-base');
+    if (debCard) {
+      const tableTopBar = debCard.querySelector('.table-top-bar');
+      if (tableTopBar) {
+        tableTopBar.innerHTML = `
+                    <div class="flex items-start gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-lock mt-1">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" />
+              <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+              <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
+            </svg>
+            <div>
+              <h4 class="text-2xl">Record locked</h4>
+              <p>Changes are pending review by the checking officer and cannot be edited.</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+  }
+});
 </script>
 
 </head>
@@ -566,11 +586,19 @@
     
                                 <div
                                     class="flex flex-col justify-center items-start self-stretch flex-grow-0 flex-shrink-0 overflow-hidden rounded border-2 border-gray-200">
-                                    <div class="w-full flex items-center gap-3 bg-gray-200 p-4">
-                                        <strong>I want to</strong>
-                                        <button class="btn-primary">
-                                            Impose new code
-                                        </button>
+                                    <div class="table-top-bar w-full flex items-center gap-3 bg-gray-200 p-4 border-b">
+                                       <div class="flex items-start gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-lock mt-1">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" />
+              <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+              <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
+            </svg>
+            <div>
+              <h4 class="text-2xl">Record locked</h4>
+              <p>Changes are pending review by the checking officer and cannot be edited.</p>
+            </div>
+          </div>
                                     </div>
     
                                     <div
@@ -1984,20 +2012,16 @@
                             <!-- section: requesting and approval -->
                             <div class="w-full">
     
-                                <!-- section: requesting -->
+<!-- section: requestor approval -->
+ <div id="requested">
+          <div class="w-full">
+            <h2 class="mb-1 text-lg">Request for counter-check</h2>
+            <p class="mb-4">Send your changes for counter-checking by another officer. Debarment record will be locked
+              and cannot be edited while pending verification.</p>
+          </div>
 
-    
-                                <!-- section: requested approval -->
-                                <div id="requested" >
-                                    <div class="w-full">
-                                        <h2 class="mb-1 text-lg">Request for counter-check</h2>
-                                        <p class="mb-4">Send your changes for counter-checking by another officer. Debarment
-                                            record will be locked
-                                            and cannot be edited while pending verification.</p>
-                                    </div>
-    
-                                    <div class="flex items-center gap-3 p-4 mb-4 rounded bg-gray-50 border-2 border-gray-200">
-                                    
+          <div class="flex items-center gap-3 p-4 mb-4 rounded bg-gray-50 border-2 border-gray-200">
+
                                       <div class="grid grid-row-2 gap-4 w-full">
                                         <div>
                                           <span class="block">Checking officer</span>
@@ -2015,56 +2039,50 @@
                                         </div>
                                       </div>
                                     </div>
-                                    
-                                    </div>
-    
-                                    <div id="approval" class="mt-4 w-full ">
-                                        <div id="awaiting-banner" class="mt-4 w-full">
-                                            <div class="rounded bg-orange-100 border border-orange-300 px-4 py-3 mb-4">
-                                                <h4 class="text-2xl">Awaiting counter-check</h4>
-                                                <p>Your request is pending verification by the checking officer.</p>
-                                            </div>
-                                        </div>
-    
-                                        <div class="w-full">
-                                            <h2 class="mb-1 text-lg">Confirm counter-check</h2>
-                                            <p class="mb-4">Check and confirm the proposed debarments changes.</p>
-                                        </div>
-    
-                                        <div
-                                            class="flex items-center gap-3 p-4 mb-4 rounded bg-gray-50 border-2 border-gray-200">
-    
-                                            <form>
-                                                <div class="mb-4">
-                                                    <label class="block mb-2 font-medium">Decision</label>
-                                                    <div class="flex gap-6 items-center">
-                                                        <label class="inline-flex items-center">
-                                                            <input type="radio" name="counter-check-decision" value="Agree"
-                                                                class="form-radio text-blue-600" />
-                                                            <span class="ml-2">Agree</span>
-                                                        </label>
-                                                        <label class="inline-flex items-center">
-                                                            <input type="radio" name="counter-check-decision"
-                                                                value="Disagree" class="form-radio text-blue-600" />
-                                                            <span class="ml-2">Disagree</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label for="counter-check-remarks" class="block mb-2 font-medium">Reason
-                                                        for decision</label>
-                                                    <textarea id="counter-check-remarks" name="counter-check-remarks"
-                                                        class="border rounded px-3 py-2 w-full"
-                                                        placeholder="Enter remarks (optional)"></textarea>
-                                                </div>
-                                                <div class="w-full">
-                                                    <button type="submit" class="btn-primary" id="counter-check-submit-btn">
-                                                        Submit
-                                                    </button>
-                                                </div>
-                                            </form>
-    
-    <!-- approved -->
+          
+          </div>
+
+                    <div id="approval" class="mt-4 w-full ">
+            <div id="awaiting-banner" class="mt-4 w-full">
+              <div class="rounded bg-orange-100 border border-orange-300 px-4 py-3 mb-4">
+                <h4 class="text-2xl">Awaiting counter-check</h4>
+                <p>Your request is pending verification by the checking officer.</p>
+              </div>
+            </div>
+
+         <div class="w-full">
+            <h2 class="mb-1 text-lg">Confirm counter-check</h2>
+            <p class="mb-4">Check and confirm the proposed debarments changes.</p>
+          </div>
+
+          <div class="flex items-center gap-3 p-4 mb-4 rounded bg-gray-50 border-2 border-gray-200">
+
+            <form>
+              <div class="mb-4">
+                <label class="block mb-2 font-medium">Decision</label>
+                <div class="flex gap-6 items-center">
+                  <label class="inline-flex items-center">
+                    <input type="radio" name="counter-check-decision" value="Agree" class="form-radio text-blue-600" />
+                    <span class="ml-2">Agree</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <input type="radio" name="counter-check-decision" value="Disagree" class="form-radio text-blue-600" />
+                    <span class="ml-2">Disagree</span>
+                  </label>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label for="counter-check-remarks" class="block mb-2 font-medium">Reason for decision</label>
+                <textarea id="counter-check-remarks" name="counter-check-remarks" class="border rounded px-3 py-2 w-full" placeholder="Enter remarks (optional)"></textarea>
+              </div>
+              <div class="w-full">
+                <button type="submit" class="btn-primary" id="counter-check-submit-btn">
+                  Submit
+                </button>
+              </div>
+            </form>
+            
+                <!-- approved -->
  <div id="approved" class="grid grid-row-2 gap-4 w-full hidden">
                                         <div>
                                           <span class="block">Decision</span>
@@ -2077,15 +2095,13 @@
                                        
                                       </div>
                                     </div>
-    
-                                        </div>
 
 
 
 
-                                    
-                                    </div>
-                                </div>
+          </div>
+          </div>
+</div>
     
     
     
@@ -2411,7 +2427,7 @@ document.querySelectorAll('.btn-menu-box').forEach(btn => {
   });
 });
 
-// Refactored card creation logic
+// card creation logic
 function handleActionBoxClick(action) {
   console.log('[handleActionBoxClick] action:', action);
   const container = document.getElementById('dynamic-card-container');
@@ -2419,8 +2435,7 @@ function handleActionBoxClick(action) {
   if (action === 1 || action === 7 || action === 9) {
     const cardId = `dynamic-card-${action}-${Date.now()}`;
     const card = createCard(action, cardId);
-    container.appendChild(card); // <-- always add to top
-
+    container.appendChild(card);
     // Highlight the latest card
     document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
       c.classList.remove('border-gray-800');
@@ -2428,20 +2443,34 @@ function handleActionBoxClick(action) {
     });
     card.classList.add('border-gray-800', 'border-4');
     updateCardJumpMenu();
+    // Anchor to top of the new card, always offset for sticky header if present
+    setTimeout(() => {
+      const stickCard = document.getElementById('stickCard');
+      const stickyRect = stickCard ? stickCard.getBoundingClientRect() : { height: 0 };
+      const cardRect = card.getBoundingClientRect();
+      // Always offset by sticky header height if stickCard exists
+      const scrollY = window.scrollY + cardRect.top - (stickyRect.height || 0);
+      window.scrollTo({ top: scrollY, behavior: 'smooth' });
+    }, 50);
   } else {
     // All other actions: only one card allowed
     const cardId = `dynamic-card-${action}`;
     if (!document.getElementById(cardId)) {
       const card = createCard(action, cardId);
-      container.appendChild(card); // <-- always add to top
-
-      // Highlight the latest card
+      container.appendChild(card);
       document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
         c.classList.remove('border-gray-800');
         c.classList.remove('border-4');
       });
       card.classList.add('border-gray-800', 'border-4');
       updateCardJumpMenu();
+      setTimeout(() => {
+        const stickCard = document.getElementById('stickCard');
+        const stickyRect = stickCard ? stickCard.getBoundingClientRect() : { height: 0 };
+        const cardRect = card.getBoundingClientRect();
+        const scrollY = window.scrollY + cardRect.top - (stickyRect.height || 0);
+        window.scrollTo({ top: scrollY, behavior: 'smooth' });
+      }, 50);
     } else {
       alert('You cannot add more than 1 of this card.');
     }
@@ -2948,6 +2977,7 @@ document.addEventListener('click', function(e) {
   }
 });
 
+
 // Add this script at the end of your file or inside a <script> block
 document.addEventListener('submit', function(e) {
   const form = e.target;
@@ -2960,8 +2990,28 @@ document.addEventListener('submit', function(e) {
     if (approved) {
       approved.classList.remove('hidden');
     }
+    // Change the table top bar to "approved" state UI
+    const debCard = form.closest('.card-base');
+    if (debCard) {
+      const tableTopBar = debCard.querySelector('.table-top-bar');
+      if (tableTopBar) {
+        tableTopBar.classList.remove('bg-gray-200');
+        tableTopBar.classList.add('bg-green-50');
+        tableTopBar.innerHTML = `
+          <div class="flex items-start gap-2">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>
+            <div>
+              <h4 class="text-2xl">Changes accepted</h4>
+              <p>The checking officer confirmed the proposed changes. If you revise the record, you will need to request for another counter-check.</p>
+            </div>
+          </div>
+        `;
+      }
+    }
   }
 });
+
+
 </script>
 
 </body> 
