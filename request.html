@@ -634,7 +634,7 @@ document.querySelectorAll('.btn-menu-box').forEach(btn => {
   });
 });
 
-// Refactored card creation logic
+// card creation logic
 function handleActionBoxClick(action) {
   console.log('[handleActionBoxClick] action:', action);
   const container = document.getElementById('dynamic-card-container');
@@ -642,8 +642,7 @@ function handleActionBoxClick(action) {
   if (action === 1 || action === 7 || action === 9) {
     const cardId = `dynamic-card-${action}-${Date.now()}`;
     const card = createCard(action, cardId);
-    container.appendChild(card); // <-- always add to top
-
+    container.appendChild(card);
     // Highlight the latest card
     document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
       c.classList.remove('border-gray-800');
@@ -651,25 +650,32 @@ function handleActionBoxClick(action) {
     });
     card.classList.add('border-gray-800', 'border-4');
     updateCardJumpMenu();
+    // Anchor to top of the new card
+    setTimeout(() => {
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
   } else {
     // All other actions: only one card allowed
     const cardId = `dynamic-card-${action}`;
     if (!document.getElementById(cardId)) {
       const card = createCard(action, cardId);
-      container.appendChild(card); // <-- always add to top
-
-      // Highlight the latest card
+      container.appendChild(card);
       document.querySelectorAll('#dynamic-card-container .card-base').forEach(c => {
         c.classList.remove('border-gray-800');
         c.classList.remove('border-4');
       });
       card.classList.add('border-gray-800', 'border-4');
       updateCardJumpMenu();
+      // Anchor to top of the new card
+      setTimeout(() => {
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
     } else {
       alert('You cannot add more than 1 of this card.');
     }
   }
 }
+// ...existing code...
 
 // Update the quick jump navigation menu
 function updateCardJumpMenu() {
@@ -1167,6 +1173,21 @@ document.addEventListener('click', function(e) {
       }
       tr.classList.remove('bg-gray-50', 'bg-gray-200', 'text-gray-400', 'animate-pulse');
       liftBtn.textContent = 'Lift';
+    }
+  }
+});
+
+// Add this script at the end of your file or inside a <script> block
+document.addEventListener('submit', function(e) {
+  const form = e.target;
+  if (form && form.querySelector('#counter-check-submit-btn')) {
+    e.preventDefault();
+    // Hide the form
+    form.style.display = 'none';
+    // Show the approved section
+    const approved = document.getElementById('approved');
+    if (approved) {
+      approved.classList.remove('hidden');
     }
   }
 });
