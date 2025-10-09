@@ -650,9 +650,14 @@ function handleActionBoxClick(action) {
     });
     card.classList.add('border-gray-800', 'border-4');
     updateCardJumpMenu();
-    // Anchor to top of the new card
+    // Anchor to top of the new card, always offset for sticky header if present
     setTimeout(() => {
-      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const stickCard = document.getElementById('stickCard');
+      const stickyRect = stickCard ? stickCard.getBoundingClientRect() : { height: 0 };
+      const cardRect = card.getBoundingClientRect();
+      // Always offset by sticky header height if stickCard exists
+      const scrollY = window.scrollY + cardRect.top - (stickyRect.height || 0);
+      window.scrollTo({ top: scrollY, behavior: 'smooth' });
     }, 50);
   } else {
     // All other actions: only one card allowed
@@ -666,9 +671,12 @@ function handleActionBoxClick(action) {
       });
       card.classList.add('border-gray-800', 'border-4');
       updateCardJumpMenu();
-      // Anchor to top of the new card
       setTimeout(() => {
-        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const stickCard = document.getElementById('stickCard');
+        const stickyRect = stickCard ? stickCard.getBoundingClientRect() : { height: 0 };
+        const cardRect = card.getBoundingClientRect();
+        const scrollY = window.scrollY + cardRect.top - (stickyRect.height || 0);
+        window.scrollTo({ top: scrollY, behavior: 'smooth' });
       }, 50);
     } else {
       alert('You cannot add more than 1 of this card.');
