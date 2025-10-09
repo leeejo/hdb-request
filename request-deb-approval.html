@@ -1985,33 +1985,7 @@
                             <div class="w-full">
     
                                 <!-- section: requesting -->
-                                <div id="requesting" class="hidden">
-                                    <div class="w-full">
-                                        <h2 class="mb-1 text-lg">Request for counter-check</h2>
-                                        <p class="mb-4">Send your changes for counter-checking by another officer. Debarment
-                                            record will be locked
-                                            and cannot be edited while pending verification.</p>
-                                    </div>
-    
-                                    <div
-                                        class="flex items-center gap-3 p-4 mb-4 rounded bg-gray-50 border-2 border-gray-200">
-    
-                                        <form>
-    
-                                            <label for="officer-select" class="block mb-2">Checking officer</label>
-                                            <select id="officer-select" name="officer" class="mb-3 block w-full">
-                                                <option value="" disabled selected>Select an officer</option>
-                                                <option value="officer-1">Staff name (XXXXXA)</option>
-                                            </select>
-                                            <div class="w-full">
-                                                <button type="button" class="btn-primary" id="send-request-btn">
-                                                    Send request
-                                                </button>
-                                            </div>
-                                        </form>
-    
-                                    </div>
-                                </div>
+
     
                                 <!-- section: requested approval -->
                                 <div id="requested" >
@@ -2090,9 +2064,26 @@
                                                 </div>
                                             </form>
     
-    
+    <!-- approved -->
+ <div id="approved" class="grid grid-row-2 gap-4 w-full hidden">
+                                        <div>
+                                          <span class="block">Decision</span>
+                                          <span class="block font-bold mt-1">Agree</span>
+                                        </div>
+
+                                        <div>
+                                          <span class="block">Reason for decision</span>
+                                          <span class="block font-bold mt-1">All checks passed</span>
+                                       
+                                      </div>
+                                    </div>
     
                                         </div>
+
+
+
+
+                                    
                                     </div>
                                 </div>
     
@@ -2957,6 +2948,20 @@ document.addEventListener('click', function(e) {
   }
 });
 
+// Add this script at the end of your file or inside a <script> block
+document.addEventListener('submit', function(e) {
+  const form = e.target;
+  if (form && form.querySelector('#counter-check-submit-btn')) {
+    e.preventDefault();
+    // Hide the form
+    form.style.display = 'none';
+    // Show the approved section
+    const approved = document.getElementById('approved');
+    if (approved) {
+      approved.classList.remove('hidden');
+    }
+  }
+});
 </script>
 
 </body> 
