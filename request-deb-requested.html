@@ -220,23 +220,50 @@ document.addEventListener('click', function (e) {
       const tableTopBar = debCard.querySelector('.table-top-bar');
       if (tableTopBar) {
         tableTopBar.innerHTML = `
-                    <div class="flex items-start gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-lock mt-1">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-              <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" />
-              <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-              <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
-            </svg>
+          <div class="flex items-start gap-2 border-b">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-lock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
             <div>
               <h4 class="text-2xl">Record locked</h4>
               <p>Changes are pending review by the checking officer and cannot be edited.</p>
             </div>
           </div>
         `;
+        // Insert the toggle nav below the table top bar
+        let toggleBar = debCard.querySelector('.debarment-toggle-bar');
+        if (!toggleBar) {
+          toggleBar = document.createElement('div');
+          toggleBar.className = 'debarment-toggle-bar flex items-center gap-2 py-3 p-4';
+          toggleBar.innerHTML = `
+            <span class="font-bold">View</span>
+            <button id="view-changes-btn" class="btn-outline font-semibold bg-blue-100">Changes only</button>
+            <button id="view-all-btn" class="btn-outline font-normal">View all</button>
+          `;
+          tableTopBar.insertAdjacentElement('afterend', toggleBar);
+        } else {
+          toggleBar.style.display = '';
+        }
+      }
+      // Show only new and lifted rows immediately
+      document.querySelectorAll('#deb-record tbody tr.main-row').forEach(tr => {
+        if (tr.classList.contains('row-new') || tr.classList.contains('row-lifted')) {
+          tr.style.display = '';
+        } else {
+          tr.style.display = 'none';
+        }
+      });
+      // Highlight the "Changes only" button
+      const viewChangesBtn = debCard.querySelector('#view-changes-btn');
+      const viewAllBtn = debCard.querySelector('#view-all-btn');
+      if (viewChangesBtn && viewAllBtn) {
+        viewChangesBtn.classList.add('bg-blue-100');
+        viewAllBtn.classList.remove('bg-blue-100');
       }
     }
   }
 });
+
+
+
 </script>
 
 </head>
@@ -532,7 +559,6 @@ document.addEventListener('click', function (e) {
     
   </div>
 </div>
-
 
     <div class="card-base mb-6" id="dynamic-card-3">
         <div class="card-content">
@@ -2002,10 +2028,6 @@ document.addEventListener('click', function (e) {
                                 </div>
     
                             </div>
-    
-                            <!-- section: requesting and approval -->
-                            <div class="w-full">
-    
 
     
                                 <!-- section: requested approval -->
@@ -2046,56 +2068,6 @@ document.addEventListener('click', function (e) {
               </div>
             </div>
 
-         <div class="w-full">
-            <h2 class="mb-1 text-lg">Confirm counter-check</h2>
-            <p class="mb-4">Check and confirm the proposed debarments changes.</p>
-          </div>
-
-          <div class="flex items-center gap-3 p-4 mb-4 rounded bg-gray-50 border-2 border-gray-200">
-
-            <form>
-              <div class="mb-4">
-                <label class="block mb-2 font-medium">Decision</label>
-                <div class="flex gap-6 items-center">
-                  <label class="inline-flex items-center">
-                    <input type="radio" name="counter-check-decision" value="Agree" class="form-radio text-blue-600" />
-                    <span class="ml-2">Agree</span>
-                  </label>
-                  <label class="inline-flex items-center">
-                    <input type="radio" name="counter-check-decision" value="Disagree" class="form-radio text-blue-600" />
-                    <span class="ml-2">Disagree</span>
-                  </label>
-                </div>
-              </div>
-              <div class="mb-4">
-                <label for="counter-check-remarks" class="block mb-2 font-medium">Reason for decision</label>
-                <textarea id="counter-check-remarks" name="counter-check-remarks" class="border rounded px-3 py-2 w-full" placeholder="Enter remarks (optional)"></textarea>
-              </div>
-              <div class="w-full">
-                <button type="submit" class="btn-primary" id="counter-check-submit-btn">
-                  Submit
-                </button>
-              </div>
-            </form>
-            
-                <!-- approved -->
- <div id="approved" class="grid grid-row-2 gap-4 w-full hidden">
-                                        <div>
-                                          <span class="block">Decision</span>
-                                          <span class="block font-bold mt-1">Agree</span>
-                                        </div>
-
-                                        <div>
-                                          <span class="block">Reason for decision</span>
-                                          <span class="block font-bold mt-1">All checks passed</span>
-                                       
-                                      </div>
-                                    </div>
-
-
-
-
-          </div>
           </div>
 </div>
     
@@ -2735,7 +2707,7 @@ document.addEventListener('submit', function(e) {
         const tbody = debTable.querySelector('tbody');
         if (tbody) {
           const newRow = document.createElement('tr');
-          newRow.className = 'border-b main-row bg-orange-50 animate-pulse';
+          newRow.className = 'border-b main-row bg-orange-50 animate-pulse row-new';
           newRow.innerHTML = `
             <td class="px-2 py-4 text-left font-bold">NEW PERSON</td>
             <td class="px-2 py-4 text-left">Self</td>
@@ -2954,10 +2926,10 @@ document.addEventListener('click', function(e) {
       } else {
         td.insertBefore(tag, liftBtn);
       }
-  tr.classList.add('bg-gray-50', 'animate-pulse');
+  tr.classList.add('bg-gray-50', 'animate-pulse', 'row-lifted');
   setTimeout(() => {
     tr.classList.remove('animate-pulse', 'bg-orange-50');
-    tr.classList.add('bg-gray-50');
+    tr.classList.add('bg-gray-50', 'row-lifted');
   }, 2000);
   liftBtn.textContent = 'Undo';
     } else {
@@ -2973,39 +2945,6 @@ document.addEventListener('click', function(e) {
   }
 });
 
-
-// Add this script at the end of your file or inside a <script> block
-document.addEventListener('submit', function(e) {
-  const form = e.target;
-  if (form && form.querySelector('#counter-check-submit-btn')) {
-    e.preventDefault();
-    // Hide the form
-    form.style.display = 'none';
-    // Show the approved section
-    const approved = document.getElementById('approved');
-    if (approved) {
-      approved.classList.remove('hidden');
-    }
-    // Change the table top bar to "approved" state UI
-    const debCard = form.closest('.card-base');
-    if (debCard) {
-      const tableTopBar = debCard.querySelector('.table-top-bar');
-      if (tableTopBar) {
-        tableTopBar.classList.remove('bg-gray-200');
-        tableTopBar.classList.add('bg-green-50');
-        tableTopBar.innerHTML = `
-          <div class="flex items-start gap-2">
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>
-            <div>
-              <h4 class="text-2xl">Changes accepted</h4>
-              <p>The checking officer confirmed the proposed changes. If you revise the record, you will need to request for another counter-check.</p>
-            </div>
-          </div>
-        `;
-      }
-    }
-  }
-});
 
 // Toggle logic for View changes / View all buttons
 document.addEventListener('click', function(e) {

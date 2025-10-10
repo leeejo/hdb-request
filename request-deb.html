@@ -204,7 +204,7 @@
   }
 
   // Event delegation for Send request button in dynamically loaded card3.html
-document.addEventListener('click', function (e) {
+/*document.addEventListener('click', function (e) {
   const btn = e.target.closest('#send-request-btn');
   if (btn) {
     // Show #requested, hide #requesting (existing logic)
@@ -220,23 +220,57 @@ document.addEventListener('click', function (e) {
       const tableTopBar = debCard.querySelector('.table-top-bar');
       if (tableTopBar) {
         tableTopBar.innerHTML = `
-                    <div class="flex items-start gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-lock mt-1">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-              <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" />
-              <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-              <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
-            </svg>
+          <div class="flex items-start gap-2 border-b">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-lock"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
             <div>
               <h4 class="text-2xl">Record locked</h4>
               <p>Changes are pending review by the checking officer and cannot be edited.</p>
             </div>
           </div>
         `;
+        // Insert the toggle nav below the table top bar
+        let toggleBar = debCard.querySelector('.debarment-toggle-bar');
+        if (!toggleBar) {
+          toggleBar = document.createElement('div');
+          toggleBar.className = 'debarment-toggle-bar flex items-center gap-2 py-3 p-4';
+          toggleBar.innerHTML = `
+            <span class="font-bold">View</span>
+            <button id="view-changes-btn" class="btn-outline font-semibold bg-blue-100">Changes only</button>
+            <button id="view-all-btn" class="btn-outline font-normal">View all</button>
+          `;
+          tableTopBar.insertAdjacentElement('afterend', toggleBar);
+        } else {
+          toggleBar.style.display = '';
+        }
+      }
+      // Show only new and lifted rows immediately
+      document.querySelectorAll('#deb-record tbody tr.main-row').forEach(tr => {
+        if (tr.classList.contains('row-new') || tr.classList.contains('row-lifted')) {
+          tr.style.display = '';
+        } else {
+          tr.style.display = 'none';
+        }
+      });
+      // Highlight the "Changes only" button
+      const viewChangesBtn = debCard.querySelector('#view-changes-btn');
+      const viewAllBtn = debCard.querySelector('#view-all-btn');
+      if (viewChangesBtn && viewAllBtn) {
+        viewChangesBtn.classList.add('bg-blue-100');
+        viewAllBtn.classList.remove('bg-blue-100');
       }
     }
   }
 });
+
+*/
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('#send-request-btn');
+  if (btn) {
+    // Redirect to the requested page after sending request
+    window.location.href = 'request-deb-requested.html';
+  }
+});
+
 </script>
 
 </head>
@@ -2713,7 +2747,7 @@ document.addEventListener('submit', function(e) {
         const tbody = debTable.querySelector('tbody');
         if (tbody) {
           const newRow = document.createElement('tr');
-          newRow.className = 'border-b main-row bg-orange-50 animate-pulse';
+          newRow.className = 'border-b main-row bg-orange-50 animate-pulse row-new';
           newRow.innerHTML = `
             <td class="px-2 py-4 text-left font-bold">NEW PERSON</td>
             <td class="px-2 py-4 text-left">Self</td>
@@ -2932,10 +2966,10 @@ document.addEventListener('click', function(e) {
       } else {
         td.insertBefore(tag, liftBtn);
       }
-  tr.classList.add('bg-gray-50', 'animate-pulse');
+  tr.classList.add('bg-gray-50', 'animate-pulse', 'row-lifted');
   setTimeout(() => {
     tr.classList.remove('animate-pulse', 'bg-orange-50');
-    tr.classList.add('bg-gray-50');
+    tr.classList.add('bg-gray-50', 'row-lifted');
   }, 2000);
   liftBtn.textContent = 'Undo';
     } else {
@@ -2948,6 +2982,31 @@ document.addEventListener('click', function(e) {
       tr.classList.remove('bg-gray-50', 'bg-gray-200', 'text-gray-400', 'animate-pulse');
       liftBtn.textContent = 'Lift';
     }
+  }
+});
+
+
+// Toggle logic for View changes / View all buttons
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.id === 'view-changes-btn') {
+    document.querySelectorAll('#deb-record tbody tr.main-row').forEach(tr => {
+      if (tr.classList.contains('row-new') || tr.classList.contains('row-lifted')) {
+        tr.style.display = '';
+      } else {
+        tr.style.display = 'none';
+      }
+    });
+    e.target.classList.add('bg-blue-100');
+    const viewAllBtn = document.getElementById('view-all-btn');
+    if (viewAllBtn) viewAllBtn.classList.remove('bg-blue-100');
+  }
+  if (e.target && e.target.id === 'view-all-btn') {
+    document.querySelectorAll('#deb-record tbody tr.main-row').forEach(tr => {
+      tr.style.display = '';
+    });
+    e.target.classList.add('bg-blue-100');
+    const viewChangesBtn = document.getElementById('view-changes-btn');
+    if (viewChangesBtn) viewChangesBtn.classList.remove('bg-blue-100');
   }
 });
 
