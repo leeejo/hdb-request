@@ -813,16 +813,10 @@ document.addEventListener('click', function (e) {
                                                                         <span
                                                                             class="inline-block truncate max-w-[340px] align-bottom cursor-pointer"
                                                                             style="vertical-align:bottom;"
-                                                                            title="SITI AMEERAH BINTI MUHAMMAD ABDUL RAHMAN AL-MUHAJIRAH AL-ZAHRA">
-                                                                            SITI AMEERAH BINTI MUHAMMAD ABDUL RAHMAN
-                                                                            AL-MUHAJIRAH AL-ZAHRA
+                                                                            title="LIANG WEI CHEN, LEO">
+                                                                            LIANG WEI CHEN, LEO
                                                                         </span>
-                                                                        <span
-                                                                            class="absolute left-0 top-full z-50 mt-1 hidden group-hover:flex w-max min-w-[220px] max-w-xs bg-white text-gray-900 text-sm font-medium rounded shadow-lg border border-gray-200 px-4 py-2 whitespace-normal break-words"
-                                                                            style="word-break:break-word;">
-                                                                            SITI AMEERAH BINTI MUHAMMAD ABDUL RAHMAN
-                                                                            AL-MUHAJIRAH AL-ZAHRA
-                                                                        </span>
+
                                                                     </span>
                                                                     <span class="inline-block">S1234567A</span>
                                                                 </span>
@@ -3021,6 +3015,20 @@ document.addEventListener('submit', function(e) {
       console.warn('Failed to push approved state to URL', err);
     }
     // -------------------------------------------------------------------
+
+    // Scroll to top of the action card so sticky header won't cover it
+    setTimeout(() => {
+      const targetCard = debCard || document.getElementById('dynamic-card-3') || document.querySelector('.card-base');
+      if (!targetCard) return;
+      const stickCard = document.getElementById('stickCard');
+      const stickyRect = stickCard ? stickCard.getBoundingClientRect() : { height: 0 };
+      const cardRect = targetCard.getBoundingClientRect();
+      const top = window.scrollY + cardRect.top - (stickyRect.height || 0);
+      window.scrollTo({ top, behavior: 'smooth' });
+      // brief highlight for visual feedback
+      //targetCard.classList.add('ring', 'ring-green-300');
+      //setTimeout(() => targetCard.classList.remove('ring', 'ring-green-300'), 1200);
+    }, 60);
   }
 });
 
