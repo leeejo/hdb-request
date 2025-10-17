@@ -2730,6 +2730,7 @@ document.addEventListener('click', function(e) {
 // Track the row being edited
 let editingRow = null;
 // Form submit
+
 document.addEventListener('submit', function(e) {
   const { form } = getImposeModalElements();
   if (form && e.target === form) {
@@ -2746,7 +2747,10 @@ document.addEventListener('submit', function(e) {
       if (debTable) {
         const tbody = debTable.querySelector('tbody');
         if (tbody) {
+          // generate stable id for the new row so we can reference it via URL/state
+          const newRowId = `deb-row-${Date.now()}`;
           const newRow = document.createElement('tr');
+          newRow.id = newRowId;
           newRow.className = 'border-b main-row bg-orange-50 animate-pulse row-new';
           newRow.innerHTML = `
             <td class="px-2 py-4 text-left font-bold">NEW PERSON</td>
@@ -2770,6 +2774,7 @@ document.addEventListener('submit', function(e) {
           `;
           // Create the detail row
           const detailRow = document.createElement('tr');
+          detailRow.id = `${newRowId}-detail`;
           detailRow.className = 'row-detail-content border-b';
           detailRow.style.display = 'none';
           detailRow.innerHTML = `
@@ -2831,6 +2836,18 @@ document.addEventListener('submit', function(e) {
           setTimeout(() => {
             newRow.classList.remove('animate-pulse');
           }, 2000);
+
+          // push URL params/state so browser treats this as a new page (impose action)
+          try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('impose', 'true');
+            url.searchParams.set('rowId', newRowId);
+            // optional: include timestamp
+            url.searchParams.set('ts', String(Date.now()));
+            history.pushState({ imposed: true, rowId: newRowId }, '', url.toString());
+          } catch (err) {
+            console.warn('Failed to push state for imposed row', err);
+          }
         }
       }
     }
@@ -2966,12 +2983,31 @@ document.addEventListener('click', function(e) {
       } else {
         td.insertBefore(tag, liftBtn);
       }
-  tr.classList.add('bg-gray-50', 'animate-pulse', 'row-lifted');
-  setTimeout(() => {
-    tr.classList.remove('animate-pulse', 'bg-orange-50');
-    tr.classList.add('bg-gray-50', 'row-lifted');
-  }, 2000);
-  liftBtn.textContent = 'Undo';
+      tr.classList.add('bg-gray-50', 'animate-pulse', 'row-lifted');
+      setTimeout(() => {
+        tr.classList.remove('animate-pulse', 'bg-orange-50');
+        tr.classList.add('bg-gray-50', 'row-lifted');
+      }, 2000);
+      liftBtn.textContent = 'Undo';
+
+      // --- NEW: push URL params/state for lift action (same approach as impose) ---
+      try {
+        // ensure the row has a stable id
+        let rowId = tr.id;
+        if (!rowId) {
+          rowId = `deb-row-${Date.now()}`;
+          tr.id = rowId;
+        }
+        const url = new URL(window.location.href);
+        url.searchParams.set('lift', 'true');
+        url.searchParams.set('rowId', rowId);
+        url.searchParams.set('ts', String(Date.now()));
+        history.pushState({ lifted: true, rowId }, '', url.toString());
+      } catch (err) {
+        console.warn('Failed to push state for lifted row', err);
+      }
+      // -----------------------------------------------------------------------
+
     } else {
       // Remove the pill robustly from anywhere in the action cell
       if (td) {
@@ -2979,12 +3015,24 @@ document.addEventListener('click', function(e) {
           pill.remove();
         });
       }
-      tr.classList.remove('bg-gray-50', 'bg-gray-200', 'text-gray-400', 'animate-pulse');
+      tr.classList.remove('bg-gray-50', 'bg-gray-200', 'text-gray-400', 'animate-pulse', 'row-lifted');
       liftBtn.textContent = 'Lift';
+
+      // --- NEW: remove lift params from URL (or push state without them) ---
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('lift');
+        url.searchParams.delete('rowId');
+        url.searchParams.delete('ts');
+        history.pushState({}, '', url.toString());
+      } catch (err) {
+        console.warn('Failed to remove lift state from URL', err);
+      }
+      // --------------------------------------------------------------------
     }
   }
 });
-
+// ...existing code...
 
 // Toggle logic for View changes / View all buttons
 document.addEventListener('click', function(e) {

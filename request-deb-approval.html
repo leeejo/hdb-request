@@ -2975,6 +2975,7 @@ document.addEventListener('click', function(e) {
 
 
 // Add this script at the end of your file or inside a <script> block
+
 document.addEventListener('submit', function(e) {
   const form = e.target;
   if (form && form.querySelector('#counter-check-submit-btn')) {
@@ -3004,6 +3005,22 @@ document.addEventListener('submit', function(e) {
         `;
       }
     }
+
+    // --- append URL params / push history when decision is "Agree" ---
+    try {
+      const decisionEl = form.querySelector('input[name="counter-check-decision"]:checked');
+      const decision = decisionEl ? decisionEl.value : null;
+      if (decision === 'Agree') {
+        const url = new URL(window.location.href);
+        url.searchParams.set('approved', 'true');
+        url.searchParams.set('decision', 'Agree');
+        url.searchParams.set('ts', String(Date.now()));
+        history.pushState({ approved: true, decision: 'Agree' }, '', url.toString());
+      }
+    } catch (err) {
+      console.warn('Failed to push approved state to URL', err);
+    }
+    // -------------------------------------------------------------------
   }
 });
 
