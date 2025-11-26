@@ -649,6 +649,27 @@ function createCard(action, id) {
     .then(html => {
       card.querySelector('.card-content').innerHTML = html;
 
+      // Re-execute scripts in the loaded content
+      const scripts = card.querySelectorAll('script');
+      scripts.forEach(script => {
+        const newScript = document.createElement('script');
+        if (script.src) {
+          newScript.src = script.src;
+        } else {
+          newScript.textContent = script.textContent;
+        }
+        script.parentNode.replaceChild(newScript, script);
+      });
+
+      // After scripts are loaded, call any init functions
+      // For card1, call initDatasetCard if it exists
+      setTimeout(() => {
+        if (action === 1 && typeof window.initDatasetCard === 'function') {
+          console.log('[createCard] Calling initDatasetCard');
+          window.initDatasetCard();
+        }
+      }, 50);
+
       // Find the header in the loaded card content
       const header = card.querySelector('header');
       if (header) {

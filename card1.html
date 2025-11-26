@@ -8,15 +8,536 @@
 
   <div class="flex flex-col w-full">
     <!-- content here -->
-
- <!-- section: add lift approval -->   
+  
     <div
-      class="flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-full overflow-hidden border-b"
+      class="flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-full overflow-hidden border-b "
     >
-      <div class="flex flex-col py-4 px-4 w-full h-96">
-        <!-- -->
-    here is where action happens
+      <div class="flex flex-col py-4 px-4 w-full">
+          <div class="flex items-center gap-3 mb-4">
+            <label class="text-sm font-medium" for="dataset-select">Select data set</label>
+            <select id="dataset-select" class="border rounded px-2 py-1">
+              <option value="" disabled selected>Please select</option>
+              <option value="flat">Flat application details</option>
+              <option value="lease">Lease period</option>
+              <option value="MOH">Manner of holding</option>
+              <option value="OCS">Optional component scheme (OCS)</option>
+              <option value="schemes">Schemes</option>
+            </select>
+            <button id="add-dataset-btn" class="ml-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">Add</button>
+          </div>
+
+          <div id="datasets-container" class="border border-gray-300 flex-col gap-3 overflow-auto hidden" style="max-height:520px;">
+            <!-- dynamically added dataset cards will go here -->
+          </div>
         </div>
+
+        <script>
+          function initDatasetCard(){
+            const addBtn = document.getElementById('add-dataset-btn');
+            const select = document.getElementById('dataset-select');
+            const container = document.getElementById('datasets-container');
+
+            // Guard: ensure elements exist
+            if (!addBtn || !select || !container) {
+              console.warn('[initDatasetCard] Elements not found, retrying...');
+              setTimeout(initDatasetCard, 100);
+              return;
+            }
+
+            function createMOHEditForm() {
+              return `
+                <div class="edit-header bg-gray-100 border-b border-gray-300 px-4 py-4 flex items-center justify-between mb-4">
+                  <h2 class="text-lg font-semibold">Manner of Holding Details</h2>
+                  <div class="flex gap-2">
+                    <button type="button" class="cancel-btn border border-blue-600 text-blue-600 px-4 py-2 rounded font-medium hover:bg-blue-50 flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M18 6l-12 12"/>
+                        <path d="M6 6l12 12"/>
+                      </svg>
+                      <span>Cancel</span>
+                    </button>
+                    <button type="button" class="save-btn bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700 flex items-center gap-2"> 
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>
+                      <span>Save</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="edit-content px-4 py-4">
+                  <div class="grid grid-cols-2 gap-6 pb-4 mb-4">
+                    <!-- Current Section -->
+                    <div>
+                      <h3 class="font-bold text-base mb-4">Current</h3>
+                      <div class="mb-4">
+                        <p class="text-sm">Manner of holding</p>
+                      </div>
+                      <div class="grid grid-cols-2 gap-4">
+                        <div>
+                          <p class="text-sm font-bold mb-1">Applicant 1</p>
+                          <p class="text-sm font-bold mb-1">SIM TIONG SOON</p>
+                          <p class="text-sm font-bold">2/5 shares</p>
+                        </div>
+                        <div>
+                          <p class="text-sm font-bold mb-1">Applicant 2</p>
+                          <p class="text-sm font-bold mb-1">SIM TIONG SOON</p>
+                          <p class="text-sm font-bold">2/5 shares</p>
+                        </div>
+                        <div>
+                          <p class="text-sm font-bold mb-1">Applicant 3</p>
+                          <p class="text-sm font-bold mb-1">SIM TIONG SOON</p>
+                          <p class="text-sm font-bold">2/5 shares</p>
+                        </div>
+                        <div>
+                          <p class="text-sm font-bold mb-1">Applicant 4</p>
+                          <p class="text-sm font-bold mb-1">SIM TIONG SOON</p>
+                          <p class="text-sm font-bold">2/5 shares</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Amended Section -->
+                    <div class="border-l pl-6">
+                      <h3 class="font-bold text-base mb-4">Amended</h3>
+                      <div class="mb-4">
+                        <label class="block text-sm font-bold mb-2">Manner of holding</label>
+                        <div class="space-y-2">
+                          <label class="flex items-center gap-3">
+                            <input type="radio" name="moh-type" value="JT" class="moh-type-input w-4 h-4" />
+                            <span class="text-sm">Joint tenancy (JT)</span>
+                          </label>
+                          <label class="flex items-center gap-3">
+                            <input type="radio" name="moh-type" value="TC" class="moh-type-input w-4 h-4" checked />
+                            <span class="text-sm">Tenancy-in-common (TC)</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label class="block text-sm font-bold mb-2">Share per applicant</label>
+                        <p class="text-xs text-gray-600 mb-3">Each applicant must have at least 1 share. The maximum total number of shares is 100.</p>
+                        
+                        <div class="space-y-3">
+                          <div class="flex items-center gap-3">
+                            <span class="text-sm">Applicant 1</span>
+                            <span class="">BENJAMIN GOH TOK CHIN</span>
+                            <input type="number" class="amended-app1-share w-20 border border-gray-300 rounded px-3 py-2 text-sm text-right" value="70" min="1" />
+                          </div>
+                          <div class="flex items-center gap-3">
+                            <span class="text-sm">Applicant 2</span>
+                            <span class="">SALLY NG SIEW YU</span>
+                            <input type="number" class="amended-app2-share w-20 border border-gray-300 rounded px-3 py-2 text-sm text-right" value="30" min="1" />
+                          </div>
+                        </div>
+                        <p class="text-right text-sm font-bold mt-4">Total number of shares: <span class="total-shares">100</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }
+
+            function createMOHViewForm(data) {
+              return `
+                <div class="view-header bg-gray-100 border-b border-gray-300 px-4 py-4 flex items-center justify-between">
+                  <h2 class="text-base font-semibold">Manner of Holding Details</h2>
+                  <div class="flex gap-2">
+                    
+                    <button type="button" class="edit-btn border border-blue-600 text-blue-600 px-4 py-2 rounded font-medium hover:bg-blue-50 flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" class="delete-btn bg-red-600 text-white px-4 py-2 rounded font-medium hover:bg-red-700 flex items-center gap-2"> 
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                       <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="view-content px-4 py-4">
+                  <div class="grid grid-cols-2 gap-6">
+                    <div>
+                      <h3 class="font-bold text-base mb-4">Current</h3>
+                      <p class="text-sm mb-3"><strong>Type</strong></p>
+                      <p class="text-sm font-bold mb-3">Tenancy-in-common (TC)</p>
+                      <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p class="font-bold mb-1">Applicant 1</p>
+                          <p class="font-bold mb-1">SIM TIONG SOON</p>
+                          <p class="font-bold">2/5 shares</p>
+                        </div>
+                        <div>
+                          <p class="font-bold mb-1">Applicant 2</p>
+                          <p class="font-bold mb-1">SIM TIONG SOON</p>
+                          <p class="font-bold">2/5 shares</p>
+                        </div>
+                        <div>
+                          <p class="font-bold mb-1">Applicant 3</p>
+                          <p class="font-bold mb-1">SIM TIONG SOON</p>
+                          <p class="font-bold">2/5 shares</p>
+                        </div>
+                        <div>
+                          <p class="font-bold mb-1">Applicant 4</p>
+                          <p class="font-bold mb-1">SIM TIONG SOON</p>
+                          <p class="font-bold">2/5 shares</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="border-l pl-6">
+                      <h3 class="font-bold text-base mb-4">Amended</h3>
+                      <p class="text-sm mb-3"><strong>Type</strong></p>
+                      <p class="text-sm font-bold mb-3"><span class="view-moh-type">${data.type || 'TC'}</span></p>
+                      <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p class="font-bold mb-1">Applicant 1</p>
+                          <p class="font-bold mb-1">BENJAMIN GOH TOK CHIN</p>
+                          <p class="font-bold"><span class="view-app1-share">${data.app1Share || '-'}</span>/100 shares</p>
+                        </div>
+                        <div>
+                          <p class="font-bold mb-1">Applicant 2</p>
+                          <p class="font-bold mb-1">SALLY NG SIEW YU</p>
+                          <p class="font-bold"><span class="view-app2-share">${data.app2Share || '-'}</span>/100 shares</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }
+
+            function createGenericEditForm(label) {
+              return `
+                <div class="flex items-start justify-between gap-4 pb-4 mb-4 border-b border-gray-300">
+                  <h3 class="font-semibold">${label}</h3>
+                  <button type="button" class="remove-btn text-sm text-red-600">Remove</button>
+                </div>
+                <div class="edit-content">
+                  <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Field 1</label>
+                    <input type="text" class="field-input w-full border rounded px-2 py-1" placeholder="Enter value" data-field="field1" />
+                  </div>
+                  <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Field 2</label>
+                    <input type="text" class="field-input w-full border rounded px-2 py-1" placeholder="Enter value" data-field="field2" />
+                  </div>
+                  <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Notes</label>
+                    <textarea class="field-input w-full border rounded px-2 py-1" placeholder="Enter notes" data-field="field3" rows="3"></textarea>
+                  </div>
+                  <div class="flex gap-2">
+                    <button type="button" class="save-btn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">Save</button>
+                    <button type="button" class="cancel-btn bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded text-sm">Cancel</button>
+                  </div>
+                </div>
+                <div class="view-content hidden">
+                  <div class="mb-2">
+                    <p class="text-sm text-gray-600"><strong>Field 1:</strong> <span class="view-field1">-</span></p>
+                  </div>
+                  <div class="mb-2">
+                    <p class="text-sm text-gray-600"><strong>Field 2:</strong> <span class="view-field2">-</span></p>
+                  </div>
+                  <div class="mb-3">
+                    <p class="text-sm text-gray-600"><strong>Notes:</strong> <span class="view-field3">-</span></p>
+                  </div>
+                  <button type="button" class="edit-btn bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">Edit</button>
+                </div>
+              `;
+            }
+
+            function createDatasetCard(value, label) {
+              console.log('[createDatasetCard] Creating card for', value, label);
+              const card = document.createElement('section');
+              card.className = 'border-2 border-blue-600 rounded bg-white shadow-lg overflow-hidden' +
+                               ' border-t-4 border-t-blue-600';
+              // Ensure the shadow is visible immediately (inline fallback for cases
+              // where utility classes might not render as expected in certain embeds)
+              card.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)';
+              card.setAttribute('data-dataset', value);
+              card.setAttribute('data-state', 'edit');
+
+              if (value === 'MOH') {
+                card.innerHTML = createMOHEditForm();
+                console.log('[createDatasetCard] MOH card HTML set');
+                attachMOHEventListeners(card);
+              } else {
+                card.innerHTML = createGenericEditForm(label);
+                attachGenericEventListeners(card);
+              }
+
+              return card;
+            }
+
+            // Helper function to safely remove card and hide container if empty
+            function removeCard(card) {
+              card.remove();
+              if (container.children.length === 0) {
+                container.classList.add('hidden');
+                container.classList.remove('flex');
+              }
+            }
+
+            // Switch MOH card to edit mode
+            function switchMOHToEdit(card) {
+              const editHTML = createMOHEditForm();
+              card.innerHTML = editHTML;
+              
+              // Restore blue styling for edit mode
+              card.className = 'border-2 border-blue-600 rounded bg-white shadow-lg overflow-hidden border-t-4 border-t-blue-600';
+              // Ensure inline shadow is present for edit mode
+              card.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)';
+              
+              // Restore saved data if available
+              if (card.mohData && card.mohData.type) {
+                setTimeout(() => {
+                  const typeRadios = card.querySelectorAll('.moh-type-input');
+                  typeRadios.forEach(radio => {
+                    if (radio.value === card.mohData.type) radio.checked = true;
+                  });
+                  card.querySelector('.amended-app1-share').value = card.mohData.app1Share;
+                  card.querySelector('.amended-app2-share').value = card.mohData.app2Share;
+                }, 0);
+              }
+              
+              // Re-attach event listeners
+              attachMOHEventListeners(card);
+              card.setAttribute('data-state', 'edit');
+            }
+
+            function attachMOHEventListeners(card) {
+              console.log('[attachMOHEventListeners] Starting, card HTML length:', card.innerHTML.length);
+              const saveBtn = card.querySelector('.save-btn');
+              const cancelBtn = card.querySelector('.cancel-btn');
+              const editBtn = card.querySelector('.edit-btn');
+
+              console.log('[attachMOHEventListeners] Attaching to card', { 
+                saveBtnFound: !!saveBtn, 
+                cancelBtnFound: !!cancelBtn, 
+                editBtnFound: !!editBtn 
+              });
+
+              // Store the saved data for edit mode re-entry
+              if (!card.mohData) {
+                card.mohData = {};
+              }
+
+              if (saveBtn) {
+                console.log('[attachMOHEventListeners] Adding save click listener');
+                saveBtn.addEventListener('click', (e) => {
+                  try {
+                    console.log('[MOH Save] Button clicked', e);
+                    const type = card.querySelector('input[name="moh-type"]:checked').value;
+                    const app1Share = card.querySelector('.amended-app1-share').value;
+                    const app2Share = card.querySelector('.amended-app2-share').value;
+                    const totalShares = parseInt(app1Share) + parseInt(app2Share);
+
+                    console.log('[MOH Save] Data captured', { type, app1Share, app2Share, totalShares });
+
+                    // Store data for later edits
+                    card.mohData = { type, app1Share, app2Share, totalShares };
+
+                    // Update view content
+                    const viewHTML = createMOHViewForm(card.mohData);
+                    card.innerHTML = viewHTML;
+                    
+                    console.log('[MOH Save] Updated to view mode');
+                    
+                    // Remove blue styling for view mode
+                    card.className = 'border rounded bg-white shadow-sm overflow-hidden';
+                    // Clear inline shadow when in view mode
+                    card.style.boxShadow = '';
+                    
+                    // Re-attach event listeners to new elements
+                    setTimeout(() => {
+                      const newEditBtn = card.querySelector('.edit-btn');
+                      const newDeleteBtn = card.querySelector('.delete-btn');
+                      
+                      if (newEditBtn) {
+                        newEditBtn.addEventListener('click', () => switchMOHToEdit(card));
+                      }
+                      
+                      if (newDeleteBtn) {
+                        newDeleteBtn.addEventListener('click', () => removeCard(card));
+                      }
+                    }, 0);
+
+                    card.setAttribute('data-state', 'view');
+                  } catch (err) {
+                    console.error('[MOH Save] Error:', err);
+                  }
+                });
+              } else {
+                console.log('[attachMOHEventListeners] Save button NOT FOUND!');
+              }
+
+              if (cancelBtn) {
+                cancelBtn.addEventListener('click', () => {
+                  // If there's saved data, go back to view mode; otherwise remove the card
+                  if (card.mohData && card.mohData.type) {
+                    // Restore view mode with previous data
+                    const viewHTML = createMOHViewForm(card.mohData);
+                    card.innerHTML = viewHTML;
+                    card.className = 'border rounded bg-white shadow-sm overflow-hidden';
+                    // Clear inline shadow when in view mode
+                    card.style.boxShadow = '';
+                    
+                    setTimeout(() => {
+                      const newEditBtn = card.querySelector('.edit-btn');
+                      const newDeleteBtn = card.querySelector('.delete-btn');
+                      
+                      if (newEditBtn) {
+                        newEditBtn.addEventListener('click', () => switchMOHToEdit(card));
+                      }
+                      
+                      if (newDeleteBtn) {
+                        newDeleteBtn.addEventListener('click', () => removeCard(card));
+                      }
+                    }, 0);
+                    
+                    card.setAttribute('data-state', 'view');
+                  } else {
+                    // No saved data, remove the card
+                    removeCard(card);
+                  }
+                });
+              }
+
+              // Attach event listener to existing edit button (in edit mode initially)
+              if (editBtn) {
+                editBtn.addEventListener('click', () => switchMOHToEdit(card));
+              }
+            }
+
+            function attachGenericEventListeners(card) {
+              const removeBtn = card.querySelector('.remove-btn');
+              const saveBtn = card.querySelector('.save-btn');
+              const cancelBtn = card.querySelector('.cancel-btn');
+              const editBtn = card.querySelector('.edit-btn');
+              const editContent = card.querySelector('.edit-content');
+              const viewContent = card.querySelector('.view-content');
+              const fieldInputs = card.querySelectorAll('.field-input');
+
+              if (removeBtn) removeBtn.addEventListener('click', () => removeCard(card));
+
+              if (saveBtn) {
+                saveBtn.addEventListener('click', () => {
+                  const field1 = card.querySelector('[data-field="field1"]').value;
+                  const field2 = card.querySelector('[data-field="field2"]').value;
+                  const field3 = card.querySelector('[data-field="field3"]').value;
+
+                  card.querySelector('.view-field1').textContent = field1 || '-';
+                  card.querySelector('.view-field2').textContent = field2 || '-';
+                  card.querySelector('.view-field3').textContent = field3 || '-';
+
+                  if (editContent) editContent.classList.add('hidden');
+                  if (viewContent) viewContent.classList.remove('hidden');
+                  
+                  // Remove blue styling for view mode
+                  card.className = 'border rounded bg-white shadow-sm overflow-hidden';
+                  // Clear inline shadow when in view mode
+                  card.style.boxShadow = '';
+                  
+                  // Mark that this card has saved data
+                  card.hasData = true;
+                  
+                  card.setAttribute('data-state', 'view');
+                });
+              }
+
+              if (cancelBtn) {
+                cancelBtn.addEventListener('click', () => {
+                  // If there's saved data, go back to view mode; otherwise remove the card
+                  if (card.hasData) {
+                    // Restore view mode
+                    if (editContent) editContent.classList.add('hidden');
+                    if (viewContent) viewContent.classList.remove('hidden');
+                    card.className = 'border rounded bg-white shadow-sm overflow-hidden';
+                    // Clear inline shadow when in view mode
+                    card.style.boxShadow = '';
+                    card.setAttribute('data-state', 'view');
+                  } else {
+                    // No saved data, remove the card
+                    removeCard(card);
+                  }
+                });
+              }
+
+              if (editBtn) {
+                editBtn.addEventListener('click', () => {
+                  if (editContent) editContent.classList.remove('hidden');
+                  if (viewContent) viewContent.classList.add('hidden');
+                  
+                  // Restore blue styling for edit mode
+                  card.className = 'border-2 border-blue-600 rounded bg-white shadow-lg overflow-hidden border-t-4 border-t-blue-600';
+                  // Ensure inline shadow for edit mode
+                  card.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)';
+                  
+                  card.setAttribute('data-state', 'edit');
+                });
+              }
+            }
+
+            addBtn.addEventListener('click', () => {
+              console.log('[Add button] Clicked');
+              const value = select.value;
+              const label = select.options[select.selectedIndex].text;
+
+              if (!value) {
+                alert('Please select a dataset');
+                return;
+              }
+
+              console.log('[Add button] Selected value:', value, 'label:', label);
+
+              const exists = container.querySelector(`[data-dataset="${value}"]`);
+              if (exists) {
+                exists.classList.add('ring-2','ring-yellow-300');
+                setTimeout(() => exists.classList.remove('ring-2','ring-yellow-300'), 800);
+                return;
+              }
+
+              // Show container when adding first card
+              if (container.children.length === 0) {
+                container.classList.remove('hidden');
+                container.classList.add('flex');
+              }
+
+              const card = createDatasetCard(value, label);
+              container.appendChild(card);
+              // Ensure newly added cards have the edit-mode shadow
+              card.classList.add('shadow-lg');
+              console.log('[Add button] Card appended to container (shadow ensured)');
+              
+              // Add observer to hide container when card is removed
+              const observer = new MutationObserver(() => {
+                if (container.children.length === 0) {
+                  container.classList.add('hidden');
+                  container.classList.remove('flex');
+                }
+              });
+              observer.observe(card, { subtree: true, childList: true });
+              
+              // When card is removed, hide container
+              const originalRemove = card.remove.bind(card);
+              card.remove = function() {
+                originalRemove();
+                if (container.children.length === 0) {
+                  container.classList.add('hidden');
+                  container.classList.remove('flex');
+                }
+              };
+              
+              card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+          }
+
+          // Make function globally available for dynamic script execution
+          window.initDatasetCard = initDatasetCard;
+
+          // Initialize when DOM is ready
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initDatasetCard);
+          } else {
+            initDatasetCard();
+          }
+        </script>
     </div>
 
 
