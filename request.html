@@ -1072,7 +1072,6 @@ document.addEventListener('submit', function(e) {
                 <!-- To lift tag will be inserted here dynamically if needed -->
                 <div class="action-btn-row flex flex-row gap-2 mt-1">
                   <button class="edit-deb-btn text-blue-700 bg-transparent border-none cursor-pointer">Edit</button>
-                  <!-- If you want to add Lift/Undo for new rows in the future, add here -->
                 </div>
               </div>
             </td>
@@ -1267,10 +1266,12 @@ document.addEventListener('click', function(e) {
       const tag = document.createElement('span');
       tag.className = 'to-be-lifted text-xs bg-gray-400 text-white rounded px-2 py-1 w-fit';
       tag.textContent = 'To lift';
-      if (liftBtn.parentNode) {
-        liftBtn.parentNode.insertBefore(tag, liftBtn);
-      } else if (tagContainer && btnRow) {
+      // Prefer putting the pill above the action-btn-row (so it sits above 'Undo' / Lift
+      // buttons). Fallback to inserting before the button if no action-btn-row exists.
+      if (tagContainer && btnRow) {
         tagContainer.insertBefore(tag, btnRow);
+      } else if (liftBtn.parentNode) {
+        liftBtn.parentNode.insertBefore(tag, liftBtn);
       } else if (tagContainer) {
         tagContainer.appendChild(tag);
       } else {
